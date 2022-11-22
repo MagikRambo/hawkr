@@ -7,9 +7,6 @@ import type { NextPage } from 'next'
 import { Auth, ThemeSupa } from '@supabase/auth-ui-react'
 import Maps from '../components/Maps'
 
-// import { Database } from '../utils/database.types'
-// type Profiles = Database['public']['Tables']['profiles']['Row']
-
 // [START maps_add_map]
 // Initialize and add the map
 function initMap(): void {
@@ -49,52 +46,6 @@ export default function Home({}) {
 
   const session = useSession()
   const supabase = useSupabaseClient()
-  //const session = useSession()
-  //const supabase = useSupabaseClient()
-  //const [profiles, setProfiles] = useState([])
-  // const [name, setName] = useState<Profiles['name']>(null)
-  // For user single user input
-  //const [UUID, setUUID] = useState({ uid: "",name: ""})
-  //const { uid, name } = profiles
-  // useEffect(() => {
-  //   fetchPosts()
-  //    //console.log("Profile data: " + prof);
-  // }, [])
-    
-  // async function fetchPosts() {
-  //   try {
-
-  //     let { data, error, status } = await supabase
-  //     .from("profiles")
-  //     .select(`*`);
-  //     //setProfiles(data)
-  //     if(data){
-  //       setName(data);
-  //       console.log("data is: ", data)
-  //     }
-  //     //return data
-  //   }
-  //   catch (error) {
-  //     alert('Error loading data')
-  //     console.log(error)
-  //   }
-  // }
-
-  // async function insertProfile() {
-  //   try {
-  //     let { data } = await supabase
-  //     .from('profiles')
-  //     .insert([
-  //       { state: 1, name: 'Jose', description: 'this is a description'}
-  //     ])
-  //     //setProfiles(data)
-  //     console.log("data: ", data)
-  //   }
-  //   catch (error) {
-  //     alert('Error loading data')
-  //     console.log(error)
-  //   }
-  // }
 
   return (
     <div className={styles.container}>

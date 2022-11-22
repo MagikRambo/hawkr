@@ -24,7 +24,8 @@ export default function Account() {
       //if (!user) throw new Error('No user')
       let { data, error, status } = await supabase
         .from('profiles')
-        .select(`name`)
+        .select(`name, description`)
+        .eq('name', 'Alex')
         .single()
 
       if (error && status !== 406) {
@@ -34,9 +35,18 @@ export default function Account() {
 
       if (data) {
         setName(data.name)
+        setDescription(data.description)
+      //   data.forEach(function (value) {
+      //     if(value.name == "Alex"){
+            
+      //     }
+      //     console.log(value);
+      // });
+      
+        //setName(data)
         // setState(data.state)
         // setDescription(data.description)
-        console.log("data is: " + data + ", " + data.name);
+        console.log("data is: " + data + ", " + data);
       }
     } catch (error) {
       alert('Error loading user data!')
@@ -82,8 +92,12 @@ export default function Account() {
   return (
       <div className="form-widget">
         <div>
-          <label htmlFor="name">name</label>
+          <label htmlFor="name">name: </label>
           <input id="name" type="text" value={name ? name : 'blank'} onChange={(e) => setName(e.target.value)} disabled />
+        </div>
+        <div>
+          <label htmlFor="description">description: </label>
+          <input id="description" type="text" value={description ? description : 'blank'} onChange={(e) => setDescription(e.target.value)} disabled />
         </div>
         {/* <div>
           <label htmlFor="username">Username</label>
@@ -103,7 +117,7 @@ export default function Account() {
             onChange={(e) => setWebsite(e.target.value)}
           />
         </div> */}
-        <div>
+        {/* <div>
           <button
             className="button primary block"
             onClick={() => getMap()}
@@ -116,7 +130,7 @@ export default function Account() {
           <button className="button block" onClick={() => supabase.auth.signOut()}>
             Sign Out
           </button>
-        </div>
+        </div> */}
       </div>
   )
 }
