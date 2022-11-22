@@ -1,8 +1,101 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
+import { useState, useEffect } from 'react';
+import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
+import type { NextPage } from 'next'
+import { Auth, ThemeSupa } from '@supabase/auth-ui-react'
+import Maps from '../components/Maps'
 
-export default function Home() {
+// import { Database } from '../utils/database.types'
+// type Profiles = Database['public']['Tables']['profiles']['Row']
+
+// [START maps_add_map]
+// Initialize and add the map
+function initMap(): void {
+  // [START maps_add_map_instantiate_map]
+  // The location of Uluru
+  const uluru = { lat: -25.344, lng: 131.031 };
+  // The map, centered at Uluru
+  const map = new google.maps.Map(
+    document.getElementById("map") as HTMLElement,
+    {
+      zoom: 4,
+      center: uluru,
+    }
+  );
+  // [END maps_add_map_instantiate_map]
+
+  // [START maps_add_map_instantiate_marker]
+  // The marker, positioned at Uluru
+  const marker = new google.maps.Marker({
+    position: uluru,
+    map: map,
+  });
+  // [END maps_add_map_instantiate_marker]
+}
+
+declare global {
+  interface Window {
+    initMap: () => void;
+  }
+}
+//window.initMap = initMap;
+
+export default function Home({}) {
+  const loc = ["37.4218", "-122.0840"];
+  const url = "https://www.google.com/maps/embed/v1/place?key=AIzaSyDSUiAdbzRWOD8raCNMlH8x5fD14wtXT7s&q=" + loc[0] + "," + loc[1];
+    //window.initMap = initMap;
+
+  const session = useSession()
+  const supabase = useSupabaseClient()
+  //const session = useSession()
+  //const supabase = useSupabaseClient()
+  //const [profiles, setProfiles] = useState([])
+  // const [name, setName] = useState<Profiles['name']>(null)
+  // For user single user input
+  //const [UUID, setUUID] = useState({ uid: "",name: ""})
+  //const { uid, name } = profiles
+  // useEffect(() => {
+  //   fetchPosts()
+  //    //console.log("Profile data: " + prof);
+  // }, [])
+    
+  // async function fetchPosts() {
+  //   try {
+
+  //     let { data, error, status } = await supabase
+  //     .from("profiles")
+  //     .select(`*`);
+  //     //setProfiles(data)
+  //     if(data){
+  //       setName(data);
+  //       console.log("data is: ", data)
+  //     }
+  //     //return data
+  //   }
+  //   catch (error) {
+  //     alert('Error loading data')
+  //     console.log(error)
+  //   }
+  // }
+
+  // async function insertProfile() {
+  //   try {
+  //     let { data } = await supabase
+  //     .from('profiles')
+  //     .insert([
+  //       { state: 1, name: 'Jose', description: 'this is a description'}
+  //     ])
+  //     //setProfiles(data)
+  //     console.log("data: ", data)
+  //   }
+  //   catch (error) {
+  //     alert('Error loading data')
+  //     console.log(error)
+  //   }
+  // }
+
   return (
     <div className={styles.container}>
       <Head>
@@ -22,35 +115,58 @@ export default function Home() {
         </p>
 
         <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+        <div id="map"></div>
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
+        <div> 
+        {/* <button
+        className="button primary block"
+        onClick={() => fetchPosts()}
+        >Click me</button> */}
+        
+        </div>
+          {/* <!-- 
+          The `defer` attribute causes the callback to execute after the full HTML
+          document has been parsed. For non-blocking uses, avoiding race conditions,
+          and consistent behavior across browsers, consider loading using Promises
+          with https://www.npmjs.com/package/@googlemaps/js-api-loader.
+          --> */}
+          {/* <script
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSUiAdbzRWOD8raCNMlH8x5fD14wtXT7s&callback=initialize"
+            defer
+          ></script> */}
 
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h2>Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
+        </div>
+         <iframe
+          width="450"
+          height="250"
+          frameBorder="0"
+          referrerPolicy="no-referrer-when-downgrade"
+          // https://www.google.com/maps/embed/v1/place?key=AIzaSyDSUiAdbzRWOD8raCNMlH8x5fD14wtXT7s&&q=Eiffel+Tower,Paris+France
+          src={url}
+          allowFullScreen>
+        </iframe>
 
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
+        <div>
+        {/* {!session ? (
+        <div className="row">
+          <div className="col-6">
+            <h1 className="header">Supabase Auth + Storage</h1>
+            <p className="">
+              Experience our Auth and Storage through a simple profile management example. Create a
+              user profile and upload an avatar image. Fast, simple, secure.
             </p>
-          </a>
+          </div>
+          <div className="col-6 auth-widget">
+            <Auth supabaseClient={supabase} appearance={{ theme: ThemeSupa }} theme="dark" />
+          </div>
+        </div>
+      ) : ( */}
+        <>
+          <h3>Account</h3>
+          <Maps/>
+        </>
+      {/* )} */}
+
         </div>
       </main>
 
