@@ -23,7 +23,7 @@ export default function Account() {
       setLoading(true)
       //if (!user) throw new Error('No user')
       let { data, error, status } = await supabase
-        .from('profiles')
+        .from('profiles') 
         .select(`name, description`)
         .eq('name', 'Alex')
         .single()
