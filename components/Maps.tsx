@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
 import { useUser, useSupabaseClient, Session } from '@supabase/auth-helpers-react'
+// import { supabase } from '../utils/supabaseClient'
 import { Database } from '../utils/database.types'
 type Profiles = Database['public']['Tables']['profiles']['Row']
 
 export default function Account() {
   const supabase = useSupabaseClient<Database>()
   const user = useUser()
+  
   const [loading, setLoading] = useState(true)
 
   const [name, setName] = useState<Profiles['name']>(null)
@@ -20,7 +22,6 @@ export default function Account() {
     try {
       setLoading(true)
       //if (!user) throw new Error('No user')
-
       let { data, error, status } = await supabase
         .from('profiles')
         .select(`name`)
@@ -35,6 +36,7 @@ export default function Account() {
         setName(data.name)
         // setState(data.state)
         // setDescription(data.description)
+        console.log("data is: " + data + ", " + data.name);
       }
     } catch (error) {
       alert('Error loading user data!')
@@ -81,7 +83,7 @@ export default function Account() {
       <div className="form-widget">
         <div>
           <label htmlFor="name">name</label>
-          <input id="name" type="text" value={name ? name : 'blank'} disabled />
+          <input id="name" type="text" value={name ? name : 'blank'} onChange={(e) => setName(e.target.value)} disabled />
         </div>
         {/* <div>
           <label htmlFor="username">Username</label>
@@ -107,7 +109,7 @@ export default function Account() {
             onClick={() => getMap()}
             disabled={loading}
           >
-            getMapCall
+            {loading ? 'Loading ...' : 'Update'}
           </button>
         </div>
         <div>
