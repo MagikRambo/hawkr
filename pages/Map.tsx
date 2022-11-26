@@ -30,9 +30,10 @@ export type MarkerType = {
 
   const { isLoaded } = useLoadScript({
     id: 'google-map-script',
-    googleMapsApiKey: process.env.NEXT_APP_GOOGLE_KEY!,
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_KEY!,
   });
 
+  console.log(`Google API KEY: ${process.env.NEXT_PUBLIC_GOOGLE_KEY}`)
   // Save map in ref if we want to access the map
   const mapRef = React.useRef<google.maps.Map | null>(null);
 
@@ -77,6 +78,7 @@ export type MarkerType = {
   const onMapClick = (e: google.maps.MapMouseEvent) => {
     setClickedPos({ lat: e.latLng!.lat(), lng: e.latLng!.lng() });
     setSelectedMarker({} as MarkerType);
+    console.log({lat: e.latLng!.lat(), lng: e.latLng!.lng()});
   };
 
   const onMarkerClick = (marker: MarkerType) => setSelectedMarker(marker);
