@@ -4,18 +4,14 @@ import { GoogleMap, Marker, InfoWindow, useJsApiLoader, useLoadScript } from '@r
 // Components
 // import CurrentLocation from './components/CurrentLocation';
 //API Calls
-// import { fetchNearbyPlaces , fetchWeather} from './api';
+
 //Map Settings
 import { containerStyle, center, options } from './settings';
 //Image
-// import beerIcon from './images/beer.svg'
+
 // Styles
 import { Wrapper, LoadingView } from './Map.styles';
 
-// export type WeatherType = {
-//   temp: number;
-//   text: string;
-// };
 
 export type MarkerType = {
   id: string;
@@ -39,25 +35,6 @@ export type MarkerType = {
 
   const [clickedPos, setClickedPos] = React.useState<google.maps.LatLngLiteral>({} as google.maps.LatLngLiteral);
   const [selectedMarker, setSelectedMarker] = React.useState<MarkerType>({} as MarkerType);
-
-//   const {
-//     data: nearbyPositions,
-//     isLoading,
-//     isError
-//   } = useQuery([clickedPos.lat, clickedPos.lng], () => fetchNearbyPlaces(clickedPos.lat, clickedPos.lng), {
-//     enabled: !!clickedPos.lat,
-//     refetchOnWindowFocus: false
-//   });
-
-//   const{
-//     data: markerWeather,
-//     isLoading: isLoadingMarkerWeather,
-//     isError: isErrorMarkerWeather,
-//   } = useQuery([selectedMarker.id], () => fetchWeather(selectedMarker), {
-//     enabled: !!selectedMarker.id,
-//     refetchOnWindowFocus: false,
-//     staleTime: 60 * 1000 * 5 // 5 minutes
-//   })
 
   const moveTo = (position: google.maps.LatLngLiteral) => {
     if (mapRef.current) {
