@@ -1,7 +1,8 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import Head from 'next/head';
+import Image from 'next/image';
+import styles from '../styles/Home.module.css';
 
+import Map from './Map';
 export default function Home() {
   return (
     <div className={styles.container}>
@@ -53,6 +54,7 @@ export default function Home() {
           </a>
         </div>
       </main>
+        <Map/>
 
       <footer className={styles.footer}>
         <a
