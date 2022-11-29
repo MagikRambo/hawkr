@@ -8,7 +8,6 @@ type Props = {
 
 function CurrentLocation({moveTo}:Props) {
   const [disabled, setDisabled] = React.useState(false);
-  console.log("MADE IT INTO THE CURRENT LOCATION FUNCTION");
   return (
     <>
     <StyledBtn
