@@ -2,7 +2,7 @@
 
 A Hawker is "defined as a person who travels around selling goods, typically advertising them by shouting" Our application aims to connect street entertainers, vendors and popup food sellers with their clients in a seamless easy to use web app.
 
-![hawkr_team_50](uploads/e3b7eb83aa7becf443fefb8d9fa855a6/hawkr_team_50.jpg)
+![hawkr_team_50](https://capstone-cs.eng.utah.edu/groups/hawkr/-/wikis/uploads/e3b7eb83aa7becf443fefb8d9fa855a6/hawkr_team_50.jpg)
 
 Authors: Alex Romero, Zixuan Zhang, Mike Marambio
 
@@ -24,10 +24,10 @@ Every Friday when there are no Capstone classes held(10:45-11:35A.M), we will me
 
 Project language(s): Javascript/Typescript Frameworks: NodeJS, NextJS, Express
 
-Hosting Service/Cloud Provider: Amazon Web Services(AWS) (Currently Researching if this is the best and most cost effective option)
+Hosting Service/Cloud Provider: Amazon Web Services(AWS), Supabase(for our database)
 
 Platforms Supported: Web App (As time allows may turn into an app on iOS, and Android)
 
-Databases used: Mongo(Currently researching if a relational DB is better)
+Databases used: Postgre
 
 > This page will be maintained and updated this page throughout the semester.
