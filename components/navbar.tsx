@@ -10,6 +10,10 @@ function classNames(...classes: string[]) {
 
 var curr_idx = 0;
 
+function set_curr_idx(idx: number){
+    //curr_idx
+}
+
 export default function Navbar() {
     return (
         <Disclosure as="nav" className="bg-white shadow">

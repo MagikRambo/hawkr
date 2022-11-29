@@ -1,8 +1,9 @@
+import Menu from "../components/exploreMenu";
 
 export default function Explore() {
     return (
-        <>        <h1>This is Explore page</h1>
-       
+        <>
+        <Menu />
         </>
     );
     }
