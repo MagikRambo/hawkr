@@ -1,12 +1,23 @@
+//TODO: Eventually Move Geolocation code into call here to return Coordinates
 
 
-// let map: google.maps.Map;
-// const center: google.maps.LatLngLiteral = {lat: 30, lng: -110};
-
-// function initMap(): void {
-//   map = new google.maps.Map(document.getElementById("map") as HTMLElement, {
-//     center,
-//     zoom: 8
-//   });
-// }
-
+// const options = {
+//     enableHighAccuracy: true,
+//     timeout: 5000,
+//     maximumAge: 0
+//   };
+  
+//   function success(pos) {
+//     const crd = pos.coords;
+  
+//     console.log('Your current position is:');
+//     console.log(`Latitude : ${crd.latitude}`);
+//     console.log(`Longitude: ${crd.longitude}`);
+//     console.log(`More or less ${crd.accuracy} meters.`);
+//   }
+  
+//   function error(err) {
+//     console.warn(`ERROR(${err.code}): ${err.message}`);
+//   }
+  
+//   navigator.geolocation.getCurrentPosition(success, error, options);
