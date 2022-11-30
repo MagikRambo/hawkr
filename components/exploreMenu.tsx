@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react'
+import React, { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 
@@ -27,13 +27,24 @@ const products = [
   // More products...
 ]
 
+type ExploreProps = {
+  handleOpen: (o: boolean, idx:number)=>void,
+  open: boolean;
+};
 
-export default function ExploreMenu() {
-  const [open, setOpen] = useState(true)
+type ExploreState = {
+};
 
-  return (
-    <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={setOpen}>
+class ExploreMenu extends React.Component<ExploreProps, ExploreState>{
+  constructor(props: ExploreProps){
+    super(props);
+  };
+
+  render(){
+    return (
+
+    <Transition.Root show={this.props.open} as={Fragment}>
+      <Dialog as="div" className="relative z-10" onClose={()=>this.props.handleOpen(false, 0)}>
         <div className="fixed inset-0 overflow-hidden">
           <div className="absolute inset-0 overflow-hidden">
             <div className="pointer-events-none fixed inset-y-0 left-0 flex max-w-full pr-10">
@@ -55,7 +66,7 @@ export default function ExploreMenu() {
                           <button
                             type="button"
                             className="-m-2 p-2 text-gray-400 hover:text-gray-500"
-                            onClick={() => setOpen(false)}>
+                            onClick={() => this.props.handleOpen(false, 0)}>
                             <span className="sr-only">Close panel</span>
                             <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                           </button>
@@ -125,7 +136,7 @@ export default function ExploreMenu() {
                           <button
                             type="button"
                             className="font-medium text-indigo-600 hover:text-indigo-500"
-                            onClick={() => setOpen(false)}
+                            onClick={() => this.props.handleOpen(false, 0)}
                           >
                             Continue Shopping
                             <span aria-hidden="true"> &rarr;</span>
@@ -143,5 +154,10 @@ export default function ExploreMenu() {
         </div >
       </Dialog >
     </Transition.Root >
-  )
+
+    )
+
+  };
 }
+
+export default ExploreMenu;
