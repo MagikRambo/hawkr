@@ -144,6 +144,13 @@ export default function Navbar() {
                                         </Menu.Items>
                                     </Transition>
                                 </Menu>
+                                <Link
+                                        href="/SignIn" onClick={()=>curr_idx=3}
+                                        className={classNames( curr_idx == 3? "border-cyan-400 text-gray-900" : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
+                                            "inline-flex items-center border-b-4 px-1 pt-1 text-sm font-medium")}
+                                    >
+                                        Sign In
+                                </Link>
                             </div>
                         </div>
                     </div>
