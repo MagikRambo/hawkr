@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { GoogleMap, Marker, InfoWindow, useJsApiLoader, useLoadScript } from '@react-google-maps/api';
 // import { useQuery } from 'react-query'
+
+
 // Components
-// import CurrentLocation from './components/CurrentLocation';
+import CurrentLocation from '../components/CurrentLocation';
 //API Calls
 
 //Map Settings
@@ -12,7 +14,6 @@ import { containerStyle, center, options } from './settings';
 // Styles
 import { Wrapper, LoadingView } from './Map.styles';
 
-
 export type MarkerType = {
   id: string;
   location: google.maps.LatLngLiteral;
@@ -20,8 +21,6 @@ export type MarkerType = {
   phone_number: string;
   website: string;
 };
-
-// const Map: React.FC = () => {
   export default function Map(){
 
   const { isLoaded } = useLoadScript({
@@ -29,13 +28,37 @@ export type MarkerType = {
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_KEY!,
   });
 
-  console.log(`Google API KEY: ${process.env.NEXT_PUBLIC_GOOGLE_KEY}`)
   // Save map in ref if we want to access the map
   const mapRef = React.useRef<google.maps.Map | null>(null);
 
   const [clickedPos, setClickedPos] = React.useState<google.maps.LatLngLiteral>({} as google.maps.LatLngLiteral);
   const [selectedMarker, setSelectedMarker] = React.useState<MarkerType>({} as MarkerType);
+  
+  const [userCurLocation, setUserCurLocation] = React.useState<google.maps.LatLngLiteral>({} as google.maps.LatLngLiteral);
+  const [userLocationReceived, setUserLocationReceived] = React.useState<boolean>(false);
+  const [userLocationRenderCount, setUserLocationRenderCount] = React.useState<number>(0);
+  
+  const getUserCurrentLocation = () =>{
 
+    //Note: userLocationRenderCount needed atleast 2 times, 5 for safety.
+    if(!userLocationReceived || userLocationRenderCount < 5){
+      //Getting the current location of user
+      navigator.geolocation.getCurrentPosition(position => {
+        // Activate button when geolocation has finished
+        // Call the callback function
+        
+        if (mapRef.current){
+          const userPosition = {lat: position.coords.latitude, lng: position.coords.longitude}
+          mapRef.current.panTo(userPosition);
+          mapRef.current.setZoom(12);
+          setClickedPos(userPosition)
+          setUserLocationReceived(true);
+          setUserLocationRenderCount(userLocationRenderCount + 1);
+        }
+      });
+    }
+  }
+  
   const moveTo = (position: google.maps.LatLngLiteral) => {
     if (mapRef.current) {
       mapRef.current.panTo({ lat: position.lat, lng: position.lng });
@@ -64,49 +87,17 @@ export type MarkerType = {
 
   return (
     <Wrapper>
-      {/* <CurrentLocation moveTo={moveTo} /> */}
+      <CurrentLocation moveTo={moveTo} />
       <GoogleMap
         mapContainerStyle={containerStyle}
         options={options as google.maps.MapOptions}
-        center={center}
+        center={getUserCurrentLocation()}
         zoom={12}
         onLoad={onLoad}
         onUnmount={onUnMount}
         onClick={onMapClick}
-      >
+        >
         {clickedPos.lat ? <Marker position={clickedPos} /> : null}
-        {/* {nearbyPositions?.map(marker => (
-          <Marker
-            key={marker.id}
-            position={marker.location}
-            onClick={() => onMarkerClick(marker)}
-            icon={{
-              url: beerIcon,
-              origin: new window.google.maps.Point(0, 0),
-              anchor: new window.google.maps.Point(15, 15),
-              scaledSize: new window.google.maps.Size(50, 30)
-            }}
-          />
-        ))}
-
-        {selectedMarker.location && (
-          <InfoWindow
-            position={selectedMarker.location}
-            onCloseClick={() => setSelectedMarker({} as MarkerType)}
-            >
-              <div>
-                <h3>{selectedMarker.name}</h3>
-                {isLoadingMarkerWeather ? (
-                  <p> Loading Weather ...</p>
-                ) : (
-                  <>
-                    <p>{markerWeather?.text}</p>
-                    <p>{markerWeather?.temp} &#xb0;F</p>
-                  </>
-                )}
-              </div>
-            </InfoWindow>
-        )} */}
         </GoogleMap>
     </Wrapper>
   );
