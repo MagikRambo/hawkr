@@ -14,11 +14,10 @@ export default function App({ Component, pageProps }: AppProps<{initialSession: 
     supabaseClient={supabaseClient}
     initialSession={pageProps.initialSession}
     >
-      <div>
-        <Navbar />
-        <Component {...pageProps} />
-        <Footer />
-      </div>
+    <div>
+      <Component {...pageProps} />
+      <Footer />
+    </div>
     </SessionContextProvider>
   )
 }
