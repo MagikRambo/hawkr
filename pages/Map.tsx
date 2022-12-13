@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { GoogleMap, Marker, InfoWindow, useJsApiLoader, useLoadScript } from '@react-google-maps/api';
 // import { useQuery } from 'react-query'
-
+import Test01 from '../components/test';
 
 // Components
 import CurrentLocation from '../components/CurrentLocation';
@@ -11,8 +11,13 @@ import CurrentLocation from '../components/CurrentLocation';
 import { containerStyle, center, options } from './settings';
 //Image
 
+import foodTruckIcon from './../public/img/foodTruck.svg'
+import artIcon from './../public/img/art.svg'
+import clothesIcon from './../public/img/clothes.svg'
+
 // Styles
 import { Wrapper, LoadingView } from './Map.styles';
+import { fileURLToPath } from 'url';
 
 export type MarkerType = {
   id: string;
@@ -82,9 +87,12 @@ export type MarkerType = {
   };
 
   const onMarkerClick = (marker: MarkerType) => setSelectedMarker(marker);
+  const foodTruckSVG = foodTruckIcon.src as string
+  const artSVG = artIcon.src as string
+  const clothesSVG = clothesIcon.src as string
 
   if (!isLoaded) return <div> Map Loading ...</div>
-
+  // if (foodTruckSVG) console.log(foodTruckSVG)
   return (
     <Wrapper>
       <CurrentLocation moveTo={moveTo} />
@@ -92,13 +100,68 @@ export type MarkerType = {
         mapContainerStyle={containerStyle}
         options={options as google.maps.MapOptions}
         center={getUserCurrentLocation()}
-        zoom={12}
+        zoom={14}
         onLoad={onLoad}
         onUnmount={onUnMount}
         onClick={onMapClick}
         >
         {clickedPos.lat ? <Marker position={clickedPos} /> : null}
+        {clickedPos.lat ? <Marker
+            position={{lat: 40.747104747417886, lng: -111.84798275571772}}
+            icon={{
+              url: foodTruckSVG,
+              origin: new window.google.maps.Point(0, 0),
+              anchor: new window.google.maps.Point(15, 15),
+              scaledSize: new window.google.maps.Size(50, 30)
+            }}
+          />: null}
+                  {clickedPos.lat ? <Marker
+            position={{lat: 40.762341053140275, lng: -111.8356704711914}}
+            icon={{
+              url: foodTruckSVG,
+              origin: new window.google.maps.Point(0, 0),
+              anchor: new window.google.maps.Point(15, 15),
+              scaledSize: new window.google.maps.Size(50, 30)
+            }}
+          />: null}
+                  {clickedPos.lat ? <Marker
+            position={{lat: 40.7687279133525, lng: -111.85475528120186}}
+            icon={{
+              url: artSVG,
+              origin: new window.google.maps.Point(0, 0),
+              anchor: new window.google.maps.Point(15, 15),
+              scaledSize: new window.google.maps.Size(50, 30)
+            }}
+          />: null}
+                  {clickedPos.lat ? <Marker
+            position={{lat: 40.77165302930935, lng: -111.84608638166573}}
+            icon={{
+              url: artSVG,
+              origin: new window.google.maps.Point(0, 0),
+              anchor: new window.google.maps.Point(15, 15),
+              scaledSize: new window.google.maps.Size(50, 30)
+            }}
+          />: null}
+                  {clickedPos.lat ? <Marker
+            position={{lat: 40.76229220499177, lng: -111.85501277326729}}
+            icon={{
+              url: clothesSVG,
+              origin: new window.google.maps.Point(0, 0),
+              anchor: new window.google.maps.Point(15, 15),
+              scaledSize: new window.google.maps.Size(50, 30)
+            }}
+          />: null}
+                  {clickedPos.lat ? <Marker
+            position={{lat: 40.75650603621897, lng: -111.85484111189034}}
+            icon={{
+              url: clothesSVG,
+              origin: new window.google.maps.Point(0, 0),
+              anchor: new window.google.maps.Point(15, 15),
+              scaledSize: new window.google.maps.Size(50, 30)
+            }}
+          />: null}
         </GoogleMap>
+        <Test01/>
     </Wrapper>
   );
 };
