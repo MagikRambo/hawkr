@@ -4,35 +4,64 @@ export type Json =
   | boolean
   | null
   | { [key: string]: Json }
-  | Json[]
+  | Json[] 
 
 export interface Database {
   public: {
     Tables: {
       profiles: {
         Row: {
-          id: string
-          updated_at: string | null
-          username: string | null
-          full_name: string | null
-          avatar_url: string | null
-          website: string | null
+          uuid: string
+          state: number | null
+          name: string | null
+          description: string | null
         }
         Insert: {
-          id: string
-          updated_at?: string | null
-          username?: string | null
-          full_name?: string | null
-          avatar_url?: string | null
-          website?: string | null
+          uuid: string
+          state?: number | null
+          name?: string | null
+          description?: string | null
         }
         Update: {
-          id?: string
-          updated_at?: string | null
-          username?: string | null
-          full_name?: string | null
-          avatar_url?: string | null
-          website?: string | null
+          uuid: string
+          state?: number | null
+          name?: string | null
+          description?: string | null
+        }
+      },
+      shops: {
+        Row: {
+          shopID: string
+          vendorID: string
+          shopName: string
+          shopDescription: string
+          open: boolean
+          timeOpen: string
+          timeClosed: string
+          messagesOn: boolean
+          liveTracking: boolean
+        }
+        Insert: {
+          shopID: string
+          vendorID: string
+          shopName: string
+          shopDescription: string
+          open: boolean
+          timeOpen: string
+          timeClosed: string
+          messagesOn: boolean
+          liveTracking: boolean
+        }
+        Update: {
+          shopID: string
+          vendorID: string
+          shopName: string
+          shopDescription: string
+          open: boolean
+          timeOpen: string
+          timeClosed: string
+          messagesOn: boolean
+          liveTracking: boolean
         }
       }
     }

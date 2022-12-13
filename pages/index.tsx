@@ -7,6 +7,7 @@ import Map from './Map';
 import ExploreMenu from '../components/exploreMenu';
 import Navbar from '../components/navbar';
 
+
 type HomeProps = {
 };
 
@@ -28,6 +29,11 @@ class Home extends React.Component<HomeProps, HomeState>{
     else this.setState({exploreOpen: false, typesOpen:false, curr_idx:0})
   }
 
+  //TODO: Instead of populating our map. perform getStaticProps here and pull DB data and pass to Map as props.
+  //Get shops around area [1]
+    //Populate shops with appropriate markers [2]
+      //[1]
+  
   render() {
     return (
       <>
