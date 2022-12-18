@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { GoogleMap, Marker, InfoWindow, useJsApiLoader, useLoadScript } from '@react-google-maps/api';
 // import { useQuery } from 'react-query'
 import Test01 from '../components/test';
@@ -6,6 +6,8 @@ import Test01 from '../components/test';
 // Components
 import CurrentLocation from '../components/CurrentLocation';
 //API Calls
+import cuz from './api/hello';
+import useSWR from 'swr';
 
 //Map Settings
 import { containerStyle, center, options } from './settings';
@@ -17,7 +19,7 @@ import clothesIcon from './../public/img/clothes.svg'
 
 // Styles
 import { Wrapper, LoadingView } from './Map.styles';
-import { fileURLToPath } from 'url';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 export type MarkerType = {
   id: string;
@@ -26,8 +28,9 @@ export type MarkerType = {
   phone_number: string;
   website: string;
 };
-  export default function Map(){
 
+
+  export default function Map(){
   const { isLoaded } = useLoadScript({
     id: 'google-map-script',
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_KEY!,
@@ -42,7 +45,38 @@ export type MarkerType = {
   const [userCurLocation, setUserCurLocation] = React.useState<google.maps.LatLngLiteral>({} as google.maps.LatLngLiteral);
   const [userLocationReceived, setUserLocationReceived] = React.useState<boolean>(false);
   const [userLocationRenderCount, setUserLocationRenderCount] = React.useState<number>(0);
+
+  // const testAPICall01 = () => {
+  //   const [data, setData] = useState(null)
   
+  //   useEffect(() => {
+  //     fetch('/api/hello')
+  //       .then((res) => res.json())
+  //       .then((data) => {
+  //         setData(data)
+  //       })
+  //   }, [])
+  //   return data
+  // }
+  //const [propValues, setPropValues] = React.useState<JSON>(JSON.parse(cuz));
+//apiURL: (address: string, req: {method: string, body: JSON})
+  const fetcher  = async (apiURL:string, apiBody:{method:string, body:string}) => fetch(apiURL).then((res) => res.json())
+  const address = `/api/hello`
+  const {data, error} = useSWR(address, fetcher)
+  const testAPICall = async () => {
+  
+    const f = await fetcher(address, {
+      method: "GET",
+      body: JSON.stringify('apple'),
+    });
+    console.log("testAPI was called", f);
+  }
+  //testAPICall()
+  const [helloVar, setHelloVar] = React.useState<any>(testAPICall);
+  // const [helloVar01, setHelloVar01] = React.useState<any>(testAPICall01);
+
+  //console.log(helloVar)
+  // console.log(helloVar01)
   const getUserCurrentLocation = () =>{
 
     //Note: userLocationRenderCount needed atleast 2 times, 5 for safety.
