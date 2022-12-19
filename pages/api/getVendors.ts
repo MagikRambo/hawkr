@@ -1,14 +1,12 @@
-import { Database } from '../utils/database.types'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import {createClient} from '@supabase/supabase-js'
 
 
-function Test01() {
+async function get_all_vendors() {
+    
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
 
-const shopsID = async () =>{
-    let {data, error} = await supabase
-    .rpc('get_shops_with_location')
+const {data, error} = await supabase.rpc('get_shops_with_location')
 
     /* NOTE: We will no longer be utilizing imports similar to the ones below: */
     // let { data: vendor_shops, error } = await supabase
@@ -21,13 +19,10 @@ const shopsID = async () =>{
     // 'get_foodtruck_vendors'
     // 'get_all_vendors'
     // 'get_clothes_vendors'
-console.log(data)
-}
+//console.log(data)
 
-return ( <><button
-            onClick={shopsID}>
-                THIS IS A HUGE BUTTON FEAR ME</button> 
-            </>);
+
+return {data}
 }
  
-export default Test01;
+export default get_all_vendors;
