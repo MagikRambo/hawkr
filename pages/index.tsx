@@ -7,11 +7,11 @@ import ExploreMenu from '../components/exploreMenu';
 import Navbar from '../components/navbar';
 import { createClient } from '@supabase/supabase-js';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
-import Test0 from './api/getVendors';
+import getShopsWithLocations from './api/getVendors';
 
 export const getStaticProps: GetStaticProps = async () => {
 
-  const { data } = await Test0();
+  const { data } = await getShopsWithLocations();
   return { props: { shops: data }};
 };
 
