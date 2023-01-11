@@ -5,6 +5,7 @@ import React, { Fragment, useState } from 'react'
 
 import Map from './Map';
 import ExploreMenu from '../components/exploreMenu';
+import TypesMenu from '../components/typesMenu';
 import Navbar from '../components/navbar';
 
 
@@ -39,6 +40,7 @@ class Home extends React.Component<HomeProps, HomeState>{
       <>
         <Navbar handleOpen={this.setOpen} curr_idx = {this.state.curr_idx}/>
         <ExploreMenu handleOpen={this.setOpen} open={this.state.exploreOpen} />
+        <TypesMenu handleOpen={this.setOpen} open={this.state.typesOpen} />
         <Map />
       </>
     );
