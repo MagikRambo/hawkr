@@ -24,7 +24,6 @@ const SignIn: NextPage = () => {
 
     return (
       <>
-        <Navbar handleOpen={setOpen} curr_idx = {0}/>
         <div className={styles.container} style={{ padding: '50px 0 100px 0' }}>
         {!session ? (
           <div className={styles.row}>
