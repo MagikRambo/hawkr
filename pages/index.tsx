@@ -46,6 +46,7 @@ export default function Home({shops}: InferGetStaticPropsType<typeof getStaticPr
       <>
         <Navbar handleOpen={setOpen} curr_idx = {currIdx}/>
         <ExploreMenu handleOpen={setOpen} open={exploreOpen} />
+        <ExploreMenu handleOpen={setOpen} open={typesOpen} />
         <Map shops={shops}/>
       </>
     );
