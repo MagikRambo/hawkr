@@ -5,7 +5,8 @@ import Navbar from '../components/navbar'
 import Footer from '../components/footer'
 import ExploreMenu from '../components/exploreMenu';
 import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs'
-import { SessionContextProvider, Session } from '@supabase/auth-helpers-react'
+import { useUser, useSession, useSupabaseClient, SessionContextProvider, Session } from '@supabase/auth-helpers-react'
+
 import TypesMenu from '../components/typesMenu'
 
 export default function App({ Component, pageProps }: AppProps<{initialSession: Session}>) {
@@ -14,6 +15,8 @@ export default function App({ Component, pageProps }: AppProps<{initialSession: 
   const [exploreOpen, setExploreOpen] = useState(false)
   const [typesOpen, setTypesOpen] = useState(false)
   const [currIdx, setCurIdx] = useState(0)
+
+  const session = useSession()
 
   const setOpen = (o: boolean, idx:number) => {
     if(idx == 1){
@@ -37,7 +40,7 @@ export default function App({ Component, pageProps }: AppProps<{initialSession: 
     initialSession={pageProps.initialSession}
     >
     <div>
-      <Navbar handleOpen={setOpen} curr_idx = {currIdx}/>
+      <Navbar handleOpen={setOpen} curr_idx = {currIdx} session={session}/>
       <ExploreMenu handleOpen={setOpen} open={exploreOpen} />
       <TypesMenu handleOpen={setOpen} open={typesOpen} />
       <Component {...pageProps} />
