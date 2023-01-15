@@ -38,7 +38,7 @@ const SignIn: NextPage = () => {
             <div className={styles.auth}>
               <Auth
               providers={['github', 'google', 'apple']} 
-              supabaseClient={supabase} appearance={{ theme: ThemeSupa }} theme="dark" />
+              supabaseClient={supabase} theme="dark" />
             </div>
           </div>
         ) : (
