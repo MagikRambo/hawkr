@@ -1,11 +1,5 @@
-import Head from 'next/head';
-import Image from 'next/image';
-import styles from '../styles/Home.module.css';
 import React, { Fragment, useState } from 'react'
 import Map from './Map';
-import TypesMenu from '../components/typesMenu';
-import Navbar from '../components/navbar';
-import { createClient } from '@supabase/supabase-js';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import getShopsWithLocations from './api/getVendors';
 
