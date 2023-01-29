@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import React from 'react'
-import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
+import Explore from '../pages/explore'
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
@@ -48,7 +48,7 @@ class Navbar extends React.Component<NavProps, NavState>{
                                     </div>
                                     <div className="hidden lg:ml-6 lg:flex lg:space-x-8">
                                         {/* Current: "border-cyan-400 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" */}
-                                        <Link href="/#"
+                                        <Link href="/explore" 
                                             onClick={()=>this.props.handleOpen(true, 1)}
                                             className={classNames(this.props.curr_idx == 1 ? "border-cyan-400 text-gray-900" : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
                                                 "inline-flex items-center border-b-4 px-1 pt-1 text-sm font-medium")}
