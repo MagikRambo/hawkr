@@ -3,7 +3,7 @@ import type { AppProps } from 'next/app'
 import { useState } from 'react'
 import Navbar from '../components/navbar'
 import Footer from '../components/footer'
-import ExploreMenu from '../components/exploreMenu';
+import ExploreMenu from './explore';
 import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs'
 import { SessionContextProvider, Session } from '@supabase/auth-helpers-react'
 import TypesMenu from '../components/typesMenu'
@@ -38,7 +38,6 @@ export default function App({ Component, pageProps }: AppProps<{initialSession: 
     >
     <div>
       <Navbar handleOpen={setOpen} curr_idx = {currIdx}/>
-      <ExploreMenu handleOpen={setOpen} open={exploreOpen} />
       <TypesMenu handleOpen={setOpen} open={typesOpen} />
       <Component {...pageProps} />
       <Footer />
