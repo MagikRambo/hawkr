@@ -128,45 +128,134 @@
 
 // export default Explore;
 
+
+
+
+
+
+
+
+
+// import React, { Fragment, useState } from 'react'
+// import { Dialog, Transition } from '@headlessui/react'
+// import { XMarkIcon } from '@heroicons/react/24/outline'
+// import info from '../utils/info'
+// import InfoCard from '../components/InfoCard'
+// import {motion} from 'framer-motion'
+// import Map from '../pages/Map';
+// import { GetStaticProps, InferGetStaticPropsType } from 'next';
+// import getShopsWithLocations from './api/getVendors';
+// const searchResults = info;
+
+// type ExploreProps = {
+//   handleOpen: (o: boolean, idx:number)=>void,
+//   open: boolean;
+//   shops: any;
+// };
+
+// type ExploreState = {
+// };
+
+// export const getStaticProps: GetStaticProps = async () => {
+
+//     const { data } = await getShopsWithLocations();
+//     return { props: { shops: data }};
+//   };
+// function Explore({shops}:any){
+//     var [isOpen, setIsOpen] = useState(true)
+//     function closeModal() {
+//         setIsOpen(false)
+//       }
+    
+//       function openModal() {
+//         setIsOpen(true)
+//       }
+//   return (
+//     <motion.div
+//       initial={{ opacity: 0 }}
+//       whileInView={{ opacity: 1 }}
+//       viewport={{ once: true }}
+//     >
+//       <main className="flex">
+//         <section className="flex-grow pt-14 px-6">
+          
+//           {/* <div className="hidden lg:inline-flex mb-5 space-x-3 text-gray-800 whitespace-nowrap">
+//             <p className="button">Cancellation Flexible</p>
+//             <p className="button">Type of Place</p>
+//             <p className="button">Price</p>
+//             <p className="button">Rooms and Beds</p>
+//             <p className="button">More filters</p>
+//           </div> */}
+//           <div className="flex flex-col">
+//             {searchResults?.map((item: any) => (
+//               <InfoCard
+//                 key={item.img}
+//                 img={item.img}
+//                 location={item.location}
+//                 description={item.description}
+//                 title={item.title}
+//                 star={item.star}
+//                 price={item.price}
+//                 total={item.total}
+//               />
+//               ))}
+//           </div>
+//         </section>
+
+//         <motion.div
+//           initial={{ opacity: 0 }}
+//           whileInView={{ opacity: 1 }}
+//           viewport={{ once: true }}
+//           className="box hidden xl:inline-flex xl:min-w-[600px]"
+//         >
+//         <Map shops={shops}/>
+//         </motion.div>
+//       </main>
+//       </motion.div>
+//       );
+
+// };
+
+/* THIS IS THE SPOT OF DIFFERENCE */
 import React, { Fragment, useState } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
-import info from '../utils/info'
-import InfoCard from '../components/InfoCard'
-import {motion} from 'framer-motion'
-import Map from '../pages/Map';
+import Map from './Map';
+import { Transition } from '@headlessui/react'
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import getShopsWithLocations from './api/getVendors';
-const searchResults = info;
+import InfoCard from '../components/InfoCard'
+import {motion} from 'framer-motion'
+import info from '../utils/info'
+
+
 
 type ExploreProps = {
-  handleOpen: (o: boolean, idx:number)=>void,
-  open: boolean;
-  shops: any;
 };
 
 type ExploreState = {
+  showOpen: boolean;
 };
 
+type ExploreMenuProps = {
+  shops:any
+
+}
+
+type ExploreMenuState = {
+}
 export const getStaticProps: GetStaticProps = async () => {
 
-    const { data } = await getShopsWithLocations();
-    return { props: { shops: data }};
-  };
-function Explore({shops}:any){
-    var [isOpen, setIsOpen] = useState(true)
-    function closeModal() {
-        setIsOpen(false)
-      }
-    
-      function openModal() {
-        setIsOpen(true)
-      }
-  return (
-    <motion.div
+  const { data } = await getShopsWithLocations();
+  return { props: { shops: data }};
+};
+
+function ExploreMenu (props: ExploreMenuProps){
+
+    console.log(props.shops)
+    return (
+      <motion.div
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
-      viewport={{ once: true }}
+       viewport={{ once: true }}
     >
       <main className="flex">
         <section className="flex-grow pt-14 px-6">
@@ -179,7 +268,7 @@ function Explore({shops}:any){
             <p className="button">More filters</p>
           </div> */}
           <div className="flex flex-col">
-            {searchResults?.map((item: any) => (
+            {info?.map((item: any) => (
               <InfoCard
                 key={item.img}
                 img={item.img}
@@ -200,12 +289,37 @@ function Explore({shops}:any){
           viewport={{ once: true }}
           className="box hidden xl:inline-flex xl:min-w-[600px]"
         >
-        <Map shops={shops}/>
+          <Map shops={props.shops}/>
         </motion.div>
       </main>
       </motion.div>
-      );
+    )
+}
 
-};
+function Explore ({shops} : InferGetStaticPropsType<typeof getStaticProps>){
+
+  let [showOpen, setShowOpen] = useState(true)
+
+    // console.log(shops)
+    return (
+      <>
+        <div className="flex justify-between">
+          <Transition className="w-2/5" show={showOpen} 
+          enter='transition-all' enterFrom='opacity-0 w-0' enterTo='opacity-100 w-2/5'
+          leave='transition-all' leaveFrom='opacity-100 w-2/5' leaveTo='opacity-0 w-0'>
+            <ExploreMenu shops={shops}/>
+          </Transition>
+          <div className='relative grow'>
+            <button className='absolute z-10 rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm
+             hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 m-8'
+              onClick={()=>setShowOpen(!showOpen)}>
+              {showOpen ? "Hide Menu" : "Show Menu"}
+            </button>
+            <Map shops={shops}/>
+          </div>
+        </div>
+      </>
+    )
+}
 
 export default Explore;

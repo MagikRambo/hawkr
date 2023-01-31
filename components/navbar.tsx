@@ -6,7 +6,6 @@ import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import React from 'react'
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useState } from 'react'
-import ExploreMenu from './exploreMenu'
 import TypesMenu from './typesMenu'
 
 function classNames(...classes: string[]) {
@@ -53,7 +52,7 @@ function Navbar (){
                             <div className="flex h-16 justify-between">
                                 <div className="flex px-2 lg:px-0">
                                     <div className="flex flex-shrink-0 items-center">
-                                        <Link href="/#" onClick={()=>setOpen(false,0)}>
+                                        <Link href="/#">
                                             <img
                                                 className="block h-8 w-auto lg:hidden"
                                                 src="/img/hawkr_icon.png"
@@ -68,7 +67,7 @@ function Navbar (){
                                     </div>
                                     <div className="hidden lg:ml-6 lg:flex lg:space-x-8">
                                         {/* Current: "border-cyan-400 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" */}
-                                        <Link href="/#"
+                                        <Link href="/explore"
                                             onClick={()=>setOpen(true, 1)}
                                             className={classNames(currIdx == 1 ? "border-cyan-400 text-gray-900" : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
                                                 "inline-flex items-center border-b-4 px-1 pt-1 text-sm font-medium")}
@@ -76,7 +75,7 @@ function Navbar (){
                                             Explore Nearby
                                         </Link>
                                         <a
-                                            href="/#" onClick={()=>setOpen(true, 2)}
+                                            href="/types" onClick={()=>setOpen(true, 2)}
                                             className={classNames(currIdx == 2 ? "border-cyan-400 text-gray-900" : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
                                                 "inline-flex items-center border-b-4 px-1 pt-1 text-sm font-medium")}
                                         >
@@ -270,8 +269,8 @@ function Navbar (){
                     </>
                 )}
             </Disclosure>
-            <ExploreMenu handleOpen={setOpen} open={exploreOpen} />
-            <TypesMenu handleOpen={setOpen} open={typesOpen} />
+            {/* <ExploreMenu handleOpen={setOpen} open={exploreOpen} /> */}
+            {/* <TypesMenu handleOpen={setOpen} open={typesOpen} /> */}
             </>
         )
     
