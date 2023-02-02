@@ -224,6 +224,8 @@ import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import getShopsWithLocations from './api/getVendors';
 import InfoCard from '../components/InfoCard'
 import {motion} from 'framer-motion'
+import { getHawkrTypeIcon } from '../utils/functions/getHawkrTypeIcon';
+import hawkr_icon from '../public/img/hawkr_icon.png';
 import info from '../utils/info'
 
 
@@ -258,7 +260,7 @@ function ExploreMenu (props: ExploreMenuProps){
        viewport={{ once: true }}
     >
       <main className="flex">
-        <section className="flex-grow pt-14 px-6">
+        <section className="flex-grow pt-14 px-6 bg-black">
           
           {/* <div className="hidden lg:inline-flex mb-5 space-x-3 text-gray-800 whitespace-nowrap">
             <p className="button">Cancellation Flexible</p>
@@ -268,29 +270,17 @@ function ExploreMenu (props: ExploreMenuProps){
             <p className="button">More filters</p>
           </div> */}
           <div className="flex flex-col">
-            {info?.map((item: any) => (
+            {props.shops?.map((item: any) => (
               <InfoCard
-                key={item.img}
-                img={item.img}
-                location={item.location}
-                description={item.description}
-                title={item.title}
-                star={item.star}
-                price={item.price}
-                total={item.total}
+                key={item.shopID}
+                img={hawkr_icon}
+                location={"item.location"}
+                description={item.shopDescription}
+                title={item.shopName}
               />
               ))}
           </div>
         </section>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="box hidden xl:inline-flex xl:min-w-[600px]"
-        >
-          <Map shops={props.shops}/>
-        </motion.div>
       </main>
       </motion.div>
     )

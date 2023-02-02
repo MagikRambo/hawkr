@@ -9,9 +9,6 @@ type InfoCardProps = {
   location: any;
   description: any;
   title: any;
-  star: number;
-  price: any;
-  total: any;
 };
 
 function InfoCard(ICProps:InfoCardProps) {
@@ -42,18 +39,6 @@ function InfoCard(ICProps:InfoCardProps) {
         <h4 className="text-xl">{ICProps.title}</h4>
         <div className="border-b w-10 pt-5" />
         <p className="pt-2 text-sm text-gray-500 flex-grow">{ICProps.description}</p>
-        <div className="flex justify-between">
-          <p className="flex items-center">
-            <StarIcon className="h-5 text-red-400" />
-            {ICProps.star}
-          </p>
-          <div>
-            <p className="text-lg font-semibold pb-2 lg:text-2xl">
-              $ {ICProps.price} / night
-            </p>
-            <p className="text-right font-extralight">$ {ICProps.total}</p>
-          </div>
-        </div>
       </div>
     </motion.div>
   );
