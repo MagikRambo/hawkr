@@ -21,7 +21,7 @@ function InfoCard(ICProps:InfoCardProps) {
       transition={{ duration: 1 }}
       whileInView={{ opacity: 1, x: 0 }}
       className="flex py-7 px-2 pr-4 border-bi cursor-pointer hover:opacity-80
-    hover:shadow-lg transition duration-200 ease-out first:border-t"
+    hover:shadow-lg transition duration-200 ease-out first:border-t bg-slate-100 sm:m-1 rounded-2xl"
     >
       <div className="relative h-24 w-40 md:h-24 md:w-40 flex-shrink-0">
         <Image
@@ -33,10 +33,10 @@ function InfoCard(ICProps:InfoCardProps) {
       </div>
       <div className="flex flex-col flex-grow pl-5">
         <div className="flex justify-between">
-          <p>{ICProps.location}</p>
+          <p className="text-gray-400">{ICProps.location}</p>
           <HeartIcon className="h-7 cursor-pointer" />
         </div>
-        <h4 className="text-xl">{ICProps.title}</h4>
+        <h4 className="text-xl text-black">{ICProps.title}</h4>
         <div className="border-b w-10 pt-5" />
         <p className="pt-2 text-sm text-gray-500 flex-grow">{ICProps.description}</p>
       </div>
