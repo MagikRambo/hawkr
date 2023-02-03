@@ -4,7 +4,9 @@ import Link from 'next/link'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import React from 'react'
-import Explore from '../pages/explore'
+import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
+import { useState } from 'react'
+import TypesMenu from './typesMenu'
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
@@ -12,20 +14,37 @@ function classNames(...classes: string[]) {
 
 type NavProps = {
     handleOpen: (o: boolean, idx:number) => void,
-    curr_idx: number
+    curr_idx: number,
+    shops: any,
 };
 
 type NavState = {
 };
 
-class Navbar extends React.Component<NavProps, NavState>{
 
-    constructor(props: NavProps) {
-        super(props)
+function Navbar (){
+    const [exploreOpen, setExploreOpen] = useState(false)
+    const [typesOpen, setTypesOpen] = useState(false)  
+    const [currIdx, setCurIdx] = useState(0)
+    
+    const setOpen = (o: boolean, idx:number) => {
+        console.log(o,idx)
+        if(idx == 1){
+            setExploreOpen(o)
+            setCurIdx(idx)
+        } 
+        else if (idx == 2){
+            setTypesOpen(o)
+            setCurIdx(idx)
+        }
+        else{
+            setExploreOpen(false)
+            setTypesOpen(false)
+            setCurIdx(0)
+        }
     }
-
-    render(): React.ReactNode {
         return (
+            <>
             <Disclosure as="nav" className="bg-white shadow">
                 {({ open }) => (
                     <>
@@ -33,7 +52,7 @@ class Navbar extends React.Component<NavProps, NavState>{
                             <div className="flex h-16 justify-between">
                                 <div className="flex px-2 lg:px-0">
                                     <div className="flex flex-shrink-0 items-center">
-                                        <Link href="/#" onClick={()=>this.props.handleOpen(false,0)}>
+                                        <Link href="/#">
                                             <img
                                                 className="block h-8 w-auto lg:hidden"
                                                 src="/img/hawkr_icon.png"
@@ -48,16 +67,16 @@ class Navbar extends React.Component<NavProps, NavState>{
                                     </div>
                                     <div className="hidden lg:ml-6 lg:flex lg:space-x-8">
                                         {/* Current: "border-cyan-400 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" */}
-                                        <Link href="/explore" 
-                                            onClick={()=>this.props.handleOpen(true, 1)}
-                                            className={classNames(this.props.curr_idx == 1 ? "border-cyan-400 text-gray-900" : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
+                                        <Link href="/explore"
+                                            onClick={()=>setOpen(true, 1)}
+                                            className={classNames(currIdx == 1 ? "border-cyan-400 text-gray-900" : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
                                                 "inline-flex items-center border-b-4 px-1 pt-1 text-sm font-medium")}
                                         >
                                             Explore Nearby
                                         </Link>
                                         <a
-                                            href="/#" onClick={()=>this.props.handleOpen(true, 2)}
-                                            className={classNames(this.props.curr_idx == 2 ? "border-cyan-400 text-gray-900" : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
+                                            href="/types" onClick={()=>setOpen(true, 2)}
+                                            className={classNames(currIdx == 2 ? "border-cyan-400 text-gray-900" : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
                                                 "inline-flex items-center border-b-4 px-1 pt-1 text-sm font-medium")}
                                         >
                                             Hawkr Type
@@ -159,8 +178,8 @@ class Navbar extends React.Component<NavProps, NavState>{
                                         </Transition>
                                     </Menu>
                                     <Link
-                                        href="/SignIn"  onClick={()=>this.props.handleOpen(true, 3)}
-                                        className={classNames(this.props.curr_idx == 3 ? "border-cyan-400 text-gray-900" : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
+                                        href="/SignIn"  onClick={()=>setOpen(true, 3)}
+                                        className={classNames(currIdx == 3 ? "border-cyan-400 text-gray-900" : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
                                             "inline-flex items-center border-b-4 px-1 pt-1 text-sm font-medium")}
                                     >
                                         Sign In
@@ -250,8 +269,11 @@ class Navbar extends React.Component<NavProps, NavState>{
                     </>
                 )}
             </Disclosure>
+            {/* <ExploreMenu handleOpen={setOpen} open={exploreOpen} /> */}
+            {/* <TypesMenu handleOpen={setOpen} open={typesOpen} /> */}
+            </>
         )
-    }
+    
 }
 
 export default Navbar;
