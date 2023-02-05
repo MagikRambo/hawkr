@@ -15,7 +15,7 @@ import RightArrow from '../public/img/Right_Arrow.svg'
 import Image from 'next/image'
 
 import Link from 'next/link';
-
+import reverseGeocode from './api/reverseGeocode';
 
 type ExploreState = {
   showOpen: boolean;
@@ -74,6 +74,9 @@ function TypesMenu (props: TypesMenuProps){
                 title={item}
               />
               ))}
+            <Link href='#' onClick={reverseGeocode}>
+              APPLE BEES
+            </Link>
           </div>
         </section>
       </main>
