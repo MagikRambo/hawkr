@@ -1,11 +1,11 @@
 import React from "react"
 
-export default async function reverseGeocode(){
+export default async function reverseGeocode(LAT:number, LNG:number){
     
     const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_KEY!
 
-    const LAT = 40.747104747417886
-    const LNG = -111.84798275571772
+    // const LAT = 40.747104747417886
+    // const LNG = -111.84798275571772
     let url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${LAT},${LNG}&key=${API_KEY}`
 
 
@@ -19,6 +19,6 @@ export default async function reverseGeocode(){
             // console.log(parts.formatted_address);
         }).catch(err => console.warn(err.message))
     
-    console.log(address)
+    // console.log(address)
     return address;
 }

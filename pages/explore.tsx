@@ -6,6 +6,7 @@ import getShopsWithLocations from './api/getVendors';
 import InfoCard from '../components/InfoCard'
 import {motion} from 'framer-motion'
 import { getHawkrTypeIcon } from '../utils/functions/getHawkrTypeIcon';
+import reverseGeocode from './api/reverseGeocode';
 
 //Image imports
 import hawkr_icon from '../public/img/hawkr_icon.png';
@@ -13,7 +14,6 @@ import info from '../utils/info'
 import LeftArrow from '../public/img/Left_Arrow.svg'
 import RightArrow from '../public/img/Right_Arrow.svg'
 import Image from 'next/image'
-
 
 
 type ExploreProps = {
@@ -33,12 +33,26 @@ type ExploreMenuState = {
 export const getStaticProps: GetStaticProps = async () => {
 
   const { data } = await getShopsWithLocations();
+
+  var data_temp:any = []
+
+  data?.forEach(async (value, index) => {
+    data[index].location = await reverseGeocode(value.location.lat, value.location.lng);
+    data_temp.push(data[index])
+    // console.log(data[index])
+  })
+  console.log(data_temp)
+  // data?.map(async (item:any, index) => {
+  //   console.log(data[index])
+  //   // data[index] = await reverseGeocode(item.location.lat, item.location.lng)
+  // })
+
   return { props: { shops: data }};
 };
 
 function ExploreMenu (props: ExploreMenuProps){
 
-    console.log(props.shops)
+    // console.log(props.shops)
     return (
       <motion.div
       initial={{ opacity: 0 }}
@@ -57,13 +71,16 @@ function ExploreMenu (props: ExploreMenuProps){
           </div> */}
           <div className="flex flex-col">
             {props.shops?.map((item: any) => (
+              <>
               <InfoCard
                 key={item.shopID}
                 img={hawkr_icon}
                 location={"item.location"}
                 description={item.shopDescription}
                 title={item.shopName}
-              />
+                />
+              {/* {console.log(item.location)} */}
+                </>
               ))}
           </div>
         </section>
