@@ -9,7 +9,6 @@ import { getHawkrTypeIcon } from '../utils/functions/getHawkrTypeIcon';
 
 //Image imports
 import hawkr_icon from '../public/img/hawkr_icon.png';
-import info from '../utils/info'
 import LeftArrow from '../public/img/Left_Arrow.svg'
 import RightArrow from '../public/img/Right_Arrow.svg'
 import Image from 'next/image'
@@ -46,8 +45,7 @@ function ExploreMenu (props: ExploreMenuProps){
        viewport={{ once: true }}
     >
       <main className="flex">
-        <section className="flex-grow pt-14 px-6 bg-slate-200">
-          
+        <section className="flex-grow h-screen pt-14 px-6 bg-slate-200 overflow-y-auto [&::-webkit-scrollbar]:hidden">
           {/* <div className="hidden lg:inline-flex mb-5 space-x-3 text-gray-800 whitespace-nowrap">
             <p className="button">Cancellation Flexible</p>
             <p className="button">Type of Place</p>
