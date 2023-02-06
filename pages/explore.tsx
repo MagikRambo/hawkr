@@ -13,6 +13,7 @@ import info from '../utils/info'
 import LeftArrow from '../public/img/Left_Arrow.svg'
 import RightArrow from '../public/img/Right_Arrow.svg'
 import Image from 'next/image'
+import Link from 'next/link';
 
 
 
@@ -57,13 +58,15 @@ function ExploreMenu (props: ExploreMenuProps){
           </div> */}
           <div className="flex flex-col">
             {props.shops?.map((item: any) => (
+              <Link href={`shops/${item.shopID}`}>
               <InfoCard
                 key={item.shopID}
                 img={hawkr_icon}
                 location={"item.location"}
                 description={item.shopDescription}
                 title={item.shopName}
-              />
+                />
+                </Link>
               ))}
           </div>
         </section>
