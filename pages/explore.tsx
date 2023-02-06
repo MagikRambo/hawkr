@@ -14,7 +14,7 @@ import Image from 'next/image'
 import Link from 'next/link';
 
 type ExploreMenuProps = {
-  shops: any
+  shops:any
 }
 
 export const getStaticProps: GetStaticProps = async () => {
@@ -23,6 +23,27 @@ export const getStaticProps: GetStaticProps = async () => {
   return { props: { shops: data } };
 };
 
+type ShopeCardProps = {
+  shop: {
+    hawkrType: string,
+    location: {},
+    shopDescription: string,
+    shopID: string,
+    shopName: string,
+  }
+}
+
+function ShopCard(props: ShopeCardProps){
+
+  return (
+    <main className="flex">
+      <section className='flex-grow h-screen pt-8 px-6 bg-slate-200 overflow-y-auto [&::-webkit-scrollbar]:hidden'>
+        <h1>{props.shop.shopName}</h1>
+      </section>
+    </main>
+  )
+}
+
 
 function ExploreMenu(props: ExploreMenuProps) {
   const [curr_page, setCurrPage] = useState(1)
@@ -30,7 +51,7 @@ function ExploreMenu(props: ExploreMenuProps) {
   console.log(props.shops)
   return (
       <main className="flex">
-        <section className="flex-grow h-screen pt-14 px-6 bg-slate-200 overflow-y-auto [&::-webkit-scrollbar]:hidden">
+        <section className="flex-grow h-screen pt-8 px-6 bg-slate-200 overflow-y-auto [&::-webkit-scrollbar]:hidden">
           {/* <div className="hidden lg:inline-flex mb-5 space-x-3 text-gray-800 whitespace-nowrap">
             <p className="button">Cancellation Flexible</p>
             <p className="button">Type of Place</p>
@@ -68,7 +89,8 @@ function Explore({ shops }: InferGetStaticPropsType<typeof getStaticProps>) {
         <Transition className="w-2/5" show={showOpen}
           enter='transition-all' enterFrom='opacity-0 w-0' enterTo='opacity-100 w-2/5'
           leave='transition-all' leaveFrom='opacity-100 w-2/5' leaveTo='opacity-0 w-0'>
-          <ExploreMenu shops={shops} />
+          {/**<ExploreMenu shops={shops} />*/}
+          <ShopCard shop={shops[0]}/>
         </Transition>
         <div className='relative grow'>
           <button className='absolute z-10 rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm
