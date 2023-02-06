@@ -24,6 +24,7 @@ export const getStaticProps: GetStaticProps = async () => {
 
 
 function ExploreMenu(props: ExploreMenuProps) {
+  const [curr_page, setCurrPage] = useState(1)
 
   console.log(props.shops)
   return (
@@ -47,7 +48,8 @@ function ExploreMenu(props: ExploreMenuProps) {
               />
             ))}
           </div>
-          <Pagination curr_page_idx={1} total_items={props.shops.length} items_on_each_page={10} on_page_swith_to={()=>{}}/>
+          <Pagination curr_page_idx={curr_page} total_items={props.shops.length} 
+          items_on_each_page={10} on_page_swith_to={(num)=>setCurrPage(num)}/>
         </section>
       </main>
   )
@@ -57,7 +59,6 @@ function Explore({ shops }: InferGetStaticPropsType<typeof getStaticProps>) {
 
   let [showOpen, setShowOpen] = useState(true)
 
-  // console.log(shops)
   return (
     <>
       <div className="flex justify-between bg-slate-200">
