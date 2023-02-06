@@ -73,7 +73,7 @@ function ExploreMenu (props: any){
 
 function shopDetails({shopData}:InferGetStaticPropsType<typeof getStaticProps>){
 
-    console.log("WE MADE IT TO DETAILS")
+    // console.log("WE MADE IT TO DETAILS")
 
     console.log(shopData[0])
     // shopData = shopData[0]
@@ -85,6 +85,8 @@ function shopDetails({shopData}:InferGetStaticPropsType<typeof getStaticProps>){
             <Transition className="w-2/5" show={showOpen} 
             enter='transition-all' enterFrom='opacity-0 w-0' enterTo='opacity-100 w-2/5'
             leave='transition-all' leaveFrom='opacity-100 w-2/5' leaveTo='opacity-0 w-0'>
+                
+             {/*  SECTION TO CREATE A NEW SHOP PAGE AND INSERT DATA HERE. */}
               <ExploreMenu shops={shopData}/>
             </Transition>
             <div className='relative grow'>
@@ -99,12 +101,4 @@ function shopDetails({shopData}:InferGetStaticPropsType<typeof getStaticProps>){
         </>
       )
 }
-function Explore ({shopData} : InferGetStaticPropsType<typeof getStaticProps>){
-
-  let [showOpen, setShowOpen] = useState(true)
-
-    // console.log(shops)
-
-}
-
 export default shopDetails
