@@ -1,54 +1,36 @@
-import React, { Fragment, useState } from 'react'
+import React, { useState } from 'react'
 import Map from './Map';
 import { Transition } from '@headlessui/react'
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import getShopsWithLocations from './api/getVendors';
 import InfoCard from '../components/InfoCard'
-import {motion} from 'framer-motion'
-import { getHawkrTypeIcon } from '../utils/functions/getHawkrTypeIcon';
+import Pagination from '../components/pagination';
 
 //Image imports
 import hawkr_icon from '../public/img/hawkr_icon.png';
-import info from '../utils/info'
 import LeftArrow from '../public/img/Left_Arrow.svg'
 import RightArrow from '../public/img/Right_Arrow.svg'
 import Image from 'next/image'
 import Link from 'next/link';
 
-
-
-type ExploreProps = {
-};
-
-type ExploreState = {
-  showOpen: boolean;
-};
-
 type ExploreMenuProps = {
-  shops:any
-
+  shops: any
 }
 
-type ExploreMenuState = {
-}
 export const getStaticProps: GetStaticProps = async () => {
 
   const { data } = await getShopsWithLocations();
-  return { props: { shops: data }};
+  return { props: { shops: data } };
 };
 
-function ExploreMenu (props: ExploreMenuProps){
 
-    console.log(props.shops)
-    return (
-      <motion.div
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-       viewport={{ once: true }}
-    >
+function ExploreMenu(props: ExploreMenuProps) {
+  const [curr_page, setCurrPage] = useState(1)
+
+  console.log(props.shops)
+  return (
       <main className="flex">
-        <section className="flex-grow pt-14 px-6 bg-slate-200">
-          
+        <section className="flex-grow h-screen pt-14 px-6 bg-slate-200 overflow-y-auto [&::-webkit-scrollbar]:hidden">
           {/* <div className="hidden lg:inline-flex mb-5 space-x-3 text-gray-800 whitespace-nowrap">
             <p className="button">Cancellation Flexible</p>
             <p className="button">Type of Place</p>
@@ -69,36 +51,36 @@ function ExploreMenu (props: ExploreMenuProps){
                 </Link>
               ))}
           </div>
+          <Pagination curr_page_idx={curr_page} total_items={props.shops.length} 
+          items_on_each_page={10} on_page_swith_to={(num)=>setCurrPage(num)}/>
         </section>
       </main>
-      </motion.div>
-    )
+  )
 }
 
-function Explore ({shops} : InferGetStaticPropsType<typeof getStaticProps>){
+function Explore({ shops }: InferGetStaticPropsType<typeof getStaticProps>) {
 
   let [showOpen, setShowOpen] = useState(true)
 
-    // console.log(shops)
-    return (
-      <>
-        <div className="flex justify-between bg-slate-200">
-          <Transition className="w-2/5" show={showOpen} 
+  return (
+    <>
+      <div className="flex justify-between bg-slate-200">
+        <Transition className="w-2/5" show={showOpen}
           enter='transition-all' enterFrom='opacity-0 w-0' enterTo='opacity-100 w-2/5'
           leave='transition-all' leaveFrom='opacity-100 w-2/5' leaveTo='opacity-0 w-0'>
-            <ExploreMenu shops={shops}/>
-          </Transition>
-          <div className='relative grow'>
-            <button className='absolute z-10 rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm
+          <ExploreMenu shops={shops} />
+        </Transition>
+        <div className='relative grow'>
+          <button className='absolute z-10 rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm
              hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 m-8'
-              onClick={()=>setShowOpen(!showOpen)}>
-              {showOpen ? <Image width={23} height={23} alt="LeftArrow" src={LeftArrow.src}/> : <div className="flex text-blue-500 text-base"><Image width={20} height={20} alt="RightArrow" src={RightArrow.src}/>Show List</div>}
-            </button>
-            <Map shops={shops}/>
-          </div>
+            onClick={() => setShowOpen(!showOpen)}>
+            {showOpen ? <Image width={23} height={23} alt="LeftArrow" src={LeftArrow.src} /> : <div className="flex text-blue-500 text-base"><Image width={20} height={20} alt="RightArrow" src={RightArrow.src} />Show List</div>}
+          </button>
+          <Map shops={shops} />
         </div>
-      </>
-    )
+      </div>
+    </>
+  )
 }
 
 export default Explore;

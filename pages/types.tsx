@@ -5,11 +5,9 @@ import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import getShopsWithLocations from './api/getVendors';
 import TypesCard from '../components/typesCard'
 import {motion} from 'framer-motion'
-import { getHawkrTypeIcon } from '../utils/functions/getHawkrTypeIcon';
 
 //images
 import hawkr_icon from '../public/img/hawkr_icon.png';
-import info from '../utils/info'
 import LeftArrow from '../public/img/Left_Arrow.svg'
 import RightArrow from '../public/img/Right_Arrow.svg'
 import Image from 'next/image'
