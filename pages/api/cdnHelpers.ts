@@ -12,7 +12,7 @@ export async function uploadShopImage(e, user){
 
     const {data, error} = await supabase
     .storage
-    .from('shop_images')
+    .from('shop-images')
     .upload(user.id + "/" + file.name, file)
 
     if(data){
@@ -28,7 +28,7 @@ export async function uploadProfileImage(e,user){
 
     const {data, error} = await supabase
     .storage
-    .from('profile_images')
+    .from('profile-images')
     .upload(user.id + "/" + file.name, file)
 
     if(data){
@@ -44,7 +44,7 @@ export async function getShopImage(e,user){
 
     const {data, error} = await supabase
     .storage
-    .from('shop_images')
+    .from('shop-images')
     .list(user?.id + "/", {
         limit: 10,
         offset: 0,
@@ -65,7 +65,7 @@ export async function getProfileImage(e,user){
 
     const {data, error} = await supabase
     .storage
-    .from('shop_images')
+    .from('shop-images')
     .list(user?.id + "/", {
         limit: 10,
         offset: 0,
