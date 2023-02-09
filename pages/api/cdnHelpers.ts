@@ -1,14 +1,16 @@
 import { useSupabaseClient } from "@supabase/auth-helpers-react"
+import { createClient } from "@supabase/supabase-js";
 import { useState } from "react"
 
-const supabase = useSupabaseClient();
-const [images, setImages] = useState<any>([]);
+// const supabase = useSupabaseClient();
+// const [images, setImages] = useState<any>([]);
 
 //https://www.youtube.com/watch?v=8tfdY0Sf2rA&t=210s
 // Video helps with functions above ^
 export async function uploadShopImage(e, user){
 
     let file = e.target.files[0]
+    const supabase = useSupabaseClient();
 
     const {data, error} = await supabase
     .storage
@@ -25,6 +27,7 @@ export async function uploadShopImage(e, user){
 
 export async function uploadProfileImage(e,user){
     let file = e.target.files[0]
+    const supabase = useSupabaseClient();
 
     const {data, error} = await supabase
     .storage
@@ -39,13 +42,12 @@ export async function uploadProfileImage(e,user){
     }
 }
 
-export async function getShopImage(e,user){
-    let file = e.target.files[0]
-
+export async function getShopImage(shopID, supabase, setImages){
+    
     const {data, error} = await supabase
     .storage
     .from('shop-images')
-    .list(user?.id + "/", {
+    .list(shopID + "/", {
         limit: 10,
         offset: 0,
         sortBy: {column: "name", order: "asc"}
@@ -62,6 +64,7 @@ export async function getShopImage(e,user){
 }
 export async function getProfileImage(e,user){
     let file = e.target.files[0]
+    const supabase = useSupabaseClient();
 
     const {data, error} = await supabase
     .storage
