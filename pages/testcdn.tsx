@@ -27,48 +27,13 @@ export default function testcdn({data}:any){
 
     const [images, setImages] = useState([])
 
-    // console.log(data);
-
-    // const getShopImage =  async (user:string) => {
-
-    //     const {data, error} = await supabase
-    //     .storage
-    //     .from('shop-images')
-    //     .list(user + "/", {
-    //         limit: 10,
-    //         offset: 0,
-    //         sortBy: {column: "name", order: "asc"}
-    //     })
-    
-    
-    //     if(data !== null){
-    //         console.log("IN FUNCTION: ", data)
-    //         return {data: data}
-    //     }
-    //     else{
-    //         alert("Error loading images")
-    //         console.log(error)
-    //     }
-    // }
-    
- 
-    // var d 
-    // useEffect(() => {
-    //     d = getShopImage(userID);
-    //     console.log("INSIDE USE EFFECT: ", d)
-    // }, [])
-
-    // var d;
-    // var e;
     useEffect(() => {
         getShopImage(userID, supabase, setImages)
     }, [])
 
-    // console.log("MAIN THREAD: ", images)
     return(
         <div>
             <h1> Testing page for cdn functions</h1>
-            {/* <Image width={10} height={10} alt="rambo" src={SHOP_CDN_URL + '/' + last}/> */}
             <div>
 
                 {images.map( (image) => {
