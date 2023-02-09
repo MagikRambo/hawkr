@@ -42,7 +42,7 @@ export default function testcdn({data}:any){
                         {console.log(image)}
                         {console.log(`Image ID: ${image.id}\tImage Name: ${image.name}`)}
                         {console.log(`URL: ${SHOP_CDN_URL}/${userID}/${image.name}`)}
-                        <Image key={image.id} height={10} width={10} alt="hi" src={SHOP_CDN_URL + '/' + userID + '/' + image.name}/>
+                        <Image key={image.id} height={100} width={100} alt="hi" src={SHOP_CDN_URL + '/' + userID + '/' + image.name}/>
                         </>
                         );
                 })}
