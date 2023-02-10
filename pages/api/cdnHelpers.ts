@@ -7,6 +7,8 @@ import { useState } from "react"
 
 //https://www.youtube.com/watch?v=8tfdY0Sf2rA&t=210s
 // Video helps with functions above ^
+
+// TO be utilized in 'Create a Shop' or 'Edit a shop'
 export async function uploadShopImage(e, supabase, userID){
 
     let file = e.target.files[0]
