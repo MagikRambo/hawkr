@@ -6,7 +6,6 @@ import { StarIcon } from "@heroicons/react/24/solid";
 
 type InfoCardProps = {
   img: any;
-  location?: any;
   description: any;
   title: any;
 };
@@ -32,10 +31,6 @@ function InfoCard(ICProps:InfoCardProps) {
         />
       </div>
       <div className="flex flex-col flex-grow pl-5">
-        <div className="flex justify-between">
-          <p className="text-gray-400">{ICProps.location}</p>
-          <HeartIcon className="h-7 cursor-pointer" />
-        </div>
         <h4 className="text-xl text-black">{ICProps.title}</h4>
         <div className="border-b w-10 pt-5" />
         <p className="pt-2 text-sm text-gray-500 flex-grow">{ICProps.description}</p>
