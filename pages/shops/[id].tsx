@@ -13,6 +13,8 @@ import { Transition } from '@headlessui/react'
 import Link from "next/link";
 import LeftArrow from '../../public/img/Left_Arrow.svg'
 import RightArrow from '../../public/img/Right_Arrow.svg'
+import ShopCard from '../../components/ShopCard';
+
 
 export const getStaticPaths = async () => {
     const {data} = await get_shops_with_location();
@@ -42,7 +44,6 @@ export const getStaticProps = async ( {params}:any ) => {
 }
 function ExploreMenu (props: any){
 
-    console.log(props.shops)
     return (
       <motion.div
       initial={{ opacity: 0 }}
@@ -54,16 +55,16 @@ function ExploreMenu (props: any){
 
           <div className="flex flex-col">
             {props.shops?.map((item: any) => (
-              <Link href={`shops/${item.shopID}`}>
-              <InfoCard
+                <ShopCard
                 key={item.shopID}
-                img={hawkr_icon}
-                location={"item.location"}
-                description={item.shopDescription}
-                title={item.shopName}
+                hawkrType={item.hawkrType}
+                location={item.location}
+                shopDescription={item.shopDescription}
+                shopID={item.shopID}
+                shopName={item.shopName}
+
                 />
-                </Link>
-              ))}
+                ))}
           </div>
         </section>
       </main>

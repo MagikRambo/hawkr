@@ -1,16 +1,14 @@
 import { HeartIcon, StarIcon } from '@heroicons/react/24/outline';
 
-type ShopeCardProps = {
-  shop: {
+type ShopCardProps = {
     hawkrType: string,
     location: {lat: number, lng: number},
     shopDescription: string,
     shopID: string,
     shopName: string,
   }
-}
 
-export default function ShopCard(props: ShopeCardProps){
+export default function ShopCard(props: ShopCardProps){
 
   return (
     <main className="flex">
@@ -18,14 +16,14 @@ export default function ShopCard(props: ShopeCardProps){
         <div className='h-60'/>
         <div className='flex justify-between items-center'>
           <div>
-            <h1 className='text-6xl font-bold pt-8'>{props.shop.shopName}</h1>
-            <p className='text-xl pb-4'>{props.shop.hawkrType}</p>
+            <h1 className='text-6xl font-bold pt-8'>{props.shopName}</h1>
+            <p className='text-xl pb-4'>{props.hawkrType}</p>
           </div>
           <HeartIcon className='h-14 cursor-pointer mr-7 '/>
         </div>
-        <p className='font-bold text-xl py-2'>Current Location: {props.shop.location.lat} {props.shop.location.lng}</p>
+        <p className='font-bold text-xl py-2'>Current Location: {props.location.lat} {props.location.lng}</p>
         <p className='font-bold text-4xl py-4'>Vender Detail</p>
-        <p className='py-2 text-2xl'>{props.shop.shopDescription}</p>
+        <p className='py-2 text-2xl'>{props.shopDescription}</p>
 
         {/** The text Review Part*/}
         <p className='font-bold text-4xl py-4'>Leave a Review</p>
