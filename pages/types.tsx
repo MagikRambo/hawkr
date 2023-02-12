@@ -72,6 +72,8 @@ function TypesMenu (props: TypesMenuProps){
             {types?.map((item: any) => (
               <>
               {/* {item === "FoodTruck" ? <div/> : <div/>} */}
+              {/* {console.log("Inputting the type")} */}
+              {/* {console.log(typeof(item.hawkrType))} */}
               <Link href={`types/${item}`}>
                 <TypesCard
                   img={hawkr_icon}
