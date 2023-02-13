@@ -6,6 +6,7 @@ import get_shops_with_location from "../api/getVendors";
 import get_shops_by_id from "../api/getShopById";
 import InfoCard from '../../components/InfoCard'
 import Pagination from '../../components/pagination';
+import { useRouter } from 'next/router';
 
 //Image imports
 import hawkr_icon from '../../public/img/hawkr_icon.png';
@@ -54,11 +55,15 @@ function Types_Dyn_Menu(props: ExploreMenuProps) {
   const [curr_page, setCurrPage] = useState(1)
 
   console.log(props.shops)
+  const router = useRouter()
+  const routerType = router.query.type
+
+
   //Hawkr-blue is #1498
   return (
       <main className="flex">
         <section className="flex-grow h-screen pt-6 px-6 bg-slate-200 overflow-y-auto [&::-webkit-scrollbar]:hidden">
-          <h1 className=' pb-2 pl-2 font-bold text-gray-600 text-2xl'> Hawkrs near me</h1>
+          <h1 className=' pb-2 pl-2 font-bold text-gray-600 text-2xl'> {routerType} Hawkrs near me</h1>
 
             <div className="flex flex-col">
               {props.shops?.map((item: any) => (
