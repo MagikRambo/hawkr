@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import Map from '../../Map'
+import Map from '../../../Map'
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType} from "next";
-import get_shops_with_location from "../../api/getVendors";
-import get_shops_by_id from "../../api/getShopById";
-import InfoCard from '../../../components/InfoCard'
+import get_shops_with_location from "../../../api/getVendors";
+import get_shops_by_id from "../../../api/getShopById";
+import InfoCard from '../../../../components/InfoCard'
 import {motion} from 'framer-motion'
 import hawkr_icon from '../../public/img/hawkr_icon.png';
 
@@ -13,7 +13,7 @@ import { Transition } from '@headlessui/react'
 import Link from "next/link";
 import LeftArrow from '../../../public/img/Left_Arrow.svg'
 import RightArrow from '../../../public/img/Right_Arrow.svg'
-import ShopCard from '../../../components/ShopCard';
+import ShopCard from '../../../../components/ShopCard';
 
 
 export const getStaticPaths = async () => {
@@ -31,9 +31,11 @@ export const getStaticPaths = async () => {
 
 }
 
-export const getStaticProps = async ( {params}:any ) => {
+export const getStaticProps = async ( context ) => {
 
-
+    const { params } = context
+    console.log(context)
+    
     const id = params.id
     // console.log(id)
     const {data} = await get_shops_by_id(id)

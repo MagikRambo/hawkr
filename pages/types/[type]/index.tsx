@@ -1,17 +1,17 @@
 import React, { useState } from 'react'
-import Map from '../Map';
+import Map from '../../Map';
 import { Transition } from '@headlessui/react'
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next';
-import get_shops_with_location from "../api/getVendors";
-import get_shops_by_id from "../api/getShopById";
-import InfoCard from '../../components/InfoCard'
-import Pagination from '../../components/pagination';
+import get_shops_with_location from "../../api/getVendors";
+import get_shops_by_id from "../../api/getShopById";
+import InfoCard from '../../../components/InfoCard'
+import Pagination from '../../../components/pagination';
 import { useRouter } from 'next/router';
 
 //Image imports
-import hawkr_icon from '../../public/img/hawkr_icon.png';
-import LeftArrow from '../../public/img/Left_Arrow.svg'
-import RightArrow from '../../public/img/Right_Arrow.svg'
+import hawkr_icon from '../../../public/img/hawkr_icon.png';
+import LeftArrow from '../../../public/img/Left_Arrow.svg'
+import RightArrow from '../../../public/img/Right_Arrow.svg'
 import Image from 'next/image'
 import Link from 'next/link';
 
@@ -27,34 +27,40 @@ export const getStaticPaths = async () => {
             params: {type: item.shopID.toString()}
         }
     })
+
+    // console.log(paths)
     return {
         paths,
         fallback: false
     }
 
 }
-// export const getStaticProps = async ( {params}:any ) => {
+export const getStaticProps = async ( {params: {type}} ) => {
 
+    // const {params} = context
+    // console.log(context)
+    
+    console.log(type)
+    // const id = params.id
+    // console.log(id)
+    // const {data} = await get_shops_by_id(id)
+    // console.log(data)
+    // console.log(error)
+    return {props: {shopData: data}}
 
-//     const id = params.id
-//     // console.log(id)
-//     const {data} = await get_shops_by_id(id)
-//     // console.log(data)
-//     // console.log(error)
-//     return {props: {shopData: data}}
+}
+// export const getStaticProps: GetStaticProps = async () => {
 
-// }
-export const getStaticProps: GetStaticProps = async () => {
-
-    const { data } = await get_shops_with_location();
-    return { props: { shops: data } };
-  };
+//     const { data } = await get_shops_with_location();
+//     console.log(data)
+//     return { props: { shops: data } };
+//   };
 
 
 function Types_Dyn_Menu(props: ExploreMenuProps) {
   const [curr_page, setCurrPage] = useState(1)
 
-  console.log(props.shops)
+  console.log(props)
   const router = useRouter()
   const routerType = router.query.type
 
