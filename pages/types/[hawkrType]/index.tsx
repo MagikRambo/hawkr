@@ -14,53 +14,55 @@ import LeftArrow from '../../../public/img/Left_Arrow.svg'
 import RightArrow from '../../../public/img/Right_Arrow.svg'
 import Image from 'next/image'
 import Link from 'next/link';
+import get_hawkr_types from '../../api/getHawkrTypes';
+import get_shops_by_type from '../../api/getShopsByType';
 
 type ExploreMenuProps = {
   shops:any
 }
 
 export const getStaticPaths = async () => {
-    const {data} = await get_shops_with_location();
-    // console.log(data)
-    const paths = data?.map(item => {
-        return {
-            params: {type: item.shopID.toString()}
-        }
-    })
-
-    // console.log(paths)
+  const {data} = await get_hawkr_types();
+  const paths = data?.map(item => {
     return {
-        paths,
-        fallback: false
+      params: {hawkrType: item.hawkrType.toString()}
     }
-
+  })
+  return {
+      paths,
+      fallback: false
+  };
 }
-export const getStaticProps = async ( {params: {type}} ) => {
 
-    // const {params} = context
-    // console.log(context)
+// export const getStaticProps = async ( ) => {
+
+//     // const {params} = context
+//     // console.log(context)
     
-    console.log(type)
-    // const id = params.id
-    // console.log(id)
-    // const {data} = await get_shops_by_id(id)
+//     // console.log(type)
+//     // const id = params.id
+//     // console.log(id)
+//     // const {data} = await get_shops_by_id(id)
+//     // console.log(data)
+//     // console.log(error)
+//     // return {props: {shopData: data}}
+
+// }
+export const getStaticProps: GetStaticProps = async (context) => {
+    // console.log("THIS IS THE STATIC PROPS")
+    // console.log(context)
+    // console.log("context params", context.params.hawkrType)
+    // const data = null
+    const { data } = await get_shops_by_type(context.params.hawkrType);
     // console.log(data)
-    // console.log(error)
-    return {props: {shopData: data}}
-
-}
-// export const getStaticProps: GetStaticProps = async () => {
-
-//     const { data } = await get_shops_with_location();
-//     console.log(data)
-//     return { props: { shops: data } };
-//   };
+    return { props: { shops: data } };
+  };
 
 
 function Types_Dyn_Menu(props: ExploreMenuProps) {
   const [curr_page, setCurrPage] = useState(1)
 
-  console.log(props)
+  // console.log(props)
   const router = useRouter()
   const routerType = router.query.type
 

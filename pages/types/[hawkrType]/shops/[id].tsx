@@ -11,8 +11,8 @@ import hawkr_icon from '../../public/img/hawkr_icon.png';
 import Image from 'next/image';
 import { Transition } from '@headlessui/react'
 import Link from "next/link";
-import LeftArrow from '../../../public/img/Left_Arrow.svg'
-import RightArrow from '../../../public/img/Right_Arrow.svg'
+import LeftArrow from '../../../../public/img/Left_Arrow.svg'
+import RightArrow from '../../../../public/img/Right_Arrow.svg'
 import ShopCard from '../../../../components/ShopCard';
 
 
