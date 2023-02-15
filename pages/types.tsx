@@ -56,6 +56,7 @@ function TypesMenu (props: TypesMenuProps){
             types.push(typeElement.hawkrType)
         }
     }
+    console.log(types)
     return (
       <motion.div
       initial={{ opacity: 0 }}
@@ -63,14 +64,23 @@ function TypesMenu (props: TypesMenuProps){
        viewport={{ once: true }}
     >
       <main className="flex">
-        <section className="flex-grow pt-14 px-6 bg-slate-200">
+        <section className="flex-grow pt-6 px-6 bg-slate-200">
+        <h1 className=' pb-2 pl-2 font-bold text-gray-600 text-2xl'>Hawkr Types</h1>
+
           <div className="flex flex-col">
                 
             {types?.map((item: any) => (
-              <TypesCard
-                img={hawkr_icon}
-                title={item}
-              />
+              <>
+              {/* {item === "FoodTruck" ? <div/> : <div/>} */}
+              {/* {console.log("Inputting the type")} */}
+              {/* {console.log(typeof(item.hawkrType))} */}
+              <Link href={`types/${item}`}>
+                <TypesCard
+                  img={hawkr_icon}
+                  title={item}
+                  />
+                </Link>
+                </>
               ))}
           </div>
         </section>
