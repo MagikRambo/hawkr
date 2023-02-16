@@ -1,118 +1,86 @@
-import React, { Fragment, useState } from 'react'
+import React, { useState } from 'react'
 import Map from './Map';
 import { Transition } from '@headlessui/react'
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import getShopsWithLocations from './api/getVendors';
 import InfoCard from '../components/InfoCard'
-import {motion} from 'framer-motion'
-import { getHawkrTypeIcon } from '../utils/functions/getHawkrTypeIcon';
-import reverseGeocode from './api/reverseGeocode';
+import Pagination from '../components/pagination';
 
 //Image imports
 import hawkr_icon from '../public/img/hawkr_icon.png';
-import info from '../utils/info'
 import LeftArrow from '../public/img/Left_Arrow.svg'
 import RightArrow from '../public/img/Right_Arrow.svg'
 import Image from 'next/image'
-
-
-type ExploreProps = {
-};
-
-type ExploreState = {
-  showOpen: boolean;
-};
+import Link from 'next/link';
 
 type ExploreMenuProps = {
   shops:any
-
 }
 
-type ExploreMenuState = {
-}
 export const getStaticProps: GetStaticProps = async () => {
 
   const { data } = await getShopsWithLocations();
-
-  var data_temp:any = []
-
-  data?.forEach(async (value, index) => {
-    data[index].location = await reverseGeocode(value.location.lat, value.location.lng);
-    data_temp.push(data[index])
-    // console.log(data[index])
-  })
-  console.log(data_temp)
-  // data?.map(async (item:any, index) => {
-  //   console.log(data[index])
-  //   // data[index] = await reverseGeocode(item.location.lat, item.location.lng)
-  // })
-
-  return { props: { shops: data }};
+  return { props: { shops: data } };
 };
 
-function ExploreMenu (props: ExploreMenuProps){
 
-    // console.log(props.shops)
-    return (
-      <motion.div
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-       viewport={{ once: true }}
-    >
+function ExploreMenu(props: ExploreMenuProps) {
+  const [curr_page, setCurrPage] = useState(1)
+
+  console.log(props.shops)
+  //Hawkr-blue is #1498
+  return (
       <main className="flex">
-        <section className="flex-grow pt-14 px-6 bg-slate-200">
-          
-          {/* <div className="hidden lg:inline-flex mb-5 space-x-3 text-gray-800 whitespace-nowrap">
-            <p className="button">Cancellation Flexible</p>
-            <p className="button">Type of Place</p>
-            <p className="button">Price</p>
-            <p className="button">Rooms and Beds</p>
-            <p className="button">More filters</p>
-          </div> */}
-          <div className="flex flex-col">
-            {props.shops?.map((item: any) => (
-              <>
-              <InfoCard
-                key={item.shopID}
-                img={hawkr_icon}
-                location={"item.location"}
-                description={item.shopDescription}
-                title={item.shopName}
-                />
-              {/* {console.log(item.location)} */}
-                </>
-              ))}
-          </div>
+        <section className="flex-grow h-screen pt-6 px-6 bg-slate-200 overflow-y-auto [&::-webkit-scrollbar]:hidden">
+          <h1 className=' pb-2 pl-2 font-bold text-gray-600 text-2xl'> Hawkrs near me</h1>
+
+            <div className="flex flex-col">
+              {props.shops?.map((item: any) => (
+                <Link href={`shops/${item.shopID}`}>
+                <InfoCard
+                  key={item.shopID}
+                  img={hawkr_icon}
+                  description={item.shopDescription}
+                  title={item.shopName}
+                  />
+                  </Link>
+                ))}
+            </div>
+            <div className="flex flex-col items-center justify-center">
+              {/* TODO: Set up the links to the set-up hawkr page*/}
+              <Link href='#' className="text-xl font-medium text-black">Want to run your business?</Link>
+              <Link href='#'className="text-2xl font-bold text-sky-500">Setup a Hawkr</Link>
+            </div>
+          <Pagination curr_page_idx={curr_page} total_items={props.shops.length} 
+          items_on_each_page={10} on_page_swith_to={(num)=>setCurrPage(num)}/>
         </section>
       </main>
-      </motion.div>
-    )
+  )
 }
 
-function Explore ({shops} : InferGetStaticPropsType<typeof getStaticProps>){
+function Explore({ shops }: InferGetStaticPropsType<typeof getStaticProps>) {
 
   let [showOpen, setShowOpen] = useState(true)
 
-    // console.log(shops)
-    return (
-      <>
-        <div className="flex justify-between bg-slate-200">
-          <Transition className="w-2/5" show={showOpen} 
+  return (
+    <>
+      <div className="flex justify-between bg-slate-200">
+        <Transition className="w-2/5" show={showOpen}
           enter='transition-all' enterFrom='opacity-0 w-0' enterTo='opacity-100 w-2/5'
           leave='transition-all' leaveFrom='opacity-100 w-2/5' leaveTo='opacity-0 w-0'>
-            <ExploreMenu shops={shops}/>
-          </Transition>
-          <div className='relative grow'>
-            <button className='absolute z-10 rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm
+          <ExploreMenu shops={shops} />
+        </Transition>
+        <div className='relative grow'>
+          <button className='absolute z-10 rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm
              hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 m-8'
-              onClick={()=>setShowOpen(!showOpen)}>
-              {showOpen ? <Image width={23} height={23} alt="LeftArrow" src={LeftArrow.src}/> : <div className="flex text-blue-500 text-base"><Image width={20} height={20} alt="RightArrow" src={RightArrow.src}/>Show List</div>}
-            </button>
-            <Map shops={shops}/>
-          </div>
+            onClick={() => setShowOpen(!showOpen)}>
+            {showOpen ? <Image width={23} height={23} alt="LeftArrow" src={LeftArrow.src} /> : <div className="flex text-blue-500 text-base"><Image width={20} height={20} alt="RightArrow" src={RightArrow.src} />Show List</div>}
+          </button>
+          <Map shops={shops} />
         </div>
-      </>
-    )
+      </div>
+    </>
+  )
 }
 
 export default Explore;
