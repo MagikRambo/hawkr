@@ -6,8 +6,6 @@ import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import React from 'react'
 import { useSession, useSupabaseClient, useUser } from '@supabase/auth-helpers-react'
 import { useState } from 'react'
-import { Database } from '../utils/database.types'
-type Profiles = Database['public']['Tables']['profiles']['Row']
 import TypesMenu from './typesMenu'
 import { Router, useRouter } from 'next/router'
 
@@ -34,35 +32,63 @@ function Navbar (){
     const supabase = useSupabaseClient()
 
     // Start Supabase user code
-    // const user = useUser()
-    // const [loading, setLoading] = useState(true)
-    // const [username, setUsername] = useState<Profiles['name']>(null)
-  
-    // async function getProfile() {
-    //   try {
-    //     setLoading(true)
-    //     if (!user) throw new Error('No user')
-  
-    //     let { data, error, status } = await supabase
-    //       .from('profiles')
-    //       .select(`name`)
-    //       .eq('id', user.id)
-    //       .single()
-  
-    //     if (error && status !== 406) {
-    //       throw error
-    //     }
-  
-    //     if (data) {
-    //       setUsername(data.name)
-    //     }
-    //   } catch (error) {
-    //     alert('Error loading user data!')
-    //     console.log(error)
-    //   } finally {
-    //     setLoading(false)
-    //   }
-    // }
+    const user = useUser()
+    const [data, setData] = useState()
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+      async function createUser(){
+        try{
+          if (!user) throw new Error('No user')
+
+          const updates = {
+            UUID: user.id,
+            state: 1,
+            name: user.email,
+            description: "Welcome to my profile!"
+          }
+
+          let { error } = await supabase.from('profiles').upsert(updates)
+          if (error) throw error
+          alert('Profile updated!')
+
+        }
+        catch (error) {
+          console.log(error)
+        }
+      }
+      async function loadData() {
+        try {
+          setLoading(true)
+          if (!user) throw new Error('No user')
+    
+          let { data, error, status } = await supabase
+            .from('profiles')
+            .select(`*`)
+            .eq('UUID', user.id)
+            .single()
+          
+          if (status == 406){
+            createUser()
+          }
+          if (error && status !== 406) {
+            console.log("error: ", error.message)
+          }
+          
+          // setData(data)
+          if (data) {
+            setData(data)
+          }
+        } catch (error) {
+          console.log("error: ", error)
+          console.log(error)
+        } finally {
+          setLoading(false)
+        }
+      }
+      // Only run query once user is logged in.
+      if (user) loadData()
+    }, [user])
     // End Supabase user code
     
     const setOpen = (o: boolean, idx:number) => {
@@ -154,7 +180,7 @@ function Navbar (){
                                 <div className="hidden lg:ml-4 lg:flex lg:items-center">
                                     {! session? (
                                     <Link
-                                        href="/SignIn"  onClick={()=>setOpen(true, 3)}
+                                        href="/Profile"  onClick={()=>setOpen(true, 3)}
                                         className={classNames(currIdx == 3 ? "border-cyan-400 text-gray-900" : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
                                             "inline-flex items-center border-b-4 px-1 pt-1 text-sm font-medium")}
                                             >
@@ -194,7 +220,7 @@ function Navbar (){
                                                     <Menu.Item>
                                                         {({ active }) => (
                                                             <a
-                                                                href="#"
+                                                                href="./Profile"
                                                                 className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                                                             >
                                                                 Your Profile
@@ -203,19 +229,19 @@ function Navbar (){
                                                     </Menu.Item>
                                                     <Menu.Item>
                                                         {({ active }) => (
-                                                            <a
-                                                                href="#"
+                                                            <Link
+                                                                href="./Account"
                                                                 className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                                                             >
                                                                 Settings
-                                                            </a>
+                                                            </Link>
                                                         )}
                                                     </Menu.Item>
                                                     <Menu.Item>
                                                         {({ active }) => (
                                                             <a
                                                                 href="#"
-                                                                onClick={() => {supabase.auth.signOut()} }
+                                                                onClick={() => {supabase.auth.signOut(); router.push('./')} }
                                                                 className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                                                             >
                                                                 Sign out
@@ -235,7 +261,7 @@ function Navbar (){
                             <Disclosure.Panel className="lg:hidden">
                                 <div className="border-t border-gray-200 pt-4 pb-3">
                                     <Link
-                                        href="/SignIn"  onClick={()=>setOpen(true, 3)}
+                                        href="/Profile"  onClick={()=>setOpen(true, 3)}
                                         className={classNames(currIdx == 3 ? "border-cyan-400 text-gray-900" : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
                                             "inline-flex items-center border-b-4 px-1 pt-1 text-sm font-medium")}
                                             >

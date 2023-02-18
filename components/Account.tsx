@@ -8,50 +8,78 @@ type Profiles = Database['public']['Tables']['profiles']['Row']
 export default function Account({ session }: { session: Session }) {
   const supabase = useSupabaseClient<Database>()
   const user = useUser()
+  const [UUID, setUUID] = useState<Profiles['UUID']>()
+  const [state, setState] = useState<Profiles['state']>(null)
+  const [name, setName] = useState<Profiles['name']>(null)
+  const [description, setDescription] = useState<Profiles['description']>(null)
   const [loading, setLoading] = useState(true)
-  // const [username, setUsername] = useState<Profiles['username']>(null)
-  // const [website, setWebsite] = useState<Profiles['website']>(null)
-  // const [avatar_url, setAvatarUrl] = useState<Profiles['avatar_url']>(null)
 
   useEffect(() => {
-    getProfile()
-  }, [session])
+    async function createProfile(){
+      try{
+        if (!user) throw new Error('No user')
 
-  async function getProfile() {
-    try {
-      setLoading(true)
-      if (!user) throw new Error('No user')
+        const updates = {
+          UUID: user.id,
+          state: 1,
+          name: user.email,
+          description: "Welcome to my profile!"
+        }
 
-      let { data, error, status } = await supabase
-        .from('profiles')
-        .select(`email`)
-        .eq('id', user.id)
-        .single()
-
-      if (error && status !== 406) {
-        throw error
+        let { error } = await supabase.from('profiles').upsert(updates)
+        if (error) throw error
+        //alert('Profile updated!')
       }
-
-      if (data) {
-        // setUsername(data.username)
-        // setWebsite(data.website)
-        // setAvatarUrl(data.avatar_url)
+      catch (error) {
+        alert('Error updating the data!')
+        console.log(error)
       }
-    } catch (error) {
-      //alert('Error loading user data!')
-      console.log(error)
-    } finally {
-      setLoading(false)
     }
-  }
+    async function loadData() {
+      //const { data } = await supabase.from('profiles').select('*')
+      try {
+        setLoading(true)
+        if (!user) throw new Error('No user')
+  
+        let { data, error, status } = await supabase
+          .from('profiles')
+          .select(`*`)
+          .eq('UUID', user.id)
+          .single()
+        
+        if (status == 406){
+          createProfile()
+        }
+        if (error && status !== 406) {
+          console.log("error: ", error.message)
+          if(error.message.includes(""))
+          throw error
+        }
+
+        if (data) {
+          setUUID(data.UUID)
+          setState(data.state)
+          setName(data.name)
+          setDescription(data.description)
+        }
+      } catch (error) {
+        console.log("error: ", error)
+        console.log(error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    // Only run query once user is logged in.
+    if (user) loadData()
+  }, [user])
 
   async function updateProfile({
-    // username,
-    // website,
+    name,
+    description
     // avatar_url,
   }: {
-    // username: Profiles['username']
-    // website: Profiles['website']
+    name: Profiles['name']
+    description: Profiles['description']
     // avatar_url: Profiles['avatar_url']
   }) {
     try {
@@ -59,16 +87,16 @@ export default function Account({ session }: { session: Session }) {
       if (!user) throw new Error('No user')
 
       const updates = {
-        id: user.id,
-        // username,
-        // website,
-        // avatar_url,
-        updated_at: new Date().toISOString(),
+        UUID: user.id,
+        // change this. need to pull from db
+        state: 1,
+        name: user.email,
+        description: description
       }
 
       let { error } = await supabase.from('profiles').upsert(updates)
       if (error) throw error
-      alert('Profile updated!')
+      //alert('Profile updated!')
     } catch (error) {
       alert('Error updating the data!')
       console.log(error)
@@ -97,24 +125,23 @@ export default function Account({ session }: { session: Session }) {
         <input
           id="username"
           type="text"
-          // value={username || ''}
-          // onChange={(e) => setUsername(e.target.value)}
+          value={name || ''}
+          onChange={(e) => setName(e.target.value)}
         />
       </div>
-      {/* <div>
-        <label htmlFor="website">Website</label>
+      <div>
+        <label htmlFor="username">Description: </label>
         <input
-          id="website"
-          type="website"
-          value={website || ''}
-          onChange={(e) => setWebsite(e.target.value)}
+          id="description"
+          type="text"
+          value={description || ''}
+          onChange={(e) => setDescription(e.target.value)}
         />
-      </div> */}
-
+      </div>
       <div>
         <button
           className="button primary block"
-          onClick={() => updateProfile({ username, website, avatar_url })}
+          onClick={() => updateProfile( {name, description} )}
           disabled={loading}
         >
           {loading ? 'Loading ...' : 'Update'}
