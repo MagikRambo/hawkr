@@ -11,19 +11,19 @@ export interface Database {
     Tables: {
       profiles: {
         Row: {
-          uuid: string
+          UUID: string
           state: number | null
           name: string | null
           description: string | null
         }
         Insert: {
-          uuid: string
+          UUID: string
           state?: number | null
           name?: string | null
           description?: string | null
         }
         Update: {
-          uuid: string
+          UUID: string
           state?: number | null
           name?: string | null
           description?: string | null
