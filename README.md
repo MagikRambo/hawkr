@@ -48,4 +48,3 @@ Databases used: Supabase ~ PostgreSQL
 #
 > This page will be maintained and updated this page throughout the semester.
 
-# Testing mirroring
