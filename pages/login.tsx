@@ -9,7 +9,7 @@ import hawkr_pic from '../public/img/hawkr_pic.svg'
 import { useEffect, useState } from 'react'
 import { stat } from 'fs'
 
-const signup: NextPage = () => {
+const login: NextPage = () => {
     const session = useSession()
     const supabase = useSupabaseClient()
     
@@ -28,7 +28,7 @@ const signup: NextPage = () => {
                 <div className={styles.col}>
                 </div>
                 <div className={styles.auth}>
-                    <h1 className='text-black text-4xl '>Sign up!</h1>
+                    <h1 className='text-black text-4xl '>Log in!</h1>
                     <Auth
                     redirectTo="./"
                     providers={['github', 'google', 'apple']} 
@@ -48,4 +48,4 @@ const signup: NextPage = () => {
     )
 }
 
-export default signup
+export default login
