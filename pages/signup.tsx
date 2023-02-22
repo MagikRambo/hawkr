@@ -55,8 +55,8 @@ const signup: NextPage = () => {
                 <div className="flex flex-col pl-5 pt-44 w-full justify-start items-start bg-white">
                   {/* Sign up segment and text */}
                   <h2 className='text-black md:text-4xl pb-5'> Sign up!</h2>
-                  <div className='flex md:text-xl pl-5 pb-8'>
-                    <p className='text-slate-500'>You can reach us any time via </p> <p className='pl-1 text-sky-700'> help@hawkr.com</p>
+                  <div className='flex md:text-xl pl-5 pb-8 text-slate-500'>
+                  <p>You can reach us any time via  <span className='pl-1 text-sky-700'> help@hawkr.com</span></p>
                   </div>
 
                   {/* Form components below */}
@@ -69,7 +69,7 @@ const signup: NextPage = () => {
                         type="email"
                         name="email"
                         id="email"
-                        className="block w-[42rem] rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-black"
+                        className="block md:w-full lg:w-[36rem] rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-black"
                         placeholder="you@example.com"
                         onChange={(e) => setEmail(e.target.value)}
                         />
@@ -84,7 +84,7 @@ const signup: NextPage = () => {
                         name="password"
                         id="password"
                         className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-black"
-                        placeholder="you@example.com"
+                        placeholder="Insert password here"
                         onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>

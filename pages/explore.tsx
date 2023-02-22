@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Map from './Map';
 import { Transition } from '@headlessui/react'
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
@@ -12,6 +12,7 @@ import LeftArrow from '../public/img/Left_Arrow.svg'
 import RightArrow from '../public/img/Right_Arrow.svg'
 import Image from 'next/image'
 import Link from 'next/link';
+import supabase from '../utils/supabaseClient';
 
 type ExploreMenuProps = {
   shops:any
@@ -61,6 +62,26 @@ function ExploreMenu(props: ExploreMenuProps) {
 function Explore({ shops }: InferGetStaticPropsType<typeof getStaticProps>) {
 
   let [showOpen, setShowOpen] = useState(true)
+
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [userId, setUserID] = useState<string | undefined>();
+
+  useEffect( () => {
+    const getUser = async () => {
+      const user = await supabase.auth.getUser()
+      console.log("user", user);
+      if(user){
+        const userId = user.data.user?.id;
+        setIsAuthenticated(true);
+        setUserID(userId);
+      }
+    };
+    getUser();
+  }, [])
+
+  if(isAuthenticated && userId){
+    console.log("User", userId, "Authenticated", isAuthenticated)
+  }
 
   return (
     <>
