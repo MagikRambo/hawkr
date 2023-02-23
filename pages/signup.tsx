@@ -8,7 +8,7 @@ import hawkr from '../public/img/hawkr.png'
 import hawkr_pic from '../public/img/hawkr_pic.svg'
 import { useEffect, useState } from 'react'
 import { stat } from 'fs'
-import supabase from '../utils/supabaseClient'
+import {supabase} from '../utils/supabaseClient'
 
 const signup: NextPage = () => {
     const session = useSession()
@@ -16,6 +16,7 @@ const signup: NextPage = () => {
     
     const [email, setEmail] = useState<string | undefined>();
     const [password, setPassword] = useState<string | undefined>();
+    const [submitted, setSubmitted] = useState(false);
 
     async function signUpWithEmail(){
         try{
@@ -30,6 +31,10 @@ const signup: NextPage = () => {
 
                 const userId = resp.data.user?.id;
                 console.log("userId: ", userId)
+                setSubmitted(true)
+            }
+            else{
+              alert('Email or Password not filled out')
             }
             
         }catch{
@@ -50,8 +55,8 @@ const signup: NextPage = () => {
                     <Image width={8000} height={10000} alt="hawkr logo" src={hawkr_pic} className='p-10'/>
                 </div>
               {/* Column 2 - Email form */}
-
-              <div className=''>
+              {!submitted ? (
+                <div className=''>
                 <div className="flex flex-col pl-5 pt-44 w-full justify-start items-start bg-white">
                   {/* Sign up segment and text */}
                   <h2 className='text-black md:text-4xl pb-5'> Sign up!</h2>
@@ -101,6 +106,11 @@ const signup: NextPage = () => {
                   
                 </div>
               </div>
+              ):
+              (
+                <h2> Please check your email for a magic link to sign in. </h2>
+              )}
+              
             </div>
           ) : (
             <>

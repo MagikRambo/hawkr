@@ -12,7 +12,8 @@ import LeftArrow from '../public/img/Left_Arrow.svg'
 import RightArrow from '../public/img/Right_Arrow.svg'
 import Image from 'next/image'
 import Link from 'next/link';
-import supabase from '../utils/supabaseClient';
+import {supabase} from '../utils/supabaseClient';
+import { useSession, useUser } from '@supabase/auth-helpers-react';
 
 type ExploreMenuProps = {
   shops:any
@@ -26,6 +27,22 @@ export const getStaticProps: GetStaticProps = async () => {
 
 
 function ExploreMenu(props: ExploreMenuProps) {
+
+  const session = useSession()
+  const userAlex = useUser()
+
+  if(session){
+    console.log("WE ARE ALIVE!! SESSION IS READY!!!", session)
+  }else{
+    console.log("NO SESSION NO SESSION : ", session)
+  }
+
+  if(userAlex){
+    console.log("ALEX YOU ARE ALIVE: ", userAlex)
+  }
+  else{
+    console.log(" ALEX IS NOT ALIVE, HE DEAD! ", userAlex)
+  }
   const [curr_page, setCurrPage] = useState(1)
 
   console.log(props.shops)
@@ -66,18 +83,18 @@ function Explore({ shops }: InferGetStaticPropsType<typeof getStaticProps>) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [userId, setUserID] = useState<string | undefined>();
 
-  useEffect( () => {
-    const getUser = async () => {
-      const user = await supabase.auth.getUser()
-      console.log("user", user);
-      if(user){
-        const userId = user.data.user?.id;
-        setIsAuthenticated(true);
-        setUserID(userId);
-      }
-    };
-    getUser();
-  }, [])
+  // useEffect( () => {
+  //   const getUser = async () => {
+  //     const user = await supabase.auth.getUser()
+  //     console.log("user", user);
+  //     if(user){
+  //       const userId = user.data.user?.id;
+  //       setIsAuthenticated(true);
+  //       setUserID(userId);
+  //     }
+  //   };
+  //   getUser();
+  // }, [])
 
   if(isAuthenticated && userId){
     console.log("User", userId, "Authenticated", isAuthenticated)

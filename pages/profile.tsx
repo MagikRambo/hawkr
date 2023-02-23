@@ -21,7 +21,7 @@ export default function Profile(props: ProfileProps){
             </div>
             <div className="py-1 px-80 content-center">
               <h1 className="py-10 font-bold text-3xl text-center">Desprition</h1>
-              <textarea className='block px-12 py-10 rounded-lg ring-gray-300 ring-4 h-full w-full'>
+              <textarea className='block px-12 py-10 rounded-lg  ring-4 h-full w-full'>
               </textarea>
               <h1 className="py-10 font-bold text-3xl text-center">Vendor Page</h1>
               <div className='block bg-white px-12 py-10 rounded-lg ring-gray-300 ring-4 h-full w-full'>

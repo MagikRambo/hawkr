@@ -9,6 +9,8 @@ import { useState } from 'react'
 import TypesMenu from './typesMenu'
 import { Router, useRouter } from 'next/router'
 
+
+
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
 }
@@ -36,21 +38,32 @@ function Navbar (){
     const [data, setData] = useState()
     const [loading, setLoading] = useState(true)
 
-    // async function SignOut(){
-    //     try{
-    //         if(!user) throw Error('No user')
-
-    //         const { error } = await supabase.auth.signOut()
-    //         console.log(error)
-
-    //     }
-    //     catch(error){
-    //         console.log("Catch: ", error)
-    //     }
-    // }
-
     useEffect(() => {
-      async function createUser(){
+        // Only run query once user is logged in.
+        // if (user) loadData()
+      }, [user])
+      // End Supabase user code
+
+
+    async function signOut(){
+        try{
+            if(!user){
+                
+                throw Error('No user')
+            } 
+
+            await supabase.auth.signOut()
+
+            // window.location.href = "/login"
+            router.push('/login')
+        }
+        catch(error){
+            alert(error)
+            console.log("Catch: ", error)
+        }
+    }
+
+    async function createUser(){
         try{
           if (!user) throw new Error('No user')
 
@@ -70,7 +83,8 @@ function Navbar (){
           console.log(error)
         }
       }
-      async function loadData() {
+
+    async function loadData() {
         try {
           setLoading(true)
           if (!user) throw new Error('No user')
@@ -99,10 +113,6 @@ function Navbar (){
           setLoading(false)
         }
       }
-      // Only run query once user is logged in.
-      if (user) loadData()
-    }, [user])
-    // End Supabase user code
     
     const setOpen = (o: boolean, idx:number) => {
         console.log(o,idx)
@@ -255,7 +265,7 @@ function Navbar (){
                                         </Transition>
                                     </Menu>
                                     <Link
-                                        href="/Profile"  onClick={()=>setOpen(true, 3)}
+                                        href="/login"  onClick={()=>setOpen(true, 3)}
                                         className={classNames(currIdx == 3 ? "border-cyan-400 text-gray-900" : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
                                             "inline-flex items-center border-b-4 px-1 pt-1 text-sm font-medium")}
                                             >
@@ -316,7 +326,7 @@ function Navbar (){
                                                         {({ active }) => (
                                                             <a
                                                                 href="#"
-                                                                onClick={() => {supabase.auth.signOut(); router.push('./')} }
+                                                                onClick={() => {signOut()}}
                                                                 className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                                                             >
                                                                 Sign out
@@ -327,7 +337,7 @@ function Navbar (){
                                             </Transition>
                                         </Menu>
                                        </> 
-                                    )}
+                                    )
                                 </div>
                             </div>
                         </div>
@@ -336,7 +346,7 @@ function Navbar (){
                             <Disclosure.Panel className="lg:hidden">
                                 <div className="border-t border-gray-200 pt-4 pb-3">
                                     <Link
-                                        href="/Profile"  onClick={()=>setOpen(true, 3)}
+                                        href="/login"  onClick={()=>setOpen(true, 3)}
                                         className={classNames(currIdx == 3 ? "border-cyan-400 text-gray-900" : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
                                             "inline-flex items-center border-b-4 px-1 pt-1 text-sm font-medium")}
                                             >
@@ -384,7 +394,7 @@ function Navbar (){
                                     </Disclosure.Button>
                                     <Disclosure.Button
                                         
-                                        onClick={() => {supabase.auth.signOut(); router.push('./')} }
+                                        onClick={() => {signOut()} }
                                         className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
                                     >
                                         Sign out

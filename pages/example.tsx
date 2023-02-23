@@ -1,6 +1,6 @@
 import { EnvelopeIcon } from "@heroicons/react/20/solid"
 import { useState } from "react"
-import supabase from "../utils/supabaseClient"
+import {supabase} from "../utils/supabaseClient"
 export default function Example() {
     
     const [email, setEmail] = useState<string | undefined>();
