@@ -9,14 +9,63 @@ import hawkr_pic from '../public/img/hawkr_pic.svg'
 import { useEffect, useState } from 'react'
 import { stat } from 'fs'
 import supabase from '../utils/supabaseClient'
+import { useRouter } from 'next/router'
 
 const login: NextPage = () => {
-    const session = useSession()
+    const sessionTHING = useSession()
+    console.log("sessionTHING: ", sessionTHING)
+
     // const supabase = useSupabaseClient()
+    const user = useUser()
+    console.log("USER FROM AUTH UI: ", user)
+
     
+    const [session, setCurSession] = useState(false);
+    const [dataV, setDataV] = useState<any>()
+    
+    useEffect(() => {
+
+      const getSession = async () => {
+        const { data, error } = await supabase.auth.getSession()
+        
+        if(data){
+          console.log("USE STATE DATA: ",data)
+          setDataV(data.session)
+          // setCurSession(true)
+        }
+
+      }
+      getSession()
+    }, [])
+
     const [email, setEmail] = useState<string | undefined>();
     const [password, setPassword] = useState<string | undefined>();
+    const [triggerStatus, setTriggerStatus] = useState(false);
+    const router = useRouter()
 
+    // useEffect(() => {
+    //   async function createProfile(){
+    //     try{
+    //       if (!user) throw new Error('No user')
+  
+    //       const updates = {
+    //         UUID: user.id,
+    //         state: 1,
+    //         name: user.email,
+    //         description: "Welcome to my profile!"
+    //       }
+  
+    //       let { error } = await supabase.from('profiles').upsert(updates)
+    //       if (error) throw error
+    //       //alert('Profile updated!')
+    //     }
+    //     catch (error) {
+    //       alert('Error updating the data!')
+    //       console.log(error)
+    //     }
+    //   }
+    //   createProfile()
+    // }, [user])
     async function signInWithEmail(){
         try{
             if (email && password){
@@ -30,16 +79,26 @@ const login: NextPage = () => {
 
                 const userId = resp.data.user?.id;
                 console.log("userId: ", userId)
+                setTriggerStatus(true);
+
+                {/* Add to Database User*/}
+
+
+                // console.log(data)
+                // router.push('/')
             }
             
         }catch{
             /* INSERT CATCH HERE IF HERE */
         }
     }
+
+    // console.log(session)
     return (
       <>
         <div className='bg-white' style={{ padding: '50px 0 100px 0' }}>
-
+          {!session ? 
+            (
             <div className='grid grid-cols-2 '>
               {/*  GRID LAYOUT */}
 
@@ -100,7 +159,13 @@ const login: NextPage = () => {
                   
                 </div>
               </div>
+            </div>):
+            (
+
+              <div className='text-black '>
+              <h2 className='text-black'> THIS IS THE SESSION INFO DATA</h2>
             </div>
+            )}
         </div>
       </>
     )

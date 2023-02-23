@@ -36,6 +36,19 @@ function Navbar (){
     const [data, setData] = useState()
     const [loading, setLoading] = useState(true)
 
+    // async function SignOut(){
+    //     try{
+    //         if(!user) throw Error('No user')
+
+    //         const { error } = await supabase.auth.signOut()
+    //         console.log(error)
+
+    //     }
+    //     catch(error){
+    //         console.log("Catch: ", error)
+    //     }
+    // }
+
     useEffect(() => {
       async function createUser(){
         try{
