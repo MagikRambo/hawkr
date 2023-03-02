@@ -87,8 +87,8 @@ function Types_Dyn_Menu(props: ExploreMenuProps) {
             </div>
             <div className="flex flex-col items-center justify-center">
               {/* TODO: Set up the links to the set-up hawkr page*/}
-              <Link href='#' className="text-xl font-medium text-black">Want to run your business?</Link>
-              <Link href='#'className="text-2xl font-bold text-sky-500">Setup a Hawkr</Link>
+              <Link href='/hawkrVendorInfo' className="text-xl font-medium text-black">Want to run your business?</Link>
+              <Link href='/hawkrVendorInfo'className="text-2xl font-bold text-sky-500">Setup a Hawkr</Link>
             </div>
           {/* <Pagination curr_page_idx={curr_page} total_items={props.shops.length}  */}
           {/* items_on_each_page={10} on_page_swith_to={(num)=>setCurrPage(num)}/> */}
