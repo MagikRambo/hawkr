@@ -8,7 +8,7 @@ import { useSession, useSupabaseClient, useUser } from '@supabase/auth-helpers-r
 import { useState } from 'react'
 import TypesMenu from './typesMenu'
 import { Router, useRouter } from 'next/router'
-
+import get_vendor_by_id from '../pages/api/getVendorByID'
 
 
 function classNames(...classes: string[]) {
@@ -29,19 +29,32 @@ function Navbar (){
     const [exploreOpen, setExploreOpen] = useState(false)
     const [typesOpen, setTypesOpen] = useState(false)  
     const [currIdx, setCurIdx] = useState(0)
+    const [vendor, setVendor] = useState<VendorContent>()    
     const router = useRouter()
     const session = useSession()
     const supabase = useSupabaseClient()
 
+    type VendorContent = Awaited<ReturnType<typeof get_vendor_by_id>>
+
     // Start Supabase user code
     const user = useUser()
+    const userID = user?.id
     const [data, setData] = useState()
     const [loading, setLoading] = useState(true)
 
-    useEffect(() => {
-        // Only run query once user is logged in.
-        // if (user) loadData()
-      }, [user])
+
+    // FETCH THE VENDOR DATA
+    useEffect( () => {
+        const getVendor = async () =>{
+            if (userID)
+            {
+                const v = await get_vendor_by_id(userID.toString())
+                setVendor(v)
+            }
+        }
+        getVendor().catch(console.error)
+    }, [user])
+    
       // End Supabase user code
 
 
@@ -254,7 +267,7 @@ function Navbar (){
                                                 <Menu.Item>
                                                     {({ active }) => (
                                                         <a
-                                                            href="#"
+                                                            href="/login"
                                                             className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                                                         >
                                                             Sign out
@@ -270,7 +283,21 @@ function Navbar (){
                                             "inline-flex items-center border-b-4 px-1 pt-1 text-sm font-medium")}
                                             >
                                                 Sign In
-                                    </Link>) : (
+                                    </Link>
+                                    {vendor && vendor.data && vendor.data[0]["state"] === 2 && (<Link
+                                        href="/manageShops" onClick={()=>setOpen(true,3)}
+                                        className={classNames(currIdx == 3 ? "border-cyan-400 text-gray-900" : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
+                                            "inline-flex items-center border-b-4 px-1 pt-1 text-sm font-medium")}
+                                            >
+                                                 Manage Shops
+                                    </Link>)}
+                                    {vendor && vendor.data && vendor.data[0]["state"] == 1 && (<Link
+                                        href="/hawkrVendorInfo" onClick={() => setOpen(true, 3)}
+                                        className={classNames(currIdx == 3 ? "border-cyan-400 text-gray-900" : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
+                                        "inline-flex items-center border-b-4 px-1 pt-1 text-sm font-medium")}
+                                        >
+                                            Become Vendor
+                                        </Link>)} : (
                                        <>
                                        <button
                                             type="button"
@@ -325,7 +352,7 @@ function Navbar (){
                                                     <Menu.Item>
                                                         {({ active }) => (
                                                             <a
-                                                                href="#"
+                                                                href="/login"
                                                                 onClick={() => {signOut()}}
                                                                 className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                                                             >

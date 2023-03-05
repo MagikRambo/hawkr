@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { supabase } from "../utils/supabaseClient";
 import get_vendor_by_id from "./api/getVendorByID";
 
-export default function manageShops(){
+export default function vendorExample(){
 
 
     // console.log(userID)
@@ -13,10 +13,7 @@ export default function manageShops(){
     // type ContentKind = Parameters<typeof get_vendor_by_id>
     
     const [vendor, setVendor] = useState<VendorContent>()    
-    // const [user, setUser] = useState<any>()
-    // const [userID, setUserID] = useState<NonNullable<string>>()
-    const [reloading, setReloading] = useState<boolean>(true)
-    // const userID = user?.id
+
     const router = useRouter()
     const { isLoading, session, error } = useSessionContext();
     const user = useUser()
@@ -26,7 +23,6 @@ export default function manageShops(){
     if(!isLoading && !session){
         router.push('/hawkrVendorInfo')
     }
-    
 
     useEffect( () => {
         const getVendor = async () =>{
@@ -36,19 +32,10 @@ export default function manageShops(){
                 setVendor(v)
             }
         }
-
-        // fetchData().catch(console.error)
         getVendor().catch(console.error)
     }, [user])
     
-        // return <p>Redirecting...</p>
-
-    
-    //retrieve vendor and check if client is a vendor
-
-
-
-    // console.log(user , vendor)
+    //User is a vendor
     if (vendor && vendor.data && vendor.data[0]["state"] === 2){
         // console.log("User is a Vendor! \t ", vendor.data[0]["state"])
         return(
@@ -56,8 +43,6 @@ export default function manageShops(){
                 <h1> YOU DID IT! </h1>
             </div>
         )
-        
-
     }
     // IF the user is a client redirect to hawkrVendorInfo Page
     else if (vendor && vendor.data && vendor.data[0]["state"] === 1){ 
