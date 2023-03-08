@@ -14,7 +14,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 // const initState = {values: initValues}
 
-// export default function becomeVendor() {
+export default function becomeVendor() {
 
 // const [state, setState] = useState(initState)
 
