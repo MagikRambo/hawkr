@@ -5,28 +5,7 @@ import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// const initValues = {
-//     name: "",
-//     email: "",
-//     subject: "",
-//     message: "",
-// }
-
-// const initState = {values: initValues}
-
 export default function becomeVendor() {
-
-// const [state, setState] = useState(initState)
-
-// const {values} = state;
-
-// const handleChange = ({target}) => setState( (prev) => ({
-// ...prev,
-// values: {
-//     ...prev.values,
-//     [target.name]: target.value
-// }
-// }))
 
   const [contactDetail, setContactDetail] = useState([]);
   const {
