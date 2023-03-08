@@ -292,7 +292,7 @@ function Navbar (){
                                                  Manage Shops
                                     </Link>)}
                                     {vendor && vendor.data && vendor.data[0]["state"] == 1 && (<Link
-                                        href="/hawkrVendorInfo" onClick={() => setOpen(true, 3)}
+                                        href="/becomeVendor" onClick={() => setOpen(true, 3)}
                                         className={classNames(currIdx == 3 ? "border-cyan-400 text-gray-900" : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
                                         "inline-flex items-center border-b-4 px-1 pt-1 text-sm font-medium")}
                                         >

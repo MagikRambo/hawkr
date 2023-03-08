@@ -32,9 +32,13 @@ export default function Example() {
                 <p> The application will be a form which is sent to our team.</p>
                 <p className=""> We will assess your eligablity for Vendor status within a few weeks and follow up with your results!</p>
 
-                <h1 className="text-purple-600 text-4xl"> We strive to bring talent to people, come join the talent!</h1>
-                <h1 className="text-4xl"> TO BE FINISHED SOON WHEN VENDOR APPLICATION IS OPEN</h1>
-            </div>
+                <h1 className="text-purple-600 text-4xl"> We strive to bring YOU to people, become a hawkr vendor Today!</h1>
+                <div className="pl-4 space-y-2">
+                    <p className=""> Click the button to start today! </p>
+                    <button onClick={() => router.push('/becomeVendor')} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+                    Become A Vendor!
+                    </button>
+                </div>            </div>
             
         </div>
     )
