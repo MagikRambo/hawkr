@@ -432,8 +432,6 @@ function Navbar (){
                     </>
                 )}
             </Disclosure>
-            {/* <ExploreMenu handleOpen={setOpen} open={exploreOpen} /> */}
-            {/* <TypesMenu handleOpen={setOpen} open={typesOpen} /> */}
             </>
         )
     
