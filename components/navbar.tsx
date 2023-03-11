@@ -243,7 +243,7 @@ function Navbar (){
                                                     <Menu.Item>
                                                         {({ active }) => (
                                                             <a
-                                                                href="./Profile"
+                                                                href="./profile"
                                                                 className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                                                             >
                                                                 Your Profile
@@ -253,7 +253,7 @@ function Navbar (){
                                                     <Menu.Item>
                                                         {({ active }) => (
                                                             <Link
-                                                                href="./Account"
+                                                                href="./profile"
                                                                 className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                                                             >
                                                                 Settings
@@ -309,7 +309,7 @@ function Navbar (){
                                     </div>
                                     <button
                                         type="button"
-                                        className="ml-auto flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2"
+                                        className="mr-auto flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2"
                                     >
                                         <span className="sr-only">View notifications</span>
                                         <BellIcon className="h-6 w-6" aria-hidden="true" />
