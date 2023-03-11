@@ -28,7 +28,21 @@ export const getStaticProps: GetStaticProps = async () => {
 
 function ExploreMenu(props: ExploreMenuProps) {
 
+  const session = useSession()
+  const userAlex = useUser()
 
+  if(session){
+    console.log("WE ARE ALIVE!! SESSION IS READY!!!", session)
+  }else{
+    console.log("NO SESSION NO SESSION : ", session)
+  }
+
+  if(userAlex){
+    console.log("ALEX YOU ARE ALIVE: ", userAlex)
+  }
+  else{
+    console.log(" ALEX IS NOT ALIVE, HE DEAD! ", userAlex)
+  }
   const [curr_page, setCurrPage] = useState(1)
 
   console.log(props.shops)
@@ -52,8 +66,8 @@ function ExploreMenu(props: ExploreMenuProps) {
             </div>
             <div className="flex flex-col items-center justify-center">
               {/* TODO: Set up the links to the set-up hawkr page*/}
-              <Link href='/hawkrVendorInfo' className="text-xl font-medium text-black">Want to run your business?</Link>
-              <Link href='/hawkrVendorInfo'className="text-2xl font-bold text-sky-500">Setup a Hawkr</Link>
+              <Link href='#' className="text-xl font-medium text-black">Want to run your business?</Link>
+              <Link href='#'className="text-2xl font-bold text-sky-500">Setup a Hawkr</Link>
             </div>
           <Pagination curr_page_idx={curr_page} total_items={props.shops.length} 
           items_on_each_page={10} on_page_swith_to={(num)=>setCurrPage(num)}/>
@@ -65,23 +79,9 @@ function ExploreMenu(props: ExploreMenuProps) {
 function Explore({ shops }: InferGetStaticPropsType<typeof getStaticProps>) {
 
   let [showOpen, setShowOpen] = useState(true)
-  const session = useSession()
-  const user = useUser()
 
-  if(session){
-    console.log("WE ARE ALIVE!! SESSION IS READY!!!", session)
-  }else{
-    console.log("NO SESSION NO SESSION : ", session)
-  }
-
-  if(user){
-    console.log("ALEX YOU ARE ALIVE: ", user)
-  }
-  else{
-    console.log(" ALEX IS NOT ALIVE, HE DEAD! ", user)
-  }
-  // const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  // const [userId, setUserID] = useState<string | undefined>();
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [userId, setUserID] = useState<string | undefined>();
 
   // useEffect( () => {
   //   const getUser = async () => {
@@ -96,9 +96,9 @@ function Explore({ shops }: InferGetStaticPropsType<typeof getStaticProps>) {
   //   getUser();
   // }, [])
 
-  // if(isAuthenticated && userId){
-  //   console.log("User", userId, "Authenticated", isAuthenticated)
-  // }
+  if(isAuthenticated && userId){
+    console.log("User", userId, "Authenticated", isAuthenticated)
+  }
 
   return (
     <>

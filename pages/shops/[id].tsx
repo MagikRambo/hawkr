@@ -14,7 +14,6 @@ import Link from "next/link";
 import LeftArrow from '../../public/img/Left_Arrow.svg'
 import RightArrow from '../../public/img/Right_Arrow.svg'
 import ShopCard from '../../components/ShopCard';
-import { useSession, useUser } from '@supabase/auth-helpers-react';
 
 
 export const getStaticPaths = async () => {
@@ -73,7 +72,7 @@ function ExploreMenu (props: any){
     )
 }
 
-function shopDetails({shopData}:NonNullable<InferGetStaticPropsType<typeof getStaticProps>>){
+function shopDetails({shopData}:InferGetStaticPropsType<typeof getStaticProps>){
 
     // console.log("WE MADE IT TO DETAILS")
 
