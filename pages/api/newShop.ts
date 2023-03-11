@@ -1,10 +1,22 @@
+import { uploadShopImage } from "./cdnHelpers"
+import { useSupabaseClient } from "@supabase/auth-helpers-react"
+import formidable from 'formidable'
 
 export default async function (req, res) {
     // require("env.local").config();
-  
-   const body =  req.body
+//   const supabase = useSupabaseClient();
+  const body =  req.body
 
-   console.log('body: ' , body)
+  //  console.log('body: ' , body)
+  //  console.log('file: ' , body.file)
+  //  console.log('shopName: ' , body.shopName)
+//    console.log('shopTitle: ' , body[0].shopDescription)
+  // const form = new formidable.IncomingForm();
+  // form.uploadDir = "./";
+  // form.keepExtensions = true;
+  // form.parse(req, (err, fields, files) => {
+  //   console.log('form parsing: ', err, fields, files);
+  // });
    if (!body.first || !body.last) {
     // Sends a HTTP bad request error code
     return res.status(400).json({ data: 'First or last name not found' })

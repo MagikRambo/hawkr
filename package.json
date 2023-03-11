@@ -25,6 +25,7 @@
     "@types/styled-components": "^5.1.26",
     "eslint": "8.28.0",
     "eslint-config-next": "13.0.4",
+    "formidable": "^2.1.1",
     "framer-motion": "^8.5.0",
     "next": "13.0.4",
     "next-images": "^1.8.4",

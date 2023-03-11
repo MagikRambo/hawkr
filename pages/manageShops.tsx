@@ -42,29 +42,30 @@ export default function manageShops(){
     console.log('data contents: ',data)
     const formData = new FormData();
     formData.append("file", data.file[0]);
+    formData.append('shopName',data.shopName)
     console.log('form Data contents: ', formData);
 
 
-    // fetch("/api/newShop", {
-    //     method: "POST",
-    //     headers: {
-    //     Accept: "application/json, text/plain, */*",
-    //     "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify(data),
-    // })
-    //     .then((res) => {
-    //     // console.log("Response received", res);
-    //     if (res.status === 200) {
-    //         // console.log("Response succeeded!");
-    //         toast("Thank you for contacting us!");
-    //     } else {
-    //         // console.log("Email/Password is invalid.");
-    //         toast("Email/Password is invalid.");
-    //     }
-    //     })
-    //     .catch((e) => console.log(e));
-    //     reset()
+    fetch("/api/newShop", {
+        method: "POST",
+        // headers: {
+        // Accept: "application/json, text/plain, */*",
+        // "Content-Type": "application/json",
+        // },
+        body: formData,
+    })
+        .then((res) => {
+        // console.log("Response received", res);
+        if (res.status === 200) {
+            // console.log("Response succeeded!");
+            toast("Thank you for contacting us!");
+        } else {
+            // console.log("Email/Password is invalid.");
+            toast("Email/Password is invalid.");
+        }
+        })
+        .catch((e) => console.log(e));
+        reset()
     };
 
     
