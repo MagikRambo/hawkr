@@ -1,18 +1,23 @@
-import { useSessionContext, useUser } from "@supabase/auth-helpers-react"
+import { useSessionContext, useSupabaseClient, useUser } from "@supabase/auth-helpers-react"
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form";
 import { supabase } from "../utils/supabaseClient";
-import { uploadShopImage } from "./api/cdnHelpers";
+import { getShopImage, uploadShopImage } from "./api/cdnHelpers";
 import get_vendor_by_id from "./api/getVendorByID";
+import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+
 export default function manageShops(){
 
+    const supabase = useSupabaseClient();
 
     // console.log(userID)
     type VendorContent = Awaited<ReturnType<typeof get_vendor_by_id>>
+    type ImageContent = Awaited<ReturnType<typeof get_vendor_by_id>>
+
     // const router = useRouter()
     // type ContentKind = Parameters<typeof get_vendor_by_id>
     
@@ -27,6 +32,9 @@ export default function manageShops(){
     const user = useUser()
     const userID = user?.id
 
+    const [images, setImages] = useState<ImageContent>()
+    const SHOP_CDN_URL = 'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/shop-images'
+
     const [showModal, setShowModal] = useState(false);
 
     const {
@@ -37,35 +45,95 @@ export default function manageShops(){
         formState: { errors },
       } = useForm();
 
-    const onSubmit = (data) => {
+    
+ 
+    const onSubmit = async (formData) => {
 
-    console.log('data contents: ',data)
-    const formData = new FormData();
-    formData.append("file", data.file[0]);
-    formData.append('shopName',data.shopName)
+    console.log('data contents: ',formData)
+    // const formData = new FormData();
+    // formData.append("file", data.file[0]);
+    // formData.append('shopName',formData.shopName)
+    // formData.append('shopDescription', formData.shopDescription)
+    // formData.append('hawkrType', formData.hawkrType)
+    // formData.append('liveTracking', formData.liveTracking)
+    // formData.append('messagesOn', formData.messagesFlag)
+    // formData.append('hoursOpen', formData.hoursOpen)
+    // formData.append('minutesOpen', formData.minutesOpen)
+    // formData.append('ampmOpen', formData.ampmOpen)
+    // formData.append('hoursClosed', formData.hoursClosed)
+    // formData.append('minutesClosed', formData.minutesClosed)
+    // formData.append('ampmClosed', formData.ampmClosed)
+    // if(userID){
+    //     formData.append('vendorID', userID)
+    // }
+    
+    var img_src
+    console.log('FILE STATUS: ', formData.file)
+    if (formData.file['length'] > 0){
+        //TODO / NOTE: when creating shop. can upload 1 image, but when editing. Needs to get first then remove from CDN and update DB
+        await uploadShopImage(formData.file[0], supabase, user?.id)
+        const res_image =  await getShopImage(userID, supabase, setImages)
+        
+        console.log('res image return: ', res_image)
+        setImages(res_image)
+
+        console.log('USE STATE CONTENT OF IMAGES: ', images)
+    //    console.log('VARIABLE D: ', d)
+
+        // const image:any = images[0] //TODO: make type for this
+
+        console.log(images)
+        img_src =`${SHOP_CDN_URL}/${userID}/${res_image.data.name}`
+        console.log("SUCCESSFULLLY ADDED TO CDN BRO!!!! :)")
+        // formData.append('file', src)
+    }
+    
+    let vendorID = userID
+    let shopName = formData.shopName
+    let shopDescription = formData.shopDescription
+    let messagesOn = formData.messagesFlag
+    let liveTracking = formData.liveTracking
+    let hawkrType = formData.hawkrType
+    
+    const { data, error } = await supabase
+    .from('shops')
+    .insert([
+      { vendorID: vendorID,
+        shopName: shopName ,
+        shopDescription: shopDescription ,
+        open: null ,
+        timeOpen: '1:00pm' ,
+        timeClosed: '8:00pm' ,
+        messagesOn: messagesOn ,
+        liveTracking: liveTracking ,
+        hawkrType: hawkrType, 
+        shop_image_url: img_src ? img_src : null},
+    ])    
+
+
+    console.log('supabase DETAILA !!!!!!! \t ', data, error)
     console.log('form Data contents: ', formData);
+    reset()
 
+    // fetch("/api/newShop", {
+    //     method: "POST",
+    //     body: formData,
+    // })
+    //     .then((res) => {
+    //     // console.log("Response received", res);
+    //     if (res.status === 200) {
+    //         // console.log("Response succeeded!");
+    //         toast("Successfully created a shop!");
 
-    fetch("/api/newShop", {
-        method: "POST",
-        // headers: {
-        // Accept: "application/json, text/plain, */*",
-        // "Content-Type": "application/json",
-        // },
-        body: formData,
-    })
-        .then((res) => {
-        // console.log("Response received", res);
-        if (res.status === 200) {
-            // console.log("Response succeeded!");
-            toast("Thank you for contacting us!");
-        } else {
-            // console.log("Email/Password is invalid.");
-            toast("Email/Password is invalid.");
-        }
-        })
-        .catch((e) => console.log(e));
-        reset()
+    //         //TODO: Create shop reload after shop making.
+    //         // setShowModal(false)
+    //     } else {
+    //         // console.log("Email/Password is invalid.");
+    //         toast("Contents for shop creation were invalid.");
+    //     }
+    //     })
+    //     .catch((e) => console.log(e));
+    //     reset()
     };
 
     
@@ -84,8 +152,16 @@ export default function manageShops(){
             }
         }
 
+        const getImages = async () => {
+            if (userID)
+            {
+                const I = await getShopImage(userID, supabase, setImages)
+            }
+        }
+
         // fetchData().catch(console.error)
         getVendor().catch(console.error)
+        getImages().catch(console.error)
     }, [user])
     
         // return <p>Redirecting...</p>
@@ -214,24 +290,23 @@ export default function manageShops(){
             </div>
 
                 <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-                    {/* <div className="sm:col-span-6">
+                    <div className="sm:col-span-6">
                         <label htmlFor="photo" className="block text-sm font-medium leading-6 text-gray-900">
-                            Photo
+                            Current Shop Photo
                         </label>
                         <div className="mt-2 flex items-center">
-                            <span className="h-12 w-12 overflow-hidden rounded-full bg-gray-100">
-                            <svg className="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                            </svg>
-                            </span>
-                            <button
-                            type="button"
-                            className="ml-5 rounded-md bg-white py-1.5 px-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                            >
-                            Change
-                            </button>
+                        {images?.data?.map( (image) => {
+                            return(
+                                <>
+                                {/* {console.log(image)}
+                                {console.log(`Image ID: ${image.id}\tImage Name: ${image.name}`)}
+                                {console.log(`URL: ${SHOP_CDN_URL}/${userID}/${image.name}`)} */}
+                                <Image key={image.id} height={100} width={100} alt="hi" src={SHOP_CDN_URL + '/' + userID + '/' + image.name}/>
+                                </>
+                                );
+                        })}
                         </div>
-                    </div> */}
+                    </div>
 
                     <div className="sm:col-span-6">
                         <label htmlFor="file" className="block text-sm font-medium leading-6 text-gray-900">
@@ -278,8 +353,8 @@ export default function manageShops(){
                     <span className="text-l mr-2">:</span>
                     <select name="minutes" className="border-transparent bg-transparent text-l appearance-none outline-none"
                         {...register("minutesOpen", {required: true})}>
-                    <option value="0">00</option>
-                    <option value="5">05</option>
+                    <option value="00">00</option>
+                    <option value="05">05</option>
                     <option value="10">10</option>
                     <option value="15">15</option>
                     <option value="20">20</option>
