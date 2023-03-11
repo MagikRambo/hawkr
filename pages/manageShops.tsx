@@ -1,8 +1,12 @@
 import { useSessionContext, useUser } from "@supabase/auth-helpers-react"
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react"
+import { useForm } from "react-hook-form";
 import { supabase } from "../utils/supabaseClient";
+import { uploadShopImage } from "./api/cdnHelpers";
 import get_vendor_by_id from "./api/getVendorByID";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function manageShops(){
 
@@ -16,6 +20,7 @@ export default function manageShops(){
     // const [user, setUser] = useState<any>()
     // const [userID, setUserID] = useState<NonNullable<string>>()
     const [reloading, setReloading] = useState<boolean>(true)
+
     // const userID = user?.id
     const router = useRouter()
     const { isLoading, session, error } = useSessionContext();
@@ -23,6 +28,45 @@ export default function manageShops(){
     const userID = user?.id
 
     const [showModal, setShowModal] = useState(false);
+
+    const {
+        register,
+        handleSubmit,
+        watch,
+        reset,
+        formState: { errors },
+      } = useForm();
+
+    const onSubmit = (data) => {
+
+    console.log('data contents: ',data)
+    const formData = new FormData();
+    formData.append("file", data.file[0]);
+    console.log('form Data contents: ', formData);
+
+
+    // fetch("/api/newShop", {
+    //     method: "POST",
+    //     headers: {
+    //     Accept: "application/json, text/plain, */*",
+    //     "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(data),
+    // })
+    //     .then((res) => {
+    //     // console.log("Response received", res);
+    //     if (res.status === 200) {
+    //         // console.log("Response succeeded!");
+    //         toast("Thank you for contacting us!");
+    //     } else {
+    //         // console.log("Email/Password is invalid.");
+    //         toast("Email/Password is invalid.");
+    //     }
+    //     })
+    //     .catch((e) => console.log(e));
+    //     reset()
+    };
+
     
     // console.log('isLoading:\t', isLoading, 'user:\t', user, 'session:\t', session)
     if(!isLoading && !session){
@@ -81,7 +125,11 @@ export default function manageShops(){
     <div  className="box-content h-4/5 w-4/5">
 
     <div className="flex justify-center items-center pl-52">
-        <form className="space-y-8 divide-y divide-gray-200">
+        <form 
+            onSubmit={handleSubmit(onSubmit)}
+            method="POST"
+            className="space-y-8 divide-y divide-gray-200"
+            >
         <div className="space-y-8 divide-y divide-gray-200">
             <div>
                 <div>
@@ -93,30 +141,32 @@ export default function manageShops(){
                 
                 <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
                     <div className="sm:col-span-3">
-                        <label htmlFor="shop-name" className="block text-sm font-medium leading-6 text-gray-900">
+                        <label htmlFor="shopName" className="block text-sm font-medium leading-6 text-gray-900">
                             Shop Name
                         </label>
                         <div className="mt-2">
                             <input
                             type="text"
-                            name="shop-name"
-                            id="shop-name"
+                            name="shopName"
+                            id="shopName"
                             autoComplete="given-name"
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            {...register("shopName", {required: true})}
                             />
                         </div>
                     </div>
                     <div className="sm:col-span-4">
-                        <label htmlFor="about" className="block text-sm font-medium leading-6 text-gray-900">
+                        <label htmlFor="shopDescription" className="block text-sm font-medium leading-6 text-gray-900">
                             About
                         </label>
                         <div className="mt-2">
                             <textarea
-                            id="about"
-                            name="about"
+                            id="shopDescription"
+                            name="shopDescription"
                             rows={3}
                             className="block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:py-1.5 sm:text-sm sm:leading-6"
                             defaultValue={''}
+                            {...register("shopDescription", {required: true})}
                             />
                         </div>
                         <p className="mt-2 text-sm text-gray-500">Write a few sentences about yourself.</p>
@@ -134,6 +184,7 @@ export default function manageShops(){
                         name="hawkrType"
                         autoComplete="hawkrType"
                         className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        {...register("hawkrType", {required: true})}
                         >
                         <option>Food Truck</option>
                         <option>Art</option>
@@ -162,7 +213,7 @@ export default function manageShops(){
             </div>
 
                 <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-                    <div className="sm:col-span-6">
+                    {/* <div className="sm:col-span-6">
                         <label htmlFor="photo" className="block text-sm font-medium leading-6 text-gray-900">
                             Photo
                         </label>
@@ -179,52 +230,123 @@ export default function manageShops(){
                             Change
                             </button>
                         </div>
-                    </div>
+                    </div> */}
 
                     <div className="sm:col-span-6">
-                        <label htmlFor="cover-photo" className="block text-sm font-medium leading-6 text-gray-900">
-                            Cover photo
+                        <label htmlFor="file" className="block text-sm font-medium leading-6 text-gray-900">
+                            Shop Photo
                         </label>
-                        <div className="mt-2 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6">
-                            <div className="space-y-1 text-center">
-                                <svg
-                                    className="mx-auto h-12 w-12 text-gray-400"
-                                    stroke="currentColor"
-                                    fill="none"
-                                    viewBox="0 0 48 48"
-                                    aria-hidden="true"
-                                >
-                                    <path
-                                    d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                                    strokeWidth={2}
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    />
-                                </svg>
-                                <div className="flex text-sm text-gray-600">
-                                    <label
-                                    htmlFor="file-upload"
-                                    className="relative cursor-pointer rounded-md bg-white font-medium text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:text-indigo-500"
-                                    >
-                                    <span>Upload a file</span>
-                                    <input id="file-upload" name="file-upload" type="file" className="sr-only" />
-                                    </label>
-                                    <p className="pl-1">or drag and drop</p>
-                                </div>
-                            <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
-                            </div>
-                        </div>
+                        
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor="file_input">Upload file</label>
+                        <input className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" 
+                            aria-describedby="file_input_help" 
+                            type="file"
+                            {...register("file", {required: false})}
+                            />
+                        <p className="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">SVG, PNG, JPG or GIF (MAX. 800x400px).</p>
+
                     </div>
                 </div>
             </div>
 
-            {/* <div className="pt-8">
+            {/* Time Open */}
+            <div className="pt-8">
                 <div>
-                    <h3 className="text-base font-semibold leading-6 text-gray-900">Personal Information</h3>
-                    <p className="mt-1 text-sm text-gray-500">Use a permanent address where you can receive mail.</p>
+                    <h3 className="text-base font-semibold leading-6 text-gray-900">Time Open</h3>
+                    <p className="mt-1 text-sm text-gray-500">Typical time open during days open</p>
                 </div>
+            </div>
 
-            </div> */}
+            <div className="mt-2 p-3 w-7/12 bg-white rounded-lg shadow-xl">
+                <div className="flex-col">
+                    <select name="hours" className="border-transparent bg-transparent text-l appearance-none outline-none"
+                        {...register("hoursOpen", {required: true})}>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    </select>
+                    <span className="text-l mr-2">:</span>
+                    <select name="minutes" className="border-transparent bg-transparent text-l appearance-none outline-none"
+                        {...register("minutesOpen", {required: true})}>
+                    <option value="0">00</option>
+                    <option value="5">05</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="25">25</option>
+                    <option value="30">30</option>
+                    <option value="35">35</option>
+                    <option value="40">40</option>
+                    <option value="45">45</option>
+                    <option value="50">50</option>
+                    <option value="55">55</option>
+                    </select>
+                    <select name="ampm" className="border-transparent bg-transparent text-l appearance-none outline-none"
+                        {...register("ampmOpen", {required: true})}>
+                    <option value="am">AM</option>
+                    <option value="pm">PM</option>
+                    </select>
+                </div>
+            </div>
+
+                        {/* Time Open */}
+                        <div className="pt-8">
+                <div>
+                    <h3 className="text-base font-semibold leading-6 text-gray-900">Time Closed</h3>
+                    <p className="mt-1 text-sm text-gray-500">Time open up to this time</p>
+                </div>
+            </div>
+
+            <div className="mt-2 p-3 w-7/12 bg-white rounded-lg shadow-xl">
+                <div className="flex-col">
+                    <select name="hours" className="border-transparent bg-transparent text-l appearance-none outline-none"
+                        {...register("hoursClosed", {required: true})}>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    </select>
+                    <span className="text-l mr-2">:</span>
+                    <select name="minutes" className="border-transparent bg-transparent text-l appearance-none outline-none"
+                        {...register("minutesClosed", {required: true})}>
+                    <option value="0">00</option>
+                    <option value="5">05</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="25">25</option>
+                    <option value="30">30</option>
+                    <option value="35">35</option>
+                    <option value="40">40</option>
+                    <option value="45">45</option>
+                    <option value="50">50</option>
+                    <option value="55">55</option>
+                    </select>
+                    <select name="ampm" className="border-transparent bg-transparent text-l appearance-none outline-none"
+                        {...register("ampmClosed", {required: true})}>
+                    <option value="am">AM</option>
+                    <option value="pm">PM</option>
+                    </select>
+                </div>
+            </div>
+
 
             <div className="pt-8">
             <div>
@@ -247,6 +369,7 @@ export default function manageShops(){
                             name="liveTracking"
                             type="checkbox"
                             className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                            {...register("liveTracking", {required: false})}
                             />
                         </div>
                         <div className="ml-3">
@@ -264,6 +387,7 @@ export default function manageShops(){
                             name="messagesFlag"
                             type="checkbox"
                             className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                            {...register("messagesFlag", {required: false})}
                             />
                         </div>
                         <div className="ml-3">
@@ -276,7 +400,7 @@ export default function manageShops(){
 
                 </div>
                 </fieldset>
-                <fieldset className="mt-6">
+                {/* <fieldset className="mt-6">
                 <legend className="contents text-sm font-semibold leading-6 text-gray-900">Push Notifications</legend>
                 <p className="text-sm text-gray-500">These are delivered via SMS to your mobile phone.</p>
                 <div className="mt-4 space-y-4">
@@ -314,7 +438,7 @@ export default function manageShops(){
                     </label>
                     </div>
                 </div>
-                </fieldset>
+                </fieldset> */}
             </div>
             </div>
         </div>
@@ -338,7 +462,9 @@ export default function manageShops(){
         </form>
         </div>
         </div>
- </div> : null}
+        <ToastContainer />
+ </div>
+  : null}
                 </div>
             </div>
         )
