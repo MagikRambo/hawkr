@@ -36,7 +36,7 @@ export default function testcdn({data}:any){
             <h1> Testing page for cdn functions</h1>
             <div>
 
-                {images.map( (image) => {
+                {/* {images.map( (image) => {
                     return(
                         <>
                         {console.log(image)}
@@ -45,7 +45,7 @@ export default function testcdn({data}:any){
                         <Image key={image.id} height={100} width={100} alt="hi" src={SHOP_CDN_URL + '/' + userID + '/' + image.name}/>
                         </>
                         );
-                })}
+                })} */}
             </div>
             <FileUpload/>
         </div>

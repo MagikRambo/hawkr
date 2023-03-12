@@ -10,11 +10,9 @@ import { useEffect, useState } from 'react'
 import { stat } from 'fs'
 // import {supabase} from '../utils/supabaseClient'
 import { useRouter } from 'next/router'
-
-
+import Profile from './profile'
 
 const login: NextPage = () => {
-
 
     const { isLoading, session, error } = useSessionContext();
     const supabase = useSupabaseClient();
@@ -48,16 +46,17 @@ const login: NextPage = () => {
     const [triggerStatus, setTriggerStatus] = useState(false);
     const router = useRouter()
 
-    
-    if (session){
-      router.push('/profile')
-    }
+    useEffect(() => {
+      if (session){
+        router.push('/profile')
+      }
+    }, [session])
 
     // console.log(session)
     return (
       <>
         <div className='bg-sky-50' style={{ padding: '50px 0 100px 0' }}>
-          {!session &&
+          {! session &&
             (
             <div className='grid grid-cols-2 '>
               {/*  GRID LAYOUT */}

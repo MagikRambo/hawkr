@@ -8,7 +8,8 @@ import { useSession, useSupabaseClient, useUser } from '@supabase/auth-helpers-r
 import { useState } from 'react'
 import TypesMenu from './typesMenu'
 import { Router, useRouter } from 'next/router'
-
+import { Database } from '../utils/database.types'
+type Profiles = Database['public']['Tables']['profiles']['Row']
 
 
 function classNames(...classes: string[]) {
@@ -35,15 +36,15 @@ function Navbar (){
 
     // Start Supabase user code
     const user = useUser()
-    const [data, setData] = useState()
+    const [UUID, setUUID] = useState<Profiles['UUID']>()
+    const [state, setState] = useState<Profiles['state']>(null)
+    const [name, setName] = useState<Profiles['name']>(null)
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         // Only run query once user is logged in.
-        // if (user) loadData()
+        if (user) loadData()
       }, [user])
-      // End Supabase user code
-
 
     async function signOut(){
         try{
@@ -53,8 +54,6 @@ function Navbar (){
             } 
 
             await supabase.auth.signOut()
-
-            // window.location.href = "/login"
             router.push('/login')
         }
         catch(error){
@@ -62,27 +61,6 @@ function Navbar (){
             console.log("Catch: ", error)
         }
     }
-
-    async function createUser(){
-        try{
-          if (!user) throw new Error('No user')
-
-          const updates = {
-            UUID: user.id,
-            state: 1,
-            name: user.email,
-            description: "Welcome to my profile!"
-          }
-
-          let { error } = await supabase.from('profiles').upsert(updates)
-          if (error) throw error
-          alert('Profile updated!')
-
-        }
-        catch (error) {
-          console.log(error)
-        }
-      }
 
     async function loadData() {
         try {
@@ -96,23 +74,26 @@ function Navbar (){
             .single()
           
           if (status == 406){
-            createUser()
+            
           }
           if (error && status !== 406) {
             console.log("error: ", error.message)
           }
           
-          // setData(data)
           if (data) {
-            setData(data)
+            if (data) {
+                setUUID(data.UUID)
+                setState(data.state)
+                setName(data.name)
+              }
           }
         } catch (error) {
           console.log("error: ", error)
-          console.log(error)
         } finally {
           setLoading(false)
         }
       }
+      // End Supabase user code
     
     const setOpen = (o: boolean, idx:number) => {
         console.log(o,idx)
@@ -246,7 +227,7 @@ function Navbar (){
                                                                 href="./profile"
                                                                 className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                                                             >
-                                                                Your Profile
+                                                                Profile
                                                             </a>
                                                         )}
                                                     </Menu.Item>
@@ -256,7 +237,17 @@ function Navbar (){
                                                                 href="./profile"
                                                                 className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                                                             >
-                                                                Settings
+                                                                Messages
+                                                            </Link>
+                                                        )}
+                                                    </Menu.Item>
+                                                    <Menu.Item>
+                                                        {({ active }) => (
+                                                            <Link
+                                                                href="./profile"
+                                                                className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                                            >
+                                                                History
                                                             </Link>
                                                         )}
                                                     </Menu.Item>
@@ -304,8 +295,8 @@ function Navbar (){
                                         />
                                     </div>
                                     <div className="ml-3">
-                                        <div className="text-base font-medium text-gray-800">Tom Cook</div>
-                                        <div className="text-sm font-medium text-gray-500">tom@example.com</div>
+                                        <div className="text-base font-medium text-gray-800">{name}</div>
+                                        {/* <div className="text-sm font-medium text-gray-500">tom@example.com</div> */}
                                     </div>
                                     <button
                                         type="button"
@@ -318,10 +309,10 @@ function Navbar (){
                                 <div className="mt-3 space-y-1">
                                     <Disclosure.Button
                                         as="a"
-                                        href="#"
+                                        href="./profile"
                                         className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
                                     >
-                                        Your Profile
+                                        Profile
                                     </Disclosure.Button>
                                     <Disclosure.Button
                                         as="a"
