@@ -89,7 +89,8 @@ export type MarkerType = {
   if (!isLoaded) return <div> Map Loading ...</div>
 
   return (
-    <Wrapper>
+    <div>
+
       <CurrentLocation moveTo={moveTo} />
       <GoogleMap
         mapContainerStyle={containerStyle}
@@ -103,18 +104,18 @@ export type MarkerType = {
         {clickedPos.lat ? <Marker position={clickedPos} /> : null}
         {clickedPos.lat ? shops?.map((marker) => (
           <Marker
-            key={marker.shopsID}
-            position={marker.location}
-            onClick={() => onMarkerClick(marker)}
-            icon ={{
-              url: getHawkrTypeIcon(marker.hawkrType),
-              origin: new window.google.maps.Point(0, 0),
-              anchor: new window.google.maps.Point(15, 15),
-              scaledSize: new window.google.maps.Size(50, 30)
-            }}
-            />
-        )): null}
+          key={marker.shopsID}
+          position={marker.location}
+          onClick={() => onMarkerClick(marker)}
+          icon ={{
+            url: getHawkrTypeIcon(marker.hawkrType),
+            origin: new window.google.maps.Point(0, 0),
+            anchor: new window.google.maps.Point(15, 15),
+            scaledSize: new window.google.maps.Size(50, 30)
+          }}
+          />
+          )): null}
         </GoogleMap>
-    </Wrapper>
+        </div>
   );
 };

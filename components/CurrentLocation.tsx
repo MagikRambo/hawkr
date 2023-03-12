@@ -8,9 +8,11 @@ type Props = {
 
 function CurrentLocation({moveTo}:Props) {
   const [disabled, setDisabled] = React.useState(false);
+
   return (
     <>
-    <StyledBtn
+    <button
+      className= 'absolute z-10 right-5 rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 m-8'
       disabled={disabled}
       onClick={() => {
         // Deactivate button when geolocation is working
@@ -28,7 +30,7 @@ function CurrentLocation({moveTo}:Props) {
       }}
     >
       {disabled ? <p>Searching ...</p> : <p>Get Current Position</p>}
-    </StyledBtn>
+    </button>
     </>
   );
 };
