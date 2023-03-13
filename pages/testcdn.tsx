@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import FileUpload from "../components/FileUpload";
 import { getShopImage } from "./api/cdnHelpers";
-
+import { useUser } from "@supabase/auth-helpers-react";
 // export async function getServerSideProps(){
 
 //     // const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
@@ -22,7 +22,10 @@ import { getShopImage } from "./api/cdnHelpers";
 export default function testcdn({data}:any){
     const SHOP_CDN_URL = 'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/shop-images'
     const last = '01f77779-1153-4869-b2c1-64e7b3fb8588/MagikRambo.jpeg'
-    const userID = '01f77779-1153-4869-b2c1-64e7b3fb8588'
+
+    const user = useUser()
+
+    const userID = 'e435ad48-ca90-4ff9-9d01-fc2dcd6c6af8'
     const supabase = useSupabaseClient()
 
     const [images, setImages] = useState([])

@@ -11,14 +11,15 @@ import { useState } from "react"
 // TO be utilized in 'Create a Shop' or 'Edit a shop'
 export async function uploadShopImage(e, supabase, userID){
 
-    let file = e.target.files[0]
+    console.log(e)
+    let file = e
     const {data, error} = await supabase
     .storage
     .from('shop-images')
     .upload(userID + "/" + file.name, file)
 
     if(data){
-        console.log("successfully uploaded")
+        console.log("successfully uploaded", data)
         alert('Successfully Uploaded!')
     }
     else{
@@ -55,13 +56,22 @@ export async function getShopImage(shopID, supabase, setImages){
         sortBy: {column: "name", order: "asc"}
     })
 
-
+    console.log('non-propped data: ', data)
     if(data !== null){
-        setImages(data);
+        console.log('MADE IT IN DATA: ', data)
+        // setImages(data);
+        return {
+            data: data,
+            error: null
+        }
     }
     else{
         alert("Error loading images")
         console.log(error)
+        return {
+            data: null,
+            error: error
+        }
     }
 }
 export async function getProfileImage(profileID, supabase, setImages){
