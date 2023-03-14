@@ -15,7 +15,6 @@ export default function manageShops(){
 
     const supabase = useSupabaseClient();
 
-    // console.log(userID)
     type VendorContent = Awaited<ReturnType<typeof get_vendor_by_id>>
     type ImageContent = Awaited<ReturnType<typeof get_vendor_by_id>>
 
@@ -57,7 +56,7 @@ export default function manageShops(){
     }
     
  
-    const onSubmit = async (formData) => {
+    const onSubmit = async (formData:any) => {
 
     console.log('data contents: ',formData)
     var img_src
@@ -116,8 +115,19 @@ export default function manageShops(){
     ])
   
 
-    console.log('supabase DETAILA !!!!!!! \t ', data, error)
+    console.log('supabase DETAILA !!!!!!! \t ', data2, error2)
     console.log('form Data contents: ', formData);
+
+    if (!error2 || !error){
+        toast("Successfully created your shop!")
+    }else{
+        if (error){
+            alert('Error in creating shop')
+        }else{
+            alert('Error in uploading locations')
+        }
+    }
+
     reset()
     };
 
@@ -212,7 +222,6 @@ export default function manageShops(){
                                             <div className="mt-2">
                                                 <input
                                                 type="text"
-                                                name="shopName"
                                                 id="shopName"
                                                 autoComplete="given-name"
                                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -227,7 +236,6 @@ export default function manageShops(){
                                             <div className="mt-2">
                                                 <textarea
                                                 id="shopDescription"
-                                                name="shopDescription"
                                                 rows={3}
                                                 className="block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:py-1.5 sm:text-sm sm:leading-6"
                                                 defaultValue={''}
@@ -246,7 +254,6 @@ export default function manageShops(){
                                         <div className="mt-2">
                                             <select
                                             id="hawkrType"
-                                            name="hawkrType"
                                             autoComplete="hawkrType"
                                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                             {...register("hawkrType", {required: true})}
@@ -323,7 +330,7 @@ export default function manageShops(){
 
                                 <div className="mt-2 p-3 w-7/12 bg-white rounded-lg shadow-xl">
                                     <div className="flex-col">
-                                        <select name="hours" className="border-transparent bg-transparent text-l appearance-none outline-none"
+                                        <select className="border-transparent bg-transparent text-l appearance-none outline-none"
                                             {...register("hoursOpen", {required: true})}>
                                         <option value="1">1</option>
                                         <option value="2">2</option>
@@ -339,7 +346,7 @@ export default function manageShops(){
                                         <option value="12">12</option>
                                         </select>
                                         <span className="text-l mr-2">:</span>
-                                        <select name="minutes" className="border-transparent bg-transparent text-l appearance-none outline-none"
+                                        <select className="border-transparent bg-transparent text-l appearance-none outline-none"
                                             {...register("minutesOpen", {required: true})}>
                                         <option value="00">00</option>
                                         <option value="05">05</option>
@@ -354,7 +361,7 @@ export default function manageShops(){
                                         <option value="50">50</option>
                                         <option value="55">55</option>
                                         </select>
-                                        <select name="ampm" className="border-transparent bg-transparent text-l appearance-none outline-none"
+                                        <select className="border-transparent bg-transparent text-l appearance-none outline-none"
                                             {...register("ampmOpen", {required: true})}>
                                         <option value="am">AM</option>
                                         <option value="pm">PM</option>
@@ -372,7 +379,7 @@ export default function manageShops(){
 
                                 <div className="mt-2 p-3 w-7/12 bg-white rounded-lg shadow-xl">
                                     <div className="flex-col">
-                                        <select name="hours" className="border-transparent bg-transparent text-l appearance-none outline-none"
+                                        <select className="border-transparent bg-transparent text-l appearance-none outline-none"
                                             {...register("hoursClosed", {required: true})}>
                                         <option value="1">1</option>
                                         <option value="2">2</option>
@@ -388,7 +395,7 @@ export default function manageShops(){
                                         <option value="12">12</option>
                                         </select>
                                         <span className="text-l mr-2">:</span>
-                                        <select name="minutes" className="border-transparent bg-transparent text-l appearance-none outline-none"
+                                        <select className="border-transparent bg-transparent text-l appearance-none outline-none"
                                             {...register("minutesClosed", {required: true})}>
                                         <option value="00">00</option>
                                         <option value="05">05</option>
@@ -403,7 +410,7 @@ export default function manageShops(){
                                         <option value="50">50</option>
                                         <option value="55">55</option>
                                         </select>
-                                        <select name="ampm" className="border-transparent bg-transparent text-l appearance-none outline-none"
+                                        <select className="border-transparent bg-transparent text-l appearance-none outline-none"
                                             {...register("ampmClosed", {required: true})}>
                                         <option value="am">AM</option>
                                         <option value="pm">PM</option>
@@ -430,7 +437,6 @@ export default function manageShops(){
                                             <div className="flex h-6 items-center">
                                                 <input
                                                 id="liveTracking"
-                                                name="liveTracking"
                                                 type="checkbox"
                                                 className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
                                                 {...register("liveTracking", {required: false})}
@@ -448,7 +454,6 @@ export default function manageShops(){
                                             <div className="flex h-6 items-center">
                                                 <input
                                                 id="messagesFlag"
-                                                name="messagesFlag"
                                                 type="checkbox"
                                                 className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
                                                 {...register("messagesFlag", {required: false})}

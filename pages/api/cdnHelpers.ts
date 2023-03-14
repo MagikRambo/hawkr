@@ -20,7 +20,7 @@ export async function uploadShopImage(e, supabase, userID){
 
     if(data){
         console.log("successfully uploaded", data)
-        alert('Successfully Uploaded!')
+        // alert('Successfully Uploaded!')
     }
     else{
         console.log(error)
@@ -38,7 +38,7 @@ export async function uploadProfileImage(e,user){
 
     if(data){
         console.log("successfully uploaded")
-        alert('Successfully Uploaded!')
+        // alert('Successfully Uploaded!')
     }
     else{
         console.log(error)
