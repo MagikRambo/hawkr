@@ -45,7 +45,7 @@ export async function uploadProfileImage(e,user){
     }
 }
 
-export async function getShopImage(shopID, supabase, setImages){
+export async function getShopImage(shopID, supabase){
     
     const {data, error} = await supabase
     .storage
