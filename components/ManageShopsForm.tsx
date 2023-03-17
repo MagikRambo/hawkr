@@ -17,10 +17,27 @@ type ManageShopsFormProps = {
     userID: string,
     images: FileList,
     setShowModal:any,
+    formProps: formProps
 
 }
 
-export default function ManageShopsForm({userID, images, setShowModal}: any){
+type formProps = {
+    shopName: string,
+    shopDescription: string,
+    hawkrType: string,
+    file: FileList,
+    hoursOpen: string,
+    minutesOpen: string, 
+    ampmOpen: string,
+    hoursClosed: string,
+    minutesClosed: string,
+    ampmClosed: string,
+    liveTracking: Boolean,
+    messagesFlag: Boolean
+}
+
+
+export default function ManageShopsForm({userID, images, setShowModal, formProps}: any){
 
   
 
@@ -54,14 +71,29 @@ export default function ManageShopsForm({userID, images, setShowModal}: any){
 
     // const [showModal, setShowModal] = useState(false);
 
-
+    // const preloadVal = {
+    //     shopName: 'THiS IS AMAZING TEXT',
+    //     shopDescription: '',
+    //     hawkrType: '',
+    //     file: '',
+    //     hoursOpen: '',
+    //     minutesOpen: '', 
+    //     ampmOpen: '',
+    //     hoursClosed: '',
+    //     minutesClosed: '',
+    //     ampmClosed: '',
+    //     liveTracking: Boolean,
+    //     messagesFlag: Boolean
+    //     }
     const {
         register,
         handleSubmit,
         watch,
         reset,
         formState: { errors },
-      } = useForm();
+      } = useForm({
+        defaultValues: formProps
+      });
 
 
 

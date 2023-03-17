@@ -27,22 +27,36 @@ export default function manageShops(){
     type ImageContent = Awaited<ReturnType<typeof getShopImage>>
     type shopsContent = Awaited<ReturnType<typeof getShopsByVendorId>>
 
-
-
-    // const router = useRouter()
-    // type ContentKind = Parameters<typeof get_vendor_by_id>
+    type formProps = {
+        shopName: string,
+        shopDescription: string,
+        hawkrType: string,
+        file: FileList,
+        hoursOpen: string,
+        minutesOpen: string, 
+        ampmOpen: string,
+        hoursClosed: string,
+        minutesClosed: string,
+        ampmClosed: string,
+        liveTracking: Boolean,
+        messagesFlag: Boolean
+    }
     
+    
+
+
+ 
     const [vendor, setVendor] = useState<VendorContent>()    
-    // const [user, setUser] = useState<any>()
-    // const [userID, setUserID] = useState<NonNullable<string>>()
     const [reloading, setReloading] = useState<boolean>(true)
     const [userLocation, setUserLocation] = useState<any>()
     const [shops, setShops] = useState<shopsContent>()
 
     const [enabled, setEnabled] = useState(false)
+    const [editClicked, setEditClicked] = useState(false)
+
+    const [formData, setFormData] = useState<formProps>()
 
 
-    // const userID = user?.id
     const router = useRouter()
     const { isLoading, session, error } = useSessionContext();
     const user = useUser()
@@ -54,19 +68,6 @@ export default function manageShops(){
     const [showModal, setShowModal] = useState(false);
 
 
-    const bg_colors = {
-        'bg-blue-500': enabled,
-        'bg-red-500': !enabled
-    }
-
-    const {
-        register,
-        handleSubmit,
-        watch,
-        reset,
-        formState: { errors },
-      } = useForm();
-
     const getUserCurrentLocation = () =>{
         //Getting the current location of user
         navigator.geolocation.getCurrentPosition(position => {
@@ -77,84 +78,7 @@ export default function manageShops(){
         });
     }
     
- 
-    const onSubmit = async (formData:any) => {
-
-    console.log('data contents: ',formData)
-    var img_src
-    console.log('FILE STATUS: ', formData.file)
-    if (formData.file['length'] > 0){
-        //TODO / NOTE: when creating shop. can upload 1 image, but when editing. Needs to get first then remove from CDN and update DB
-        await uploadShopImage(formData.file[0], supabase, user?.id)
-        const res_image =  await getShopImage(userID, supabase)
-        
-        // console.log('res image return: ', res_image)
-        // setImages(res_image)
-
-        console.log('USE STATE CONTENT OF IMAGES: ', images)
-    //    console.log('VARIABLE D: ', d)
-
-        // const image:any = images[0] //TODO: make type for this
-
-        console.log(images)
-        img_src =`${SHOP_CDN_URL}/${userID}/${res_image.data[0].name}`
-        console.log("SUCCESSFULLLY ADDED TO CDN BRO!!!! :)")
-        // formData.append('file', src)
-    }
-
-    console.log('USER CURRENT LOCATION: ', userLocation)
     
-    let vendorID = userID
-    let shopName = formData.shopName
-    let shopDescription = formData.shopDescription
-    let messagesOn = formData.messagesFlag
-    let liveTracking = formData.liveTracking
-    let hawkrType = formData.hawkrType
-    let timeOpen = `${formData.hoursOpen}:${formData.minutesOpen}${formData.ampmOpen}`
-    let timeClosed = `${formData.hoursClosed}:${formData.minutesClosed}${formData.ampmClosed}`
-    
-    console.log(timeOpen, timeClosed)
-    const { data, error } = await supabase
-    .from('shops')
-    .insert([
-      { vendorID: vendorID,
-        shopName: shopName ,
-        shopDescription: shopDescription ,
-        open: false ,
-        timeOpen: timeOpen,
-        timeClosed: timeClosed ,
-        messagesOn: messagesOn ,
-        liveTracking: liveTracking ,
-        hawkrType: hawkrType, 
-        shop_image_url: img_src ? img_src : null},
-    ])
-    
-
-    const { data:data2, error:error2 } = await supabase
-    .from('locations')
-    .insert([
-      { UUID: vendorID, location: userLocation },
-    ])
-  
-
-    console.log('supabase DETAILA !!!!!!! \t ', data2, error2)
-    console.log('form Data contents: ', formData);
-
-    if (!error2 || !error){
-        toast("Successfully created your shop!")
-    }else{
-        if (error){
-            alert('Error in creating shop')
-        }else{
-            alert('Error in uploading locations')
-        }
-    }
-
-    reset()
-    };
-
-    
-    // console.log('isLoading:\t', isLoading, 'user:\t', user, 'session:\t', session)
     if(!isLoading && !session){
         router.push('/hawkrVendorInfo')
     }
@@ -193,16 +117,8 @@ export default function manageShops(){
         getUserCurrentLocation()
     }, [user])
     
-    // return <p>Redirecting...</p>
     console.log('2nd section mapped imanges: ', images)
-
-
-//     const modelContext = (
-// )
-
-    // console.log(shops?.data)
-    //retrieve vendor and check if client is a vendor
-
+    console.log('SHOPS CONTENT: ', shops?.data)
 
     // ##################################################### Returning state below
 
@@ -211,31 +127,31 @@ export default function manageShops(){
             //If there exists no shops ---> Prompt this screen
             //Window boxed screen of bg color
             <>
-            {shops && shops.data && shops.data[0] && (
+            {shops && shops.data && !shops.data[0] && (
                 <div className=" h-[80vh] w-screen bg-slate-200 text-black">
                 {/* Centering Items */}
-                <div className="flex justify-center items-center h-[80vh]">
-    {!showModal && (
-    <div className="text-4xl text-gray-500 space-y-2">
-            
-        <h1 className="">No Shops have been found</h1>
-        <h1 className="pl-10">Lets create one together!</h1>
-        <div className="pl-20 py-2 text-xl">
-        <button onClick={() => setShowModal(true)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
-        Create Shop
-        </button>
-        </div>
-    </div>
-    
-    )}
-    
-
-    {showModal &&  <ManageShopsForm  userID={userID} images={images} setShowModal={setShowModal}/>}
+                    <div className="flex justify-center items-center h-[80vh]">
+                        {!showModal && (
+                        <div className="text-4xl text-gray-500 space-y-2">
+                                
+                            <h1 className="">No Shops have been found</h1>
+                            <h1 className="pl-10">Lets create one together!</h1>
+                            <div className="pl-20 py-2 text-xl">
+                            <button onClick={() => setShowModal(true)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+                            Create Shop
+                            </button>
+                            </div>
+                        </div>
+                        
+                        )}
     
 
-</div>                </div>
+                    {showModal &&  <ManageShopsForm  userID={userID} images={images} setShowModal={setShowModal}/>}
+                    </div>
+                </div>
             )}
-            {shops && shops.data && !shops.data[0] && (
+
+            {shops && shops.data && shops.data[0] && (
                 <div className="bg-slate-200 h-screen w-screen">
 
                     {/* Button to create more shops */}
@@ -248,27 +164,32 @@ export default function manageShops(){
 
 
                     <div className="grid h-screen place-items-center">
-                    {/* TODO: Make map function IMAGES BELOW */}
-                        <div className="w-80 rounded-2xl bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-1 shadow-xl">
-                            <div className="h-64 w-full bg-gray-200 flex flex-col justify-between p-4 bg-cover rounded-xl bg-center bg-[url(https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/shop-images/e86dccfa-9039-458f-9815-9a783480dbec/IMG_4612.jpg)]">
-                                
-                                
-                                <div className="flex justify-between">
-                                    <input type="checkbox"/>
-                                    <div className="relative h-32 w-32 ">
-                                        <button className="absolute -right-4 -top-4 rounded-xl bg-gray-900 bg-opacity-50 pl-2 pb-2 text-white hover:bg-gray-500 hover:bg-opacity-50 hover:text-blue-500">
-                                        <div className="relative -left-1 -bottom-1">
+                        {/* TODO: Make map function IMAGES BELOW */}
+                        <>
+                        ({shops.data.map((shop) => 
+                            <div className="w-80 rounded-2xl bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-1 shadow-xl">
+                                <div className="h-64 w-full bg-gray-200 flex flex-col justify-between p-4 bg-cover rounded-xl bg-center bg-[url(https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/shop-images/e86dccfa-9039-458f-9815-9a783480dbec/IMG_4612.jpg)]">
+                                    
+                                    <div className="flex justify-between">
+                                        <input type="checkbox"/>
+                                        <div className="relative h-32 w-32 ">
+                                            <button onClick={() => {
+                                                setEditClicked(true)
+                                                setShowModal(true)
+                                                }} 
+                                                className="absolute -right-4 -top-4 rounded-xl bg-gray-900 bg-opacity-50 pl-2 pb-2 text-white hover:bg-gray-500 hover:bg-opacity-50 hover:text-blue-500">
+                                            <div className="relative -left-1 -bottom-1">
 
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M12 4H6C4.89543 4 4 4.89543 4 6V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V12" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                                <path d="M18.2929 3.70711C18.6834 3.31658 19.3166 3.31658 19.7071 3.70711L20.4142 4.41421C20.8047 4.80474 20.8047 5.4379 20.4142 5.82843L12.2628 13.9799C12.0432 14.1994 11.7756 14.3648 11.481 14.463L8.93669 15.3111C8.85851 15.3372 8.78414 15.2628 8.8102 15.1846L9.65831 12.6403C9.7565 12.3457 9.92191 12.0781 10.1415 11.8585L18.2929 3.70711Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                            </svg>
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M12 4H6C4.89543 4 4 4.89543 4 6V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V12" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    <path d="M18.2929 3.70711C18.6834 3.31658 19.3166 3.31658 19.7071 3.70711L20.4142 4.41421C20.8047 4.80474 20.8047 5.4379 20.4142 5.82843L12.2628 13.9799C12.0432 14.1994 11.7756 14.3648 11.481 14.463L8.93669 15.3111C8.85851 15.3372 8.78414 15.2628 8.8102 15.1846L9.65831 12.6403C9.7565 12.3457 9.92191 12.0781 10.1415 11.8585L18.2929 3.70711Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                </svg>
+                                            </div>
+                                            </button>
                                         </div>
-                                        </button>
-                                    </div>
 
-                                </div>
-                                <div className="relative flex space-x-40 -left-4 -bottom-4 w-full rounded-xl pl-2 bg-slate-800 bg-opacity-90">
+                                    </div>
+                                    <div className="relative flex space-x-40 -left-4 -bottom-4 w-full rounded-xl pl-2 bg-slate-800 bg-opacity-90">
                                         <p className="text-2xl"> Open </p>
 
                                         <Switch
@@ -317,8 +238,15 @@ export default function manageShops(){
                                                 </span>
                                             </Switch>
 
+                                    </div>
                                 </div>
                             </div>
+                            )} )
+                        </>
+
+                        
+                        <div className="text-black">
+                            {showModal &&  <ManageShopsForm  userID={userID} images={images} setShowModal={setShowModal} editFlag={false} shopName={'WOW COOL SHOP NAME'}/>}
                         </div>
 
                     </div>
