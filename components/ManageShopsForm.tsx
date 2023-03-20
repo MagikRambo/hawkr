@@ -106,7 +106,7 @@ export default function ManageShopsForm({userID, images, setShowModal, formProps
         if (formData.file['length'] > 0){
             //TODO / NOTE: when creating shop. can upload 1 image, but when editing. Needs to get first then remove from CDN and update DB
             await uploadShopImage(formData.file[0], supabase, user?.id)
-            const res_image =  await getShopImage(userID, supabase)
+            // const res_image =  await getShopImage(userID, supabase)
             
             // console.log('res image return: ', res_image)
             // setImages(res_image)
@@ -116,13 +116,16 @@ export default function ManageShopsForm({userID, images, setShowModal, formProps
     
             // const image:any = images[0] //TODO: make type for this
     
-            console.log(images)
-            img_src =`${SHOP_CDN_URL}/${userID}/${res_image.data[0].name}`
-            console.log("SUCCESSFULLLY ADDED TO CDN BRO!!!! :)")
+            // console.log(res_image)
+
+            //TODO: Change the path from userID to /UserID/ShopID/picture
+            img_src =`${SHOP_CDN_URL}/${userID}/${formData.file[0].name}`
+            // console.log("SUCCESSFULLLY ADDED TO CDN BRO!!!! :)")
             // formData.append('file', src)
         }
     
-        console.log('USER CURRENT LOCATION: ', userLocation)
+        // console.log('USER CURRENT LOCATION: ', userLocation)
+        
         
         let vendorID = userID
         let shopName = formData.shopName
@@ -146,19 +149,43 @@ export default function ManageShopsForm({userID, images, setShowModal, formProps
             messagesOn: messagesOn ,
             liveTracking: liveTracking ,
             hawkrType: hawkrType, 
-            shop_image_url: img_src ? img_src : null},
+            shop_image_url: null},
         ])
-        
+
+        console.log('SUPABASE SHOP CREATION DATA CONENTS: ', data)
     
+        //get Shop ID that was recently posted
+ 
+        // TEST IF THIS WORKS ^^^^^^^^^^ !!!!!!!!!!!!!!!!!
+
+        // console.log('!!!!!!!!!!! SHOP ID VALUE: ', data5, error5)
+        console.log('VALUE OF IMG SRC: ', img_src)
         const { data:data2, error:error2 } = await supabase
+        .from('shops')
+        .update({ shop_image_url: img_src ? img_src : null })
+        .match(
+            { vendorID: vendorID,
+                shopName: shopName ,
+                shopDescription: shopDescription ,
+                open: 'false' ,
+                timeOpen: timeOpen,
+                timeClosed: timeClosed ,
+                messagesOn: messagesOn ,
+                liveTracking: liveTracking ,
+                hawkrType: hawkrType, 
+                // shop_image_url: 'NULL',
+            },
+        )
+    
+        const { data:data3, error:error3 } = await supabase
         .from('locations')
         .insert([
           { UUID: vendorID, location: userLocation },
         ])
       
     
-        console.log('supabase DETAILA !!!!!!! \t ', data2, error2)
-        console.log('form Data contents: ', formData);
+        // console.log('supabase DETAILA !!!!!!! \t ', data2, error2)
+        // console.log('form Data contents: ', formData);
     
         if (!error2 || !error){
             toast("Successfully created your shop!")

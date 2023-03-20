@@ -11,7 +11,7 @@ import { useState } from "react"
 // TO be utilized in 'Create a Shop' or 'Edit a shop'
 export async function uploadShopImage(e, supabase, userID){
 
-    console.log(e)
+    console.log('uploadShop Image Function!! : ', e)
     let file = e
     const {data, error} = await supabase
     .storage
@@ -28,6 +28,7 @@ export async function uploadShopImage(e, supabase, userID){
 }
 
 export async function uploadProfileImage(e,user){
+    console.log(e.target.files)
     let file = e.target.files[0]
     const supabase = useSupabaseClient();
 
