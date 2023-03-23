@@ -41,6 +41,20 @@ export default function manageShops(){
         liveTracking: Boolean,
         messagesFlag: Boolean
     }
+
+    type shopType = {
+        shopID: string,
+        vendorID: string,
+        shopName: string,
+        shopDescription: string,
+        open: boolean,
+        timeOpen: string,
+        timeClosed: string,
+        messagesOn: boolean,
+        liveTracking: boolean,
+        hawkrType: string,
+        shop_image_url: string
+    }
     
     
 
@@ -52,6 +66,8 @@ export default function manageShops(){
     const [shops, setShops] = useState<shopsContent>()
 
     const [enabled, setEnabled] = useState(false)
+    const [disabled, setDisabled] = useState(false)
+
     const [editClicked, setEditClicked] = useState(false)
 
     const [formData, setFormData] = useState<formProps>()
@@ -76,6 +92,57 @@ export default function manageShops(){
             const userPosition = {lat: position.coords.latitude, lng: position.coords.longitude}
             setUserLocation(userPosition)
         });
+    }
+
+    const  EnableShop = async (shop: shopType) => {
+
+        //if enabled flag is set, one shop is active. cannot enable a shop, unless it is of the id that enabled.
+        if (enabled && shop.open){
+            const { data, error } = await supabase
+            .from('shops')
+            .update({ open: false})
+            .match(
+                {   shopID: shop.shopID,
+                    vendorID: shop.vendorID,
+                    shopName: shop.shopName ,
+                    shopDescription: shop.shopDescription ,
+                    timeOpen: shop.timeOpen,
+                    timeClosed: shop.timeClosed ,
+                    messagesOn: shop.messagesOn ,
+                    liveTracking: shop.liveTracking ,
+                    hawkrType: shop.hawkrType, 
+                },
+            )
+            setEnabled(false)
+            setDisabled(true)
+        }
+        else if (enabled){
+            setEnabled(true)
+            setDisabled(false)
+            alert('Error: Cannot enable a shop, one is already active')
+        }
+        else{
+            const { data, error } = await supabase
+            .from('shops')
+            .update({ open: true})
+            .match(
+                {   shopID: shop.shopID,
+                    vendorID: shop.vendorID,
+                    shopName: shop.shopName ,
+                    shopDescription: shop.shopDescription ,
+                    timeOpen: shop.timeOpen,
+                    timeClosed: shop.timeClosed ,
+                    messagesOn: shop.messagesOn ,
+                    liveTracking: shop.liveTracking ,
+                    hawkrType: shop.hawkrType, 
+                },
+            )
+            setEnabled(true)
+            setDisabled(false)
+        }
+
+
+        // console.log(shop)
     }
     
     
@@ -110,12 +177,34 @@ export default function manageShops(){
             }
         }
 
-        // fetchData().catch(console.error)
         getVendor().catch(console.error)
         getImages().catch(console.error)
         getShops().catch(console.error)
         getUserCurrentLocation()
-    }, [user])
+    }, [userID])
+
+    useEffect( () => {
+        const getShops = async () => {
+            if (userID){
+                const res_shops = await getShopsByVendorId(userID.toString())
+                setShops(res_shops)
+            }
+        }
+        getShops().catch(console.error)
+
+    }, [enabled])
+
+    useEffect( () => {
+        const getShops = async () => {
+            if (userID){
+                const res_shops = await getShopsByVendorId(userID.toString())
+                setShops(res_shops)
+            }
+        }
+        getShops().catch(console.error)
+
+    }, [disabled])
+    
     
     console.log('2nd section mapped imanges: ', images)
     console.log('SHOPS CONTENT: ', shops?.data)
@@ -151,6 +240,7 @@ export default function manageShops(){
                 </div>
             )}
 
+            {/* !!!!!!!! SHOPS EXIST !!!!!! */}
             {shops && shops.data && shops.data[0] && (
                 <div className="bg-slate-200 h-screen w-screen">
 
@@ -193,24 +283,27 @@ export default function manageShops(){
                                     <div className="relative flex space-x-40 -left-4 -bottom-4 w-full rounded-xl pl-2 bg-slate-800 bg-opacity-90">
                                         <p className="text-2xl"> Open </p>
 
+                                        {/*  Enable flag if open */}
+                                        {shop.open && !enabled && (setEnabled(true), console.log(enabled))}
+
                                         <Switch
-                                            checked={enabled}
-                                            onChange={setEnabled}
+                                            checked={shop.open}
+                                            onChange={() => EnableShop(shop)}
                                             className={classNames(
-                                                enabled ? 'bg-green-600' : 'bg-gray-200',
+                                                shop.open ? 'bg-green-600' : 'bg-gray-200',
                                                 'relative inline-flex h-6 w-11 -bottom-1 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-slate-600 focus:ring-offset-2'
                                                 )}
                                                 >
                                                 <span className="sr-only">Use setting</span>
                                                     <span
                                                     className={classNames(
-                                                        enabled ? 'translate-x-5' : 'translate-x-0',
+                                                        shop.open ? 'translate-x-5' : 'translate-x-0',
                                                         'pointer-events-none relative inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
                                                         )}
                                                         >
                                                     <span
                                                     className={classNames(
-                                                        enabled ? 'opacity-0 duration-100 ease-out' : 'opacity-100 duration-200 ease-in',
+                                                        shop.open ? 'opacity-0 duration-100 ease-out' : 'opacity-100 duration-200 ease-in',
                                                         'absolute inset-0 flex h-full w-full items-center justify-center transition-opacity'
                                                         )}
                                                         aria-hidden="true"
@@ -227,7 +320,7 @@ export default function manageShops(){
                                                     </span>
                                                     <span
                                                     className={classNames(
-                                                        enabled ? 'opacity-100 duration-200 ease-in' : 'opacity-0 duration-100 ease-out',
+                                                        shop.open ? 'opacity-100 duration-200 ease-in' : 'opacity-0 duration-100 ease-out',
                                                         'absolute inset-0 flex h-full w-full items-center justify-center transition-opacity'
                                                         )}
                                                         aria-hidden="true"
