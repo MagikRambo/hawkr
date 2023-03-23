@@ -9,6 +9,8 @@ import { useState } from 'react'
 import TypesMenu from './typesMenu'
 import { Router, useRouter } from 'next/router'
 import get_vendor_by_id from '../pages/api/getVendorByID'
+import { Database } from '../utils/database.types'
+type Profiles = Database['public']['Tables']['profiles']['Row']
 
 
 function classNames(...classes: string[]) {
@@ -39,7 +41,9 @@ function Navbar (){
     // Start Supabase user code
     const user = useUser()
     const userID = user?.id
-    const [data, setData] = useState()
+    const [UUID, setUUID] = useState<Profiles['UUID']>()
+    const [state, setState] = useState<Profiles['state']>(null)
+    const [name, setName] = useState<Profiles['name']>(null)
     const [loading, setLoading] = useState(true)
 
 
@@ -50,6 +54,7 @@ function Navbar (){
             {
                 const v = await get_vendor_by_id(userID.toString())
                 setVendor(v)
+                loadData()
             }
         }
         getVendor().catch(console.error)
@@ -76,27 +81,6 @@ function Navbar (){
         }
     }
 
-    async function createUser(){
-        try{
-          if (!user) throw new Error('No user')
-
-          const updates = {
-            UUID: user.id,
-            state: 1,
-            name: user.email,
-            description: "Welcome to my profile!"
-          }
-
-          let { error } = await supabase.from('profiles').upsert(updates)
-          if (error) throw error
-          alert('Profile updated!')
-
-        }
-        catch (error) {
-          console.log(error)
-        }
-      }
-
     async function loadData() {
         try {
           setLoading(true)
@@ -109,7 +93,7 @@ function Navbar (){
             .single()
           
           if (status == 406){
-            createUser()
+            console.log("error: no user found")
           }
           if (error && status !== 406) {
             console.log("error: ", error.message)
@@ -117,7 +101,9 @@ function Navbar (){
           
           // setData(data)
           if (data) {
-            setData(data)
+            setUUID(data.UUID)
+            setState(data.state)
+            setName(data.name)
           }
         } catch (error) {
           console.log("error: ", error)
