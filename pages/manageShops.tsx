@@ -113,6 +113,8 @@ export default function manageShops(){
                     hawkrType: shop.hawkrType, 
                 },
             )
+            shop.open = false;
+
             setEnabled(false)
             setDisabled(true)
         }
@@ -137,14 +139,17 @@ export default function manageShops(){
                     hawkrType: shop.hawkrType, 
                 },
             )
+            shop.open = true;
             setEnabled(true)
             setDisabled(false)
         }
 
+        //TODO: Fix the open/close issue with this 
+        // window.location.reload()
+
 
         // console.log(shop)
     }
-    
     
     if(!isLoading && !session){
         router.push('/hawkrVendorInfo')
@@ -183,28 +188,17 @@ export default function manageShops(){
         getUserCurrentLocation()
     }, [userID])
 
-    useEffect( () => {
-        const getShops = async () => {
-            if (userID){
-                const res_shops = await getShopsByVendorId(userID.toString())
-                setShops(res_shops)
-            }
-        }
-        getShops().catch(console.error)
+    // useEffect( () => {
+    //     const getShops = async () => {
+    //         if (userID){
+    //             const res_shops = await getShopsByVendorId(userID.toString())
+    //             setShops(res_shops)
+    //         }
+    //     }
+    //     getShops().catch(console.error)
 
-    }, [enabled])
+    // }, [enabled, disabled])
 
-    useEffect( () => {
-        const getShops = async () => {
-            if (userID){
-                const res_shops = await getShopsByVendorId(userID.toString())
-                setShops(res_shops)
-            }
-        }
-        getShops().catch(console.error)
-
-    }, [disabled])
-    
     
     console.log('2nd section mapped imanges: ', images)
     console.log('SHOPS CONTENT: ', shops?.data)
@@ -253,10 +247,10 @@ export default function manageShops(){
                        
 
 
-                    <div className="grid h-screen place-items-center">
+                    <div className="grid h-screen place-items-center ">
                         {/* TODO: Make map function IMAGES BELOW */}
                         <>
-                        ({shops.data.map((shop) => 
+                        {shops.data.map((shop) => 
                             <div className="w-80 rounded-2xl bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-1 shadow-xl">
                                 <div className="h-64 w-full bg-gray-200 flex flex-col justify-between p-4 bg-cover rounded-xl bg-center"
                                      style={{backgroundImage: `url(${shop.shop_image_url ? shop.shop_image_url :'https://via.placeholder.com/500'})`}}
@@ -284,8 +278,8 @@ export default function manageShops(){
                                         <p className="text-2xl"> Open </p>
 
                                         {/*  Enable flag if open */}
-                                        {shop.open && !enabled && (setEnabled(true), console.log(enabled))}
-
+                                        {shop.open && !enabled && (setEnabled(true), console.log(enabled), setDisabled(false))}
+                                        
                                         <Switch
                                             checked={shop.open}
                                             onChange={() => EnableShop(shop)}
@@ -335,7 +329,7 @@ export default function manageShops(){
                                     </div>
                                 </div>
                             </div>
-                            )} )
+                            )}
                         </>
 
                         

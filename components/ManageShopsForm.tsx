@@ -96,8 +96,6 @@ export default function ManageShopsForm({userID, images, setShowModal, formProps
       });
 
 
-
-
       const onSubmit = async (formData:any) => {
 
         console.log('data contents: ',formData)
