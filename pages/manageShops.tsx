@@ -160,13 +160,7 @@ export default function manageShops(){
             }
         }
 
-        const getImages = async () => {
-            if (userID)
-            {
-                const i = await getShopImage(userID, supabase)
-                setImages(i)
-            }
-        }
+
 
         const getShops = async () => {
             if (userID){
@@ -176,7 +170,6 @@ export default function manageShops(){
         }
 
         getVendor().catch(console.error)
-        getImages().catch(console.error)
         getShops().catch(console.error)
         getUserCurrentLocation()
     }, [userID])

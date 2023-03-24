@@ -48,12 +48,12 @@ export async function uploadProfileImage(e,user){
     }
 }
 
-export async function getShopImage(shopID, supabase){
+export async function getShopImage(userID, shopID, supabase){
     
     const {data, error} = await supabase
     .storage
     .from('shop-images')
-    .list(shopID + "/", {
+    .list(userID + "/" + shopID + "/", {
         limit: 10,
         offset: 0,
         sortBy: {column: "name", order: "asc"}

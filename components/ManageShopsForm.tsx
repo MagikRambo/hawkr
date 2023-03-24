@@ -22,6 +22,7 @@ type ManageShopsFormProps = {
 }
 
 type formProps = {
+    shopID: string | undefined
     shopName: string,
     shopDescription: string,
     hawkrType: string,
@@ -37,7 +38,7 @@ type formProps = {
 }
 
 
-export default function ManageShopsForm({userID, images, setShowModal, formProps}: any){
+export default function ManageShopsForm({userID, setShowModal, editFlag, formProps}: any){
 
   
 
@@ -66,7 +67,7 @@ export default function ManageShopsForm({userID, images, setShowModal, formProps
     const user = useUser()
     // const userID = user?.id
 
-    // const [images, setImages] = useState<ImageContent>()
+    const [images, setImages] = useState<ImageContent>()
     const SHOP_CDN_URL = 'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/shop-images'
 
     const {
@@ -78,18 +79,36 @@ export default function ManageShopsForm({userID, images, setShowModal, formProps
       } = useForm({
         defaultValues: formProps
       });
+      
+      useEffect( () => {
+
+        const getImages = async (shopID) => {
+              if (userID)
+              {
+                  const i = await getShopImage(userID, shopID, supabase)
+                  setImages(i)
+              }
+          }
 
 
+        if (editFlag){
+            getImages(formProps.shopID).catch(console.error)
+        }
+
+    }, [userID])
+
+      
+      
       const onSubmit = async (formData:any) => {
-
-        console.log('data contents: ',formData)
+          
+          console.log('data contents: ',formData)
         var img_src
         console.log('FILE STATUS: ', formData.file)
 
     
         // console.log('USER CURRENT LOCATION: ', userLocation)
         
-        
+        let shopID = formData.shopID
         let vendorID = userID
         let shopName = formData.shopName
         let shopDescription = formData.shopDescription
@@ -100,111 +119,144 @@ export default function ManageShopsForm({userID, images, setShowModal, formProps
         let timeClosed = `${formData.hoursClosed}:${formData.minutesClosed}${formData.ampmClosed}`
         
         console.log(timeOpen, timeClosed)
-        const { data, error } = await supabase
-        .from('shops')
-        .insert([
-          { vendorID: vendorID,
-            shopName: shopName ,
-            shopDescription: shopDescription ,
-            open: false ,
-            timeOpen: timeOpen,
-            timeClosed: timeClosed ,
-            messagesOn: messagesOn ,
-            liveTracking: liveTracking ,
-            hawkrType: hawkrType, 
-            shop_image_url: null},
-        ])
 
-        console.log('SUPABASE SHOP CREATION DATA CONENTS: ', data)
-    
-        if (formData.file['length'] > 0){
-
-
-            const { data:shopID, error:error3 } = await supabase
+        if (!editFlag){
+            const { data, error } = await supabase
             .from('shops')
-            .select('shopID')
-            .match(
-                { vendorID: vendorID,
-                    shopName: shopName ,
-                    shopDescription: shopDescription ,
-                    open: 'false' ,
-                    timeOpen: timeOpen,
-                    timeClosed: timeClosed ,
-                    messagesOn: messagesOn ,
-                    liveTracking: liveTracking ,
-                    hawkrType: hawkrType, 
-                    // shop_image_url: 'NULL',
-                },
-            )
+            .insert([
+            { vendorID: vendorID,
+                shopName: shopName ,
+                shopDescription: shopDescription ,
+                open: false ,
+                timeOpen: timeOpen,
+                timeClosed: timeClosed ,
+                messagesOn: messagesOn ,
+                liveTracking: liveTracking ,
+                hawkrType: hawkrType, 
+                shop_image_url: null},
+            ])
+
+            console.log('SUPABASE SHOP CREATION DATA CONENTS: ', data)
+        
+            if (formData.file['length'] > 0){
 
 
-            //TODO / NOTE: when creating shop. can upload 1 image, but when editing. Needs to get first then remove from CDN and update DB
-            await uploadShopImage(formData.file[0], supabase, user?.id, shopID)
-            // const res_image =  await getShopImage(userID, supabase)
-            
-            // console.log('res image return: ', res_image)
-            // setImages(res_image)
-    
-            console.log('USE STATE CONTENT OF IMAGES: ', images)
-        //    console.log('VARIABLE D: ', d)
-    
-            // const image:any = images[0] //TODO: make type for this
-    
-            // console.log(res_image)
-
-            //TODO: Change the path from userID to /UserID/ShopID/picture
-            img_src =`${SHOP_CDN_URL}/${userID}/${formData.file[0].name}`
-            // console.log("SUCCESSFULLLY ADDED TO CDN BRO!!!! :)")
-            // formData.append('file', src)
+                const { data:res_shopID, error:error3 } = await supabase
+                .from('shops')
+                .select('shopID')
+                .match(
+                    { vendorID: vendorID,
+                        shopName: shopName ,
+                        shopDescription: shopDescription ,
+                        open: 'false' ,
+                        timeOpen: timeOpen,
+                        timeClosed: timeClosed ,
+                        messagesOn: messagesOn ,
+                        liveTracking: liveTracking ,
+                        hawkrType: hawkrType, 
+                        // shop_image_url: 'NULL',
+                    },
+                )
 
 
-            const { data:data2, error:error2 } = await supabase
-            .from('shops')
-            .update({ shop_image_url: img_src ? img_src : null })
-            .match(
-                { vendorID: vendorID,
-                    shopName: shopName ,
-                    shopDescription: shopDescription ,
-                    open: 'false' ,
-                    timeOpen: timeOpen,
-                    timeClosed: timeClosed ,
-                    messagesOn: messagesOn ,
-                    liveTracking: liveTracking ,
-                    hawkrType: hawkrType, 
-                    // shop_image_url: 'NULL',
-                },
-            )
-        }
+                //TODO / NOTE: when creating shop. can upload 1 image, but when editing. Needs to get first then remove from CDN and update DB
+                await uploadShopImage(formData.file[0], supabase, user?.id, res_shopID)
+                // const res_image =  await getShopImage(userID, supabase)
+                
+                // console.log('res image return: ', res_image)
+                // setImages(res_image)
+        
+                console.log('USE STATE CONTENT OF IMAGES: ', images)
+            //    console.log('VARIABLE D: ', d)
+        
+                // const image:any = images[0] //TODO: make type for this
+        
+                // console.log(res_image)
 
-        //get Shop ID that was recently posted
- 
-        // TEST IF THIS WORKS ^^^^^^^^^^ !!!!!!!!!!!!!!!!!
+                //TODO: Change the path from userID to /UserID/ShopID/picture
+                img_src =`${SHOP_CDN_URL}/${userID}/${res_shopID}/${formData.file[0].name}`
+                // console.log("SUCCESSFULLLY ADDED TO CDN BRO!!!! :)")
+                // formData.append('file', src)
 
-        // console.log('!!!!!!!!!!! SHOP ID VALUE: ', data5, error5)
-        console.log('VALUE OF IMG SRC: ', img_src)
 
-    
-        const { data:data3, error:error3 } = await supabase
-        .from('locations')
-        .insert([
-          { UUID: vendorID, location: userLocation },
-        ])
-      
-    
-        // console.log('supabase DETAILA !!!!!!! \t ', data2, error2)
-        // console.log('form Data contents: ', formData);
-    
-        if  (!error){
-            toast("Successfully created your shop!")
-        }else{
-            if (error){
-                alert('Error in creating shop')
-            }else{
-                alert('Error in uploading locations')
+                const { data:data2, error:error2 } = await supabase
+                .from('shops')
+                .update({ shop_image_url: img_src ? img_src : null })
+                .match(
+                    { vendorID: vendorID,
+                        shopName: shopName ,
+                        shopDescription: shopDescription ,
+                        open: 'false' ,
+                        timeOpen: timeOpen,
+                        timeClosed: timeClosed ,
+                        messagesOn: messagesOn ,
+                        liveTracking: liveTracking ,
+                        hawkrType: hawkrType, 
+                        // shop_image_url: 'NULL',
+                    },
+                )
             }
-        }
+
+            //get Shop ID that was recently posted
     
-        reset()
+            // TEST IF THIS WORKS ^^^^^^^^^^ !!!!!!!!!!!!!!!!!
+
+            // console.log('!!!!!!!!!!! SHOP ID VALUE: ', data5, error5)
+            console.log('VALUE OF IMG SRC: ', img_src)
+
+        
+            const { data:data3, error:error3 } = await supabase
+            .from('locations')
+            .insert([
+            { UUID: vendorID, location: userLocation },
+            ])
+        
+        
+            // console.log('supabase DETAILA !!!!!!! \t ', data2, error2)
+            // console.log('form Data contents: ', formData);
+        
+            if  (!error){
+                toast("Successfully created your shop!")
+            }else{
+                if (error){
+                    alert('Error in creating shop')
+                }else{
+                    alert('Error in uploading locations')
+                }
+            }
+        
+            reset()
+        }
+
+        //Edit flag set
+        else{
+
+            var img_src;
+
+            if (formData.file['length'] > 0){
+                img_src =`${SHOP_CDN_URL}/${userID}/${shopID}/${formData.file[0].name}`
+            }
+
+
+            const {data, error} = await supabase
+            .from('shops')
+            .update({
+                shopName: shopName,
+                shopDescription: shopDescription,
+                open: formData.open,
+                timeOpen: timeOpen,
+                timeClosed: timeClosed,
+                messagesOn: messagesOn,
+                liveTracking: liveTracking,
+                hawkrType: hawkrType,
+                shop_image_url: img_src ? img_src : 'https://via.placeholder.com/500'
+            })
+            .match({
+                shopID: shopID
+            })
+        }
+
+
         };
 
 return(
