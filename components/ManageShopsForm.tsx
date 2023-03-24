@@ -69,22 +69,6 @@ export default function ManageShopsForm({userID, images, setShowModal, formProps
     // const [images, setImages] = useState<ImageContent>()
     const SHOP_CDN_URL = 'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/shop-images'
 
-    // const [showModal, setShowModal] = useState(false);
-
-    // const preloadVal = {
-    //     shopName: 'THiS IS AMAZING TEXT',
-    //     shopDescription: '',
-    //     hawkrType: '',
-    //     file: '',
-    //     hoursOpen: '',
-    //     minutesOpen: '', 
-    //     ampmOpen: '',
-    //     hoursClosed: '',
-    //     minutesClosed: '',
-    //     ampmClosed: '',
-    //     liveTracking: Boolean,
-    //     messagesFlag: Boolean
-    //     }
     const {
         register,
         handleSubmit,
@@ -101,26 +85,7 @@ export default function ManageShopsForm({userID, images, setShowModal, formProps
         console.log('data contents: ',formData)
         var img_src
         console.log('FILE STATUS: ', formData.file)
-        if (formData.file['length'] > 0){
-            //TODO / NOTE: when creating shop. can upload 1 image, but when editing. Needs to get first then remove from CDN and update DB
-            await uploadShopImage(formData.file[0], supabase, user?.id)
-            // const res_image =  await getShopImage(userID, supabase)
-            
-            // console.log('res image return: ', res_image)
-            // setImages(res_image)
-    
-            console.log('USE STATE CONTENT OF IMAGES: ', images)
-        //    console.log('VARIABLE D: ', d)
-    
-            // const image:any = images[0] //TODO: make type for this
-    
-            // console.log(res_image)
 
-            //TODO: Change the path from userID to /UserID/ShopID/picture
-            img_src =`${SHOP_CDN_URL}/${userID}/${formData.file[0].name}`
-            // console.log("SUCCESSFULLLY ADDED TO CDN BRO!!!! :)")
-            // formData.append('file', src)
-        }
     
         // console.log('USER CURRENT LOCATION: ', userLocation)
         
@@ -152,28 +117,72 @@ export default function ManageShopsForm({userID, images, setShowModal, formProps
 
         console.log('SUPABASE SHOP CREATION DATA CONENTS: ', data)
     
+        if (formData.file['length'] > 0){
+
+
+            const { data:shopID, error:error3 } = await supabase
+            .from('shops')
+            .select('shopID')
+            .match(
+                { vendorID: vendorID,
+                    shopName: shopName ,
+                    shopDescription: shopDescription ,
+                    open: 'false' ,
+                    timeOpen: timeOpen,
+                    timeClosed: timeClosed ,
+                    messagesOn: messagesOn ,
+                    liveTracking: liveTracking ,
+                    hawkrType: hawkrType, 
+                    // shop_image_url: 'NULL',
+                },
+            )
+
+
+            //TODO / NOTE: when creating shop. can upload 1 image, but when editing. Needs to get first then remove from CDN and update DB
+            await uploadShopImage(formData.file[0], supabase, user?.id, shopID)
+            // const res_image =  await getShopImage(userID, supabase)
+            
+            // console.log('res image return: ', res_image)
+            // setImages(res_image)
+    
+            console.log('USE STATE CONTENT OF IMAGES: ', images)
+        //    console.log('VARIABLE D: ', d)
+    
+            // const image:any = images[0] //TODO: make type for this
+    
+            // console.log(res_image)
+
+            //TODO: Change the path from userID to /UserID/ShopID/picture
+            img_src =`${SHOP_CDN_URL}/${userID}/${formData.file[0].name}`
+            // console.log("SUCCESSFULLLY ADDED TO CDN BRO!!!! :)")
+            // formData.append('file', src)
+
+
+            const { data:data2, error:error2 } = await supabase
+            .from('shops')
+            .update({ shop_image_url: img_src ? img_src : null })
+            .match(
+                { vendorID: vendorID,
+                    shopName: shopName ,
+                    shopDescription: shopDescription ,
+                    open: 'false' ,
+                    timeOpen: timeOpen,
+                    timeClosed: timeClosed ,
+                    messagesOn: messagesOn ,
+                    liveTracking: liveTracking ,
+                    hawkrType: hawkrType, 
+                    // shop_image_url: 'NULL',
+                },
+            )
+        }
+
         //get Shop ID that was recently posted
  
         // TEST IF THIS WORKS ^^^^^^^^^^ !!!!!!!!!!!!!!!!!
 
         // console.log('!!!!!!!!!!! SHOP ID VALUE: ', data5, error5)
         console.log('VALUE OF IMG SRC: ', img_src)
-        const { data:data2, error:error2 } = await supabase
-        .from('shops')
-        .update({ shop_image_url: img_src ? img_src : null })
-        .match(
-            { vendorID: vendorID,
-                shopName: shopName ,
-                shopDescription: shopDescription ,
-                open: 'false' ,
-                timeOpen: timeOpen,
-                timeClosed: timeClosed ,
-                messagesOn: messagesOn ,
-                liveTracking: liveTracking ,
-                hawkrType: hawkrType, 
-                // shop_image_url: 'NULL',
-            },
-        )
+
     
         const { data:data3, error:error3 } = await supabase
         .from('locations')
@@ -185,7 +194,7 @@ export default function ManageShopsForm({userID, images, setShowModal, formProps
         // console.log('supabase DETAILA !!!!!!! \t ', data2, error2)
         // console.log('form Data contents: ', formData);
     
-        if (!error2 || !error){
+        if  (!error){
             toast("Successfully created your shop!")
         }else{
             if (error){

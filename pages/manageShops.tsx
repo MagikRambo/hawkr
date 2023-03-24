@@ -144,11 +144,6 @@ export default function manageShops(){
             setDisabled(false)
         }
 
-        //TODO: Fix the open/close issue with this 
-        // window.location.reload()
-
-
-        // console.log(shop)
     }
     
     if(!isLoading && !session){
@@ -187,17 +182,6 @@ export default function manageShops(){
         getShops().catch(console.error)
         getUserCurrentLocation()
     }, [userID])
-
-    // useEffect( () => {
-    //     const getShops = async () => {
-    //         if (userID){
-    //             const res_shops = await getShopsByVendorId(userID.toString())
-    //             setShops(res_shops)
-    //         }
-    //     }
-    //     getShops().catch(console.error)
-
-    // }, [enabled, disabled])
 
     
     console.log('2nd section mapped imanges: ', images)

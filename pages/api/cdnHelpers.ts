@@ -9,14 +9,16 @@ import { useState } from "react"
 // Video helps with functions above ^
 
 // TO be utilized in 'Create a Shop' or 'Edit a shop'
-export async function uploadShopImage(e, supabase, userID){
+export async function uploadShopImage(e, supabase, userID, shop){
 
     console.log('uploadShop Image Function!! : ', e)
+
+    console.log(userID, shop[0])
     let file = e
     const {data, error} = await supabase
     .storage
     .from('shop-images')
-    .upload(userID + "/" + file.name, file)
+    .upload(userID + "/" + shop[0].shopID + '/' + file.name, file)
 
     if(data){
         console.log("successfully uploaded", data)
