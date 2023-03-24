@@ -11,7 +11,6 @@ import "react-toastify/dist/ReactToastify.css";
 import getShopsByVendorId from "./api/getShopsByVendorId";
 
 import { Switch } from '@headlessui/react'
-import clsx from 'clsx'
 import ManageShopsForm from "../components/ManageShopsForm";
 
 //NOTE: Current state of project - Location of shop/user is where the shop was created in form
@@ -55,11 +54,7 @@ export default function manageShops(){
         hawkrType: string,
         shop_image_url: string
     }
-    
-    
-
-
- 
+     
     const [vendor, setVendor] = useState<VendorContent>()    
     const [reloading, setReloading] = useState<boolean>(true)
     const [userLocation, setUserLocation] = useState<any>()
@@ -69,6 +64,9 @@ export default function manageShops(){
     const [disabled, setDisabled] = useState(false)
 
     const [editClicked, setEditClicked] = useState(false)
+
+    const [editShop, setEditShop] = useState<any>()
+
 
     const [formData, setFormData] = useState<formProps>()
 
@@ -228,9 +226,6 @@ export default function manageShops(){
                     Create Shop
                     </button>
            
-                       
-
-
                     <div className="grid h-screen place-items-center ">
                         {/* TODO: Make map function IMAGES BELOW */}
                         <>
@@ -244,6 +239,7 @@ export default function manageShops(){
                                         <div className="relative h-32 w-32 ">
                                             <button onClick={() => {
                                                 setEditClicked(true)
+                                                setEditShop(shop)
                                                 setShowModal(true)
                                                 }} 
                                                 className="absolute -right-4 -top-4 rounded-xl bg-gray-900 bg-opacity-50 pl-2 pb-2 text-white hover:bg-gray-500 hover:bg-opacity-50 hover:text-blue-500">
@@ -314,12 +310,12 @@ export default function manageShops(){
                                 </div>
                             </div>
                             )}
+                        <div className="text-black">
+                            {showModal &&  <ManageShopsForm  userID={userID} images={images} setShowModal={setShowModal} editFlag={true} formProps={editShop} />}
+                        </div>
                         </>
 
                         
-                        <div className="text-black">
-                            {showModal &&  <ManageShopsForm  userID={userID} images={images} setShowModal={setShowModal} editFlag={false} shopName={'WOW COOL SHOP NAME'}/>}
-                        </div>
 
                     </div>
 
