@@ -1,6 +1,6 @@
 import { useSessionContext, useSupabaseClient, useUser } from "@supabase/auth-helpers-react"
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react"
+import { Fragment, useEffect, useState } from "react"
 import { useForm } from "react-hook-form";
 import { supabase } from "../utils/supabaseClient";
 import { getShopImage, uploadShopImage } from "./api/cdnHelpers";
@@ -10,8 +10,9 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import getShopsByVendorId from "./api/getShopsByVendorId";
 
-import { Switch } from '@headlessui/react'
+import { Dialog, Switch, Transition } from '@headlessui/react'
 import ManageShopsForm from "../components/ManageShopsForm";
+import { ExclamationTriangleIcon, XMarkIcon } from "@heroicons/react/24/solid";
 
 //NOTE: Current state of project - Location of shop/user is where the shop was created in form
 function classNames(...classes:any) {
@@ -66,6 +67,8 @@ export default function manageShops(){
     const [editClicked, setEditClicked] = useState(false)
 
     const [editShop, setEditShop] = useState<any>()
+    const [removeShop, setRemoveShop] = useState<any>()
+
 
 
     const [formData, setFormData] = useState<formProps>()
@@ -82,6 +85,9 @@ export default function manageShops(){
     const [showModal, setShowModal] = useState(false);
 
 
+    const [open, setOpen] = useState(false)
+
+
     const getUserCurrentLocation = () =>{
         //Getting the current location of user
         navigator.geolocation.getCurrentPosition(position => {
@@ -90,6 +96,20 @@ export default function manageShops(){
             const userPosition = {lat: position.coords.latitude, lng: position.coords.longitude}
             setUserLocation(userPosition)
         });
+    }
+
+    const deleteShop = async (shopID:string) => {
+        const {data, error} = await supabase
+        .from('shops')
+        .delete()
+        .eq('shopID', shopID)
+
+        // console.log(shops.data?.map((shop) => {
+        //     if (shop.shopID == shopID){
+        //         shops?.data
+        //     }
+        // }))
+        
     }
 
     const  EnableShop = async (shop: shopType) => {
@@ -215,7 +235,7 @@ export default function manageShops(){
 
                     {/* Button to create more shops */}
 
-                    <button onClick={() => setShowModal(true)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+                    <button onClick={() => (setEditClicked(false), setEditShop(null), setShowModal(true))} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
                     Create Shop
                     </button>
            
@@ -228,21 +248,33 @@ export default function manageShops(){
                                      style={{backgroundImage: `url(${shop.shop_image_url ? shop.shop_image_url :'https://via.placeholder.com/500'})`}}
                                 >
                                     <div className="flex justify-between">
-                                        <input type="checkbox"/>
+                                        <div className="relative h-32 w-32">
+                                            <button type="button"
+                                                onClick={() => (setOpen(true), setRemoveShop(shop))} 
+                                                className="relative -left-6 -top-6 focus-visible:outline-offset-[-4px] rounded-xl bg-gray-900 bg-opacity-50 pl-2 pb-2 text-white hover:bg-gray-500 hover:bg-opacity-50 hover:text-blue-500"
+                                                >
+                                                <div className="relative right-1 -bottom-1">
+
+                                                    <span className="sr-only">Dismiss</span>
+                                                    <XMarkIcon className="h-6 w-6 text-white font-extrabold" aria-hidden="true" />
+                                                </div>
+                                                </button>
+                                            </div>
                                         <div className="relative h-32 w-32 ">
                                             <button onClick={() => {
                                                 setEditClicked(true)
                                                 setEditShop(shop)
                                                 setShowModal(true)
                                                 }} 
-                                                className="absolute -right-4 -top-4 rounded-xl bg-gray-900 bg-opacity-50 pl-2 pb-2 text-white hover:bg-gray-500 hover:bg-opacity-50 hover:text-blue-500">
-                                            <div className="relative -left-1 -bottom-1">
+                                                className="absolute -right-4 -top-4 rounded-xl bg-gray-900 bg-opacity-50 pl-2 pb-2 text-white hover:bg-gray-500 hover:bg-opacity-50 hover:text-blue-500"
+                                            >
+                                                <div className="relative -left-1 -bottom-1">
 
-                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M12 4H6C4.89543 4 4 4.89543 4 6V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V12" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                                    <path d="M18.2929 3.70711C18.6834 3.31658 19.3166 3.31658 19.7071 3.70711L20.4142 4.41421C20.8047 4.80474 20.8047 5.4379 20.4142 5.82843L12.2628 13.9799C12.0432 14.1994 11.7756 14.3648 11.481 14.463L8.93669 15.3111C8.85851 15.3372 8.78414 15.2628 8.8102 15.1846L9.65831 12.6403C9.7565 12.3457 9.92191 12.0781 10.1415 11.8585L18.2929 3.70711Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                                </svg>
-                                            </div>
+                                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M12 4H6C4.89543 4 4 4.89543 4 6V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V12" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        <path d="M18.2929 3.70711C18.6834 3.31658 19.3166 3.31658 19.7071 3.70711L20.4142 4.41421C20.8047 4.80474 20.8047 5.4379 20.4142 5.82843L12.2628 13.9799C12.0432 14.1994 11.7756 14.3648 11.481 14.463L8.93669 15.3111C8.85851 15.3372 8.78414 15.2628 8.8102 15.1846L9.65831 12.6403C9.7565 12.3457 9.92191 12.0781 10.1415 11.8585L18.2929 3.70711Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    </svg>
+                                                </div>
                                             </button>
                                         </div>
 
@@ -304,14 +336,87 @@ export default function manageShops(){
                             </div>
                             )}
                         <div className="text-black">
-                            {showModal &&  <ManageShopsForm  userID={userID} images={images} setShowModal={setShowModal} editFlag={true} formProps={editShop} />}
+                            {showModal &&  <ManageShopsForm  userID={userID} images={images} setShowModal={setShowModal} editFlag={editClicked} formProps={editShop} />}
                         </div>
                         </>
 
                         
 
                     </div>
+                    <Transition.Root show={open} as={Fragment}>
+                    <Dialog as="div" className="relative z-10" onClose={setOpen}>
+                        <Transition.Child
+                        as={Fragment}
+                        enter="ease-out duration-300"
+                        enterFrom="opacity-0"
+                        enterTo="opacity-100"
+                        leave="ease-in duration-200"
+                        leaveFrom="opacity-100"
+                        leaveTo="opacity-0"
+                        >
+                        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+                        </Transition.Child>
 
+                        <div className="fixed inset-0 z-10 overflow-y-auto">
+                        <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                            <Transition.Child
+                            as={Fragment}
+                            enter="ease-out duration-300"
+                            enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                            enterTo="opacity-100 translate-y-0 sm:scale-100"
+                            leave="ease-in duration-200"
+                            leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                            leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                            >
+                            <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+                                <div className="absolute top-0 right-0 hidden pt-4 pr-4 sm:block">
+                                <button
+                                    type="button"
+                                    className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                    onClick={() => setOpen(false)}
+                                >
+                                    <span className="sr-only">Close</span>
+                                    <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+                                </button>
+                                </div>
+                                <div className="sm:flex sm:items-start">
+                                <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                                    <ExclamationTriangleIcon className="h-6 w-6 text-red-600" aria-hidden="true" />
+                                </div>
+                                <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                                    <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
+                                    Deactivate account
+                                    </Dialog.Title>
+                                    <div className="mt-2">
+                                    <p className="text-sm text-gray-500">
+                                        Are you sure you want to deactivate your account? All of your data will be permanently removed
+                                        from our servers forever. This action cannot be undone.
+                                    </p>
+                                    </div>
+                                </div>
+                                </div>
+                                <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+                                <button
+                                    type="button"
+                                    className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
+                                    onClick={() => (deleteShop(removeShop.shopID), console.log(removeShop), setOpen(false))}
+                                >
+                                    Deactivate
+                                </button>
+                                <button
+                                    type="button"
+                                    className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                                    onClick={() => setOpen(false)}
+                                >
+                                    Cancel
+                                </button>
+                                </div>
+                            </Dialog.Panel>
+                            </Transition.Child>
+                        </div>
+                        </div>
+                    </Dialog>
+                    </Transition.Root>
                 </div>
 
             )} 

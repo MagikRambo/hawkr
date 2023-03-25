@@ -95,7 +95,7 @@ export default function ManageShopsForm({userID, setShowModal, editFlag, formPro
             getImages(formProps.shopID).catch(console.error)
         }
 
-    }, [userID])
+    }, [editFlag])
 
       
       
@@ -141,14 +141,14 @@ export default function ManageShopsForm({userID, setShowModal, editFlag, formPro
             if (formData.file['length'] > 0){
 
 
-                const { data:res_shopID, error:error3 } = await supabase
+                const { data:resShop, error:error3 } = await supabase
                 .from('shops')
                 .select('shopID')
                 .match(
                     { vendorID: vendorID,
                         shopName: shopName ,
                         shopDescription: shopDescription ,
-                        open: 'false' ,
+                        // open: 'false' ,
                         timeOpen: timeOpen,
                         timeClosed: timeClosed ,
                         messagesOn: messagesOn ,
@@ -158,9 +158,14 @@ export default function ManageShopsForm({userID, setShowModal, editFlag, formPro
                     },
                 )
 
+                const shopID = resShop ? resShop[0].shopID : ''
+
+
+                console.log(formData.file[0])
+                console.log(formData.file)
 
                 //TODO / NOTE: when creating shop. can upload 1 image, but when editing. Needs to get first then remove from CDN and update DB
-                await uploadShopImage(formData.file[0], supabase, user?.id, res_shopID)
+                await uploadShopImage(formData.file[0], supabase, user?.id, resShop)
                 // const res_image =  await getShopImage(userID, supabase)
                 
                 // console.log('res image return: ', res_image)
@@ -174,7 +179,8 @@ export default function ManageShopsForm({userID, setShowModal, editFlag, formPro
                 // console.log(res_image)
 
                 //TODO: Change the path from userID to /UserID/ShopID/picture
-                img_src =`${SHOP_CDN_URL}/${userID}/${res_shopID}/${formData.file[0].name}`
+                img_src =`${SHOP_CDN_URL}/${userID}/${shopID}/${formData.file[0].name}`
+                
                 // console.log("SUCCESSFULLLY ADDED TO CDN BRO!!!! :)")
                 // formData.append('file', src)
 
