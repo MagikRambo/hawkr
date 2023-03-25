@@ -233,13 +233,33 @@ export default function manageShops(){
             {shops && shops.data && shops.data[0] && (
                 <div className="bg-slate-200 h-screen w-screen">
 
-                    {/* Button to create more shops */}
+                {/* Bar above to creat shops etc.... */}
+                    <div className="bg-sky-400 w-screen h-24">
 
-                    <button onClick={() => (setEditClicked(false), setEditShop(null), setShowModal(true))} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
-                    Create Shop
-                    </button>
+                        <div className="relative pt-8 pl-10 text-2xl font-bold text-black">
+                           
+                           <div className="flex">
+                                <p> Manage Shops </p>
+                                <p className="pl-2"> |</p>
+                                <p className="pl-2"> {shops.data["length"]} Shops </p>
+                                {/* Button to create more shops */}
+
+                                <div className="absolute right-12 top-6  ">
+
+                                    <button 
+                                        onClick={() => (setEditClicked(false), setEditShop(null), setShowModal(true))} 
+                                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+                                        >
+                                    + Create Shop
+                                    </button>
+                                </div>
+                             </div> 
+                        </div>
+                    </div>
+
+
            
-                    <div className="grid h-screen place-items-center ">
+                    <div className="relative grid grid-cols-3 h-screen place-items-center ">
                         {/* TODO: Make map function IMAGES BELOW */}
                         <>
                         {shops.data.map((shop) => 
