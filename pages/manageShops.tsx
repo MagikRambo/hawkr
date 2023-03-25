@@ -56,6 +56,18 @@ export default function manageShops(){
         shop_image_url: string
     }
      
+    const tabs = [
+        { name: 'Applied', href: '#', current: false },
+        { name: 'Phone Screening', href: '#', current: false },
+        { name: 'Interview', href: '#', current: true },
+        { name: 'Offer', href: '#', current: false },
+        { name: 'Hired', href: '#', current: false },
+      ]
+      
+      function classNames(...classes) {
+        return classes.filter(Boolean).join(' ')
+      }
+
     const [vendor, setVendor] = useState<VendorContent>()    
     const [reloading, setReloading] = useState<boolean>(true)
     const [userLocation, setUserLocation] = useState<any>()
@@ -234,7 +246,7 @@ export default function manageShops(){
                 <div className="bg-slate-200 h-screen w-screen">
 
                 {/* Bar above to creat shops etc.... */}
-                    <div className="bg-sky-400 w-screen h-24">
+                    <div className="relative bg-gray-300 border-b border-gray-400 pb-5 sm:pb-0 w-screen h-24 ">
 
                         <div className="relative pt-8 pl-10 text-2xl font-bold text-black">
                            
@@ -253,7 +265,10 @@ export default function manageShops(){
                                     + Create Shop
                                     </button>
                                 </div>
+                                
                              </div> 
+                             
+                             
                         </div>
                     </div>
 
