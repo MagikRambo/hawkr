@@ -57,11 +57,10 @@ export default function manageShops(){
     }
      
     const tabs = [
-        { name: 'Applied', href: '#', current: false },
-        { name: 'Phone Screening', href: '#', current: false },
-        { name: 'Interview', href: '#', current: true },
-        { name: 'Offer', href: '#', current: false },
-        { name: 'Hired', href: '#', current: false },
+        { name: 'ALL SHOPS', href: '#', current: true },
+        { name: 'ACTIVE', href: '#', current: false },
+        { name: 'INACTIVE', href: '#', current: false },
+
       ]
       
       function classNames(...classes) {
@@ -246,7 +245,7 @@ export default function manageShops(){
                 <div className="bg-slate-200 h-screen w-screen">
 
                 {/* Bar above to creat shops etc.... */}
-                    <div className="relative bg-gray-300 border-b border-gray-400 pb-5 sm:pb-0 w-screen h-24 ">
+                    <div className="relative bg-gray-300 border-b border-gray-400 pb-5 sm:pb-0 w-screen h-30 ">
 
                         <div className="relative pt-8 pl-10 text-2xl font-bold text-black">
                            
@@ -256,7 +255,7 @@ export default function manageShops(){
                                 <p className="pl-2"> {shops.data["length"]} Shops </p>
                                 {/* Button to create more shops */}
 
-                                <div className="absolute right-12 top-6  ">
+                                <div className="absolute right-12 top-10  ">
 
                                     <button 
                                         onClick={() => (setEditClicked(false), setEditShop(null), setShowModal(true))} 
@@ -267,11 +266,44 @@ export default function manageShops(){
                                 </div>
                                 
                              </div> 
-                             
-                             
+                        </div>
+                        <div className="pl-10 mt-4">
+                            <div className="sm:hidden">
+                            <label htmlFor="current-tab" className="sr-only">
+                                Select a tab
+                            </label>
+                            <select
+                                id="current-tab"
+                                name="current-tab"
+                                className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
+                                defaultValue={tabs.find((tab) => tab.current).name}
+                            >
+                                {tabs.map((tab) => (
+                                <option key={tab.name}>{tab.name}</option>
+                                ))}
+                            </select>
+                            </div>
+                            <div className="hidden sm:block">
+                            <nav className="-mb-px flex space-x-8">
+                                {tabs.map((tab) => (
+                                <a
+                                    key={tab.name}
+                                    href={tab.href}
+                                    className={classNames(
+                                    tab.current
+                                        ? 'border-indigo-500 text-indigo-600'
+                                        : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
+                                    'whitespace-nowrap border-b-2 px-1 pb-4 text-sm font-medium'
+                                    )}
+                                    aria-current={tab.current ? 'page' : undefined}
+                                >
+                                    {tab.name}
+                                </a>
+                                ))}
+                            </nav>
+                            </div>
                         </div>
                     </div>
-
 
            
                     <div className="relative grid grid-cols-3 h-screen place-items-center ">
