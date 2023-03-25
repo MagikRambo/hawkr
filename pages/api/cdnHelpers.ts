@@ -9,18 +9,20 @@ import { useState } from "react"
 // Video helps with functions above ^
 
 // TO be utilized in 'Create a Shop' or 'Edit a shop'
-export async function uploadShopImage(e, supabase, userID){
+export async function uploadShopImage(e, supabase, userID, shop){
 
-    console.log(e)
+    console.log('uploadShop Image Function!! : ', e)
+
+    console.log(userID, shop[0])
     let file = e
     const {data, error} = await supabase
     .storage
     .from('shop-images')
-    .upload(userID + "/" + file.name, file)
+    .upload(userID + "/" + shop[0].shopID + '/' + file.name, file)
 
     if(data){
         console.log("successfully uploaded", data)
-        alert('Successfully Uploaded!')
+        // alert('Successfully Uploaded!')
     }
     else{
         console.log(error)
@@ -28,6 +30,7 @@ export async function uploadShopImage(e, supabase, userID){
 }
 
 export async function uploadProfileImage(e,user){
+    console.log(e.target.files)
     let file = e.target.files[0]
     const supabase = useSupabaseClient();
 
@@ -38,19 +41,19 @@ export async function uploadProfileImage(e,user){
 
     if(data){
         console.log("successfully uploaded")
-        alert('Successfully Uploaded!')
+        // alert('Successfully Uploaded!')
     }
     else{
         console.log(error)
     }
 }
 
-export async function getShopImage(shopID, supabase, setImages){
+export async function getShopImage(userID, shopID, supabase){
     
     const {data, error} = await supabase
     .storage
     .from('shop-images')
-    .list(shopID + "/", {
+    .list(userID + "/" + shopID + "/", {
         limit: 10,
         offset: 0,
         sortBy: {column: "name", order: "asc"}
