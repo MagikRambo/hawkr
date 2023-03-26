@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react'
 import { stat } from 'fs'
 import {supabase} from '../utils/supabaseClient'
 
-const signup: NextPage = () => {
+const useSignup: NextPage = () => {
     const session = useSession()
     // const supabase = useSupabaseClient()
     
@@ -124,4 +124,4 @@ const signup: NextPage = () => {
     )
 }
 
-export default signup
+export default useSignup

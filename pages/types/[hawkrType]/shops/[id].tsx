@@ -31,7 +31,7 @@ export const getStaticPaths = async () => {
 
 }
 
-export const getStaticProps = async ( context ) => {
+export const getStaticProps = async ( context: { params: any; } ) => {
 
     const { params } = context
     console.log(context)
@@ -74,7 +74,7 @@ function ExploreMenu (props: any){
     )
 }
 
-function shopDetails({shopData}:InferGetStaticPropsType<typeof getStaticProps>){
+function useShopDetails({shopData}:InferGetStaticPropsType<typeof getStaticProps>){
 
     // console.log("WE MADE IT TO DETAILS")
 
@@ -104,4 +104,4 @@ function shopDetails({shopData}:InferGetStaticPropsType<typeof getStaticProps>){
         </>
       )
 }
-export default shopDetails
+export default useShopDetails

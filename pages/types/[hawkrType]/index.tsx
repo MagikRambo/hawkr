@@ -53,8 +53,12 @@ export const getStaticProps: GetStaticProps = async (context) => {
     // console.log(context)
     // console.log("context params", context.params.hawkrType)
     // const data = null
-    const { data } = await get_shops_by_type(context.params.hawkrType);
+    if(typeof context.params == "undefined"){
+      return { props: { shops: null } };
+    }
+    const { data } = await get_shops_by_type(typeof context.params.hawkrType);
     // console.log(data)
+    
     return { props: { shops: data } };
   };
 

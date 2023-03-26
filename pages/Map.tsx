@@ -24,7 +24,7 @@ export type MarkerType = {
   website: string;
 };
 
-  export default function Map({shops}) {
+  export default function Map({shops}: any) {
     const { isLoaded } = useLoadScript({
       id: 'google-map-script',
       googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_KEY!,
@@ -95,14 +95,15 @@ export type MarkerType = {
       <GoogleMap
         mapContainerStyle={containerStyle}
         options={options as google.maps.MapOptions}
-        center={getUserCurrentLocation()}
+        // This looks like it should be kept?
+        //center={getUserCurrentLocation()}
         zoom={14}
         onLoad={onLoad}
         onUnmount={onUnMount}
         onClick={onMapClick}
         >
         {clickedPos.lat ? <Marker position={clickedPos} /> : null}
-        {clickedPos.lat ? shops?.map((marker) => (
+        {clickedPos.lat ? shops?.map((marker: any) => (
           <Marker
           key={marker.shopsID}
           position={marker.location}

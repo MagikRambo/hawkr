@@ -21,3 +21,7 @@
 //   }
   
 //   navigator.geolocation.getCurrentPosition(success, error, options);
+
+export default function geoloc(){
+    return ""
+}

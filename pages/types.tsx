@@ -82,9 +82,9 @@ function TypesMenu (props: TypesMenuProps){
                 </Link>
                 </>
               ))}
-            <Link href='#' onClick={reverseGeocode}>
+            {/* <Link href='#' onClick={reverseGeocode}>
               APPLE BEES
-            </Link>
+            </Link> */}
           </div>
         </section>
       </main>

@@ -1,5 +1,5 @@
 import { useSupabaseClient } from "@supabase/auth-helpers-react"
-import { createClient } from "@supabase/supabase-js";
+import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import { useState } from "react"
 
 // const supabase = useSupabaseClient();
@@ -9,27 +9,29 @@ import { useState } from "react"
 // Video helps with functions above ^
 
 // TO be utilized in 'Create a Shop' or 'Edit a shop'
-export async function uploadShopImage(e, supabase, userID, shop){
+export async function uploadShopImage(e: any, supabase: SupabaseClient<any, "public", any>, userID: string | undefined, shop: { shopID: any; }[] | null){
 
     console.log('uploadShop Image Function!! : ', e)
-
-    console.log(userID, shop[0])
-    let file = e
-    const {data, error} = await supabase
-    .storage
-    .from('shop-images')
-    .upload(userID + "/" + shop[0].shopID + '/' + file.name, file)
-
-    if(data){
-        console.log("successfully uploaded", data)
-        // alert('Successfully Uploaded!')
+    if(shop != null){
+        console.log(userID, shop[0])
+        let file = e
+        const {data, error} = await supabase
+        .storage
+        .from('shop-images')
+        .upload(userID + "/" + shop[0].shopID + '/' + file.name, file)
+        
+        if(data){
+            console.log("successfully uploaded", data)
+            // alert('Successfully Uploaded!')
+        }
+        else{
+            console.log(error)
+        }
     }
-    else{
-        console.log(error)
-    }
+
 }
 
-export async function uploadProfileImage(e,user){
+export async function useUploadProfileImage(e: { target: { files: any[]; }; },user: { id: string; }){
     console.log(e.target.files)
     let file = e.target.files[0]
     const supabase = useSupabaseClient();
@@ -48,7 +50,7 @@ export async function uploadProfileImage(e,user){
     }
 }
 
-export async function getShopImage(userID, shopID, supabase){
+export async function getShopImage(userID: string, shopID: string | SupabaseClient<any, "public", any>, supabase: any){
     
     const {data, error} = await supabase
     .storage
@@ -77,7 +79,7 @@ export async function getShopImage(userID, shopID, supabase){
         }
     }
 }
-export async function getProfileImage(profileID, supabase, setImages){
+export async function getProfileImage(profileID: string, supabase: { storage: { from: (arg0: string) => { (): any; new(): any; list: { (arg0: string, arg1: { limit: number; offset: number; sortBy: { column: string; order: string; }; }): PromiseLike<{ data: any; error: any; }> | { data: any; error: any; }; new(): any; }; }; }; }, setImages: (arg0: any) => void){
     const {data, error} = await supabase
     .storage
     .from('shop-images')

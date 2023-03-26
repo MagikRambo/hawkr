@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form";
 import { supabase } from "../utils/supabaseClient";
 import { getShopImage, uploadShopImage } from "../pages/api/cdnHelpers";
-import get_vendor_by_id from "../pages/api/getVendorByID";
+import get_vendor_by_id from "../pages/api/getVendorById";
 import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -82,7 +82,7 @@ export default function ManageShopsForm({userID, setShowModal, editFlag, formPro
       
       useEffect( () => {
 
-        const getImages = async (shopID) => {
+        const getImages = async (shopID: any) => {
               if (userID)
               {
                   const i = await getShopImage(userID, shopID, supabase)

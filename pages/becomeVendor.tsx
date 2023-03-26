@@ -5,7 +5,7 @@ import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export default function becomeVendor() {
+export default function useBecomeVendor() {
 
   const [contactDetail, setContactDetail] = useState([]);
   const {
@@ -15,7 +15,7 @@ export default function becomeVendor() {
     reset,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => {
+  const onSubmit = (data: any) => {
     fetch("/api/contact", {
       method: "POST",
       headers: {
@@ -107,7 +107,8 @@ export default function becomeVendor() {
                   </label>
                   <input
                     type="text"
-                    name="fullName"
+                    // removed this, is this okay?
+                    //name="fullName"
                     id="fullName"
                     autoComplete="name"
                     className="block w-full shadow-sm py-3 px-4 placeholder-gray-500 focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
@@ -122,7 +123,8 @@ export default function becomeVendor() {
                   </label>
                   <input
                     id="email"
-                    name="email"
+                    // removed this, is this okay?
+                    //name="email"
                     type="email"
                     autoComplete="email"
                     className="block w-full shadow-sm py-3 px-4 placeholder-gray-500 focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
@@ -136,7 +138,8 @@ export default function becomeVendor() {
                   </label>
                   <input
                     type="text"
-                    name="subject"
+                    // removed this, is this okay?
+                    //name="subject"
                     id="subject"
                     autoComplete="subject"
                     className="block w-full shadow-sm py-3 px-4 placeholder-gray-500 focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
@@ -150,7 +153,8 @@ export default function becomeVendor() {
                   </label>
                   <textarea
                     id="message"
-                    name="message"
+                    // removed this, is this okay?
+                    //name="message"
                     rows={4}
                     className="block w-full shadow-sm py-3 px-4 placeholder-gray-500 focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 rounded-md"
                     placeholder="Message"

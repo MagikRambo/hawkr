@@ -4,7 +4,7 @@ import { Fragment, useEffect, useState } from "react"
 import { useForm } from "react-hook-form";
 import { supabase } from "../utils/supabaseClient";
 import { getShopImage, uploadShopImage } from "./api/cdnHelpers";
-import get_vendor_by_id from "./api/getVendorByID";
+import get_vendor_by_id from "./api/getVendorById";
 import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -19,7 +19,7 @@ function classNames(...classes:any) {
     return classes.filter(Boolean).join(' ')
   }
 
-export default function manageShops(){
+export default function useManageShops(){
 
     const supabase = useSupabaseClient();
 
