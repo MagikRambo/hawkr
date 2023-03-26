@@ -99,6 +99,7 @@ export default function manageShops(){
     const [open, setOpen] = useState(false)
 
 
+
     const getUserCurrentLocation = () =>{
         //Getting the current location of user
         navigator.geolocation.getCurrentPosition(position => {
@@ -114,13 +115,6 @@ export default function manageShops(){
         .from('shops')
         .delete()
         .eq('shopID', shopID)
-
-        // console.log(shops.data?.map((shop) => {
-        //     if (shop.shopID == shopID){
-        //         shops?.data
-        //     }
-        // }))
-        
     }
 
     const  EnableShop = async (shop: shopType) => {
@@ -306,7 +300,7 @@ export default function manageShops(){
                     </div>
 
            
-                    <div className="relative grid grid-cols-3 h-screen place-items-center ">
+                    <div className="relative grid grid-cols-4 h-screen place-items-center ">
                         {/* TODO: Make map function IMAGES BELOW */}
                         <>
                         {shops.data.map((shop) => 
@@ -410,6 +404,8 @@ export default function manageShops(){
                         
 
                     </div>
+
+
                     <Transition.Root show={open} as={Fragment}>
                     <Dialog as="div" className="relative z-10" onClose={setOpen}>
                         <Transition.Child
