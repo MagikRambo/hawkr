@@ -229,7 +229,7 @@ export default function manageShops(){
                         )}
     
 
-                    {showModal &&  <ManageShopsForm  userID={userID} images={images} setShowModal={setShowModal}/>}
+                    {showModal &&  <ManageShopsForm  userID={userID} images={images} showModal={showModal} setShowModal={setShowModal}/>}
                     </div>
                 </div>
             )}
@@ -397,7 +397,7 @@ export default function manageShops(){
                             </div>
                             )}
                         <div className="text-black">
-                            {showModal &&  <ManageShopsForm  userID={userID} images={images} setShowModal={setShowModal} editFlag={editClicked} formProps={editShop} />}
+                            {showModal &&  <ManageShopsForm  userID={userID} images={images} showModal={showModal} setShowModal={setShowModal} editFlag={editClicked} formProps={editShop} />}
                         </div>
                         </>
 

@@ -17,6 +17,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 type ManageShopsFormProps = {
     userID: string,
     images: FileList,
+    showModal:boolean
     setShowModal:any,
     formProps: formProps
 
@@ -39,9 +40,11 @@ type formProps = {
 }
 
 
-export default function ManageShopsForm({userID, setShowModal, editFlag, formProps}: any){
+export default function ManageShopsForm({userID, showModal, setShowModal, editFlag, formProps}: any){
 
   
+    console.log(showModal)
+    console.log(setShowModal)
 
     type VendorContent = Awaited<ReturnType<typeof get_vendor_by_id>>
     type ImageContent = Awaited<ReturnType<typeof getShopImage>>
@@ -61,7 +64,6 @@ export default function ManageShopsForm({userID, setShowModal, editFlag, formPro
 
     const [enabled, setEnabled] = useState(false)
 
-    const [openModal, setOpenModal] = useState(true)
 
 
     // const userID = user?.id
@@ -226,6 +228,7 @@ export default function ManageShopsForm({userID, setShowModal, editFlag, formPro
         
             if  (!error){
                 toast("Successfully created your shop!")
+                console.log('should have toasted' )
             }else{
                 if (error){
                     alert('Error in creating shop')
@@ -265,14 +268,17 @@ export default function ManageShopsForm({userID, setShowModal, editFlag, formPro
             })
         }
 
+        // setShowModal(false)
+
 
         };
 
 return(
 
 <>
-    <Transition.Root show={openModal} as={Fragment}>
-    <Dialog as="div" className="relative z-10 " onClose={setOpenModal}>
+
+    <Transition.Root show={showModal} as={Fragment}>
+    <Dialog as="div" className="relative z-10 " onClose={setShowModal}>
         <Transition.Child
         as={Fragment}
         enter="ease-out duration-300"
@@ -301,7 +307,7 @@ return(
                 <button
                     type="button"
                     className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    onClick={() => setOpenModal(false)}
+                    onClick={() => setShowModal(false)}
                 >
                     <span className="sr-only">Close</span>
                     <XMarkIcon className="h-6 w-6" aria-hidden="true" />
@@ -569,8 +575,25 @@ return(
                         </div>
                         </div>
                     </div>
+                                    {/* ---------- BUTTONS SECTION --------- */}
+                <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+                
+                <button
+                    type="submit"
+                    className="inline-flex w-full justify-center rounded-md bg-sky-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-500 sm:ml-3 sm:w-auto"
+                    // onClick={() => setShowModal(false)}
+                >
+                    Submit
+                </button>
+                <button
+                    type="button"
+                    className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                    onClick={() => setShowModal(false)}
+                >
+                    Cancel
+                </button>
+                </div>
                 </form>
-        <ToastContainer />
                 </div>
 
    
@@ -582,29 +605,14 @@ return(
 
 
 
-                {/* ---------- BUTTONS SECTION --------- */}
-                <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
-                <button
-                    type="button"
-                    className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
-                    onClick={() => setOpenModal(false)}
-                >
-                    Deactivate
-                </button>
-                <button
-                    type="button"
-                    className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
-                    onClick={() => setOpenModal(false)}
-                >
-                    Cancel
-                </button>
-                </div>
+
             </Dialog.Panel>
             </Transition.Child>
         </div>
         </div>
     </Dialog>
 </Transition.Root>
+<ToastContainer />
 
     </>
 
