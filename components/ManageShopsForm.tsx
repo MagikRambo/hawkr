@@ -40,7 +40,7 @@ type formProps = {
 }
 
 
-export default function ManageShopsForm({userID, showModal, setShowModal, editFlag, formProps}: any){
+export default function ManageShopsForm({userID, setSubmissionType, showModal, setShowModal, editFlag, formProps}: any){
 
   
     console.log(showModal)
@@ -227,7 +227,9 @@ export default function ManageShopsForm({userID, showModal, setShowModal, editFl
             // console.log('form Data contents: ', formData);
         
             if  (!error){
-                toast("Successfully created your shop!")
+                setSubmissionType('CREATE')
+
+                // toast("Successfully created your shop!")
                 console.log('should have toasted' )
             }else{
                 if (error){
@@ -249,6 +251,7 @@ export default function ManageShopsForm({userID, showModal, setShowModal, editFl
                 img_src =`${SHOP_CDN_URL}/${userID}/${shopID}/${formData.file[0].name}`
             }
 
+            setSubmissionType('EDIT')
 
             const {data, error} = await supabase
             .from('shops')
@@ -268,7 +271,7 @@ export default function ManageShopsForm({userID, showModal, setShowModal, editFl
             })
         }
 
-        // setShowModal(false)
+        setShowModal(false)
 
 
         };
@@ -612,7 +615,7 @@ return(
         </div>
     </Dialog>
 </Transition.Root>
-<ToastContainer />
+{/* <ToastContainer /> */}
 
     </>
 

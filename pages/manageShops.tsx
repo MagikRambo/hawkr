@@ -80,6 +80,8 @@ export default function manageShops(){
     const [editShop, setEditShop] = useState<any>()
     const [removeShop, setRemoveShop] = useState<any>()
 
+    const [submissionType, setSubmissionType] = useState<string>()
+    
 
 
     const [formData, setFormData] = useState<formProps>()
@@ -199,6 +201,16 @@ export default function manageShops(){
         getUserCurrentLocation()
     }, [userID])
 
+
+    console.log('SUBMISSION TYPE CONTENTS: ', submissionType)
+    if (submissionType === 'CREATE'){
+        toast("Successfully created your shop!")
+        setSubmissionType(undefined)
+        
+    }else if (submissionType === 'EDIT'){
+        toast('Successfully edited your shop!')
+        setSubmissionType(undefined)
+    }
     
     console.log('2nd section mapped imanges: ', images)
     console.log('SHOPS CONTENT: ', shops?.data)
@@ -340,6 +352,7 @@ export default function manageShops(){
                                         </div>
 
                                     </div>
+                                    
                                     <div className="relative flex space-x-40 -left-4 -bottom-4 w-full rounded-xl pl-2 bg-slate-800 bg-opacity-90">
                                         <p className="text-2xl"> Open </p>
 
@@ -397,8 +410,9 @@ export default function manageShops(){
                             </div>
                             )}
                         <div className="text-black">
-                            {showModal &&  <ManageShopsForm  userID={userID} images={images} showModal={showModal} setShowModal={setShowModal} editFlag={editClicked} formProps={editShop} />}
+                            {showModal &&  <ManageShopsForm  userID={userID} images={images} setSubmissionType={setSubmissionType} showModal={showModal} setShowModal={setShowModal} editFlag={editClicked} formProps={editShop} />}
                         </div>
+                        <ToastContainer/>
                         </>
 
                         
