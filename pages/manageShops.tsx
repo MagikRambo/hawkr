@@ -68,12 +68,10 @@ export default function manageShops(){
       }
 
     const [vendor, setVendor] = useState<VendorContent>()    
-    const [reloading, setReloading] = useState<boolean>(true)
-    const [userLocation, setUserLocation] = useState<any>()
+
     const [shops, setShops] = useState<shopsContent>()
 
     const [enabled, setEnabled] = useState(false)
-    const [disabled, setDisabled] = useState(false)
 
     const [editClicked, setEditClicked] = useState(false)
 
@@ -83,17 +81,12 @@ export default function manageShops(){
     const [submissionType, setSubmissionType] = useState<string>()
     
 
-
-    const [formData, setFormData] = useState<formProps>()
-
-
     const router = useRouter()
     const { isLoading, session, error } = useSessionContext();
     const user = useUser()
     const userID = user?.id
 
     const [images, setImages] = useState<ImageContent>()
-    const SHOP_CDN_URL = 'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/shop-images'
 
     const [showModal, setShowModal] = useState(false);
 
@@ -102,15 +95,7 @@ export default function manageShops(){
 
 
 
-    const getUserCurrentLocation = () =>{
-        //Getting the current location of user
-        navigator.geolocation.getCurrentPosition(position => {
-        // Activate button when geolocation has finished
-        // Call the callback function
-            const userPosition = {lat: position.coords.latitude, lng: position.coords.longitude}
-            setUserLocation(userPosition)
-        });
-    }
+
 
     const deleteShop = async (shopID:string) => {
         const {data, error} = await supabase
@@ -141,11 +126,9 @@ export default function manageShops(){
             shop.open = false;
 
             setEnabled(false)
-            setDisabled(true)
         }
         else if (enabled){
             setEnabled(true)
-            setDisabled(false)
             alert('Error: Cannot enable a shop, one is already active')
         }
         else{
@@ -166,7 +149,6 @@ export default function manageShops(){
             )
             shop.open = true;
             setEnabled(true)
-            setDisabled(false)
         }
 
     }
@@ -198,7 +180,6 @@ export default function manageShops(){
 
         getVendor().catch(console.error)
         getShops().catch(console.error)
-        getUserCurrentLocation()
     }, [userID])
 
 
@@ -353,11 +334,13 @@ export default function manageShops(){
 
                                     </div>
                                     
-                                    <div className="relative flex space-x-40 -left-4 -bottom-4 w-full rounded-xl pl-2 bg-slate-800 bg-opacity-90">
+                                    <div className="relative -left-4 -bottom-4 w-full h-18 rounded-xl pl-2 bg-slate-800 bg-opacity-90">
+                                        <p className="text-xl">{shop.shopName}</p>
+                                    <div className="relative flex space-x-40 -left-2  w-full h-10 rounded-xl pl-2 bg-slate-800 bg-opacity-90">
                                         <p className="text-2xl"> Open </p>
 
                                         {/*  Enable flag if open */}
-                                        {shop.open && !enabled && (setEnabled(true), console.log(enabled), setDisabled(false))}
+                                        {shop.open && !enabled && (setEnabled(true), console.log(enabled))}
                                         
                                         <Switch
                                             checked={shop.open}
@@ -404,6 +387,7 @@ export default function manageShops(){
                                                     </span>
                                                 </span>
                                             </Switch>
+                                    </div>
 
                                     </div>
                                 </div>
