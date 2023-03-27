@@ -40,7 +40,7 @@ type formProps = {
 }
 
 
-export default function ManageShopsForm({userID, setSubmissionType, showModal, setShowModal, editFlag, formProps}: any){
+export default function ManageShopsForm({shop, userID, setSubmissionType, showModal, setShowModal, editFlag, formProps}: any){
 
   
     console.log(showModal)
@@ -276,6 +276,17 @@ export default function ManageShopsForm({userID, setSubmissionType, showModal, s
                 .match({
                     shopID: shopID
                 })
+
+                shop.shopName = shopName
+                shop.shopDescription = shopDescription
+                shop.open = formData.open
+                shop.timeOpen = timeOpen
+                shop.timeClosed = timeClosed
+                shop.messagesOn = messagesOn
+                shop.liveTracking = liveTracking
+                shop.hawkrType = hawkrType
+                shop.shop_image_url = img_src
+
             }else{
 
                 //Update with already existing image
@@ -298,9 +309,20 @@ export default function ManageShopsForm({userID, setSubmissionType, showModal, s
                     shopID: shopID
                 })
 
+
+                shop.shopName = shopName
+                shop.shopDescription = shopDescription
+                shop.open = formData.open
+                shop.timeOpen = timeOpen
+                shop.timeClosed = timeClosed
+                shop.messagesOn = messagesOn
+                shop.liveTracking = liveTracking
+                shop.hawkrType = hawkrType
+                shop.shop_image_url = img_src
+                
                 console.log('IMAGE DIFF STUFF : ', images?.data[0])
             }
-
+            
 
 
             

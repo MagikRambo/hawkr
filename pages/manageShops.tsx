@@ -96,7 +96,6 @@ export default function manageShops(){
 
 
 
-
     const deleteShop = async (shopID:string) => {
         const {data, error} = await supabase
         .from('shops')
@@ -394,7 +393,7 @@ export default function manageShops(){
                             </div>
                             )}
                         <div className="text-black">
-                            {showModal &&  <ManageShopsForm  userID={userID} images={images} setSubmissionType={setSubmissionType} showModal={showModal} setShowModal={setShowModal} editFlag={editClicked} formProps={editShop} />}
+                            {showModal &&  <ManageShopsForm  shop={editShop} userID={userID} images={images} setSubmissionType={setSubmissionType} showModal={showModal} setShowModal={setShowModal} editFlag={editClicked} formProps={editShop} />}
                         </div>
                         <ToastContainer/>
                         </>
