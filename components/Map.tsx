@@ -60,6 +60,7 @@ export type MarkerType = {
         }
       });
     }
+    return userCurLocation;
   }
   
   const moveTo = (position: google.maps.LatLngLiteral) => {
@@ -96,7 +97,7 @@ export type MarkerType = {
         mapContainerStyle={containerStyle}
         options={options as google.maps.MapOptions}
         // This looks like it should be kept?
-        //center={getUserCurrentLocation()}
+        center={getUserCurrentLocation()}
         zoom={14}
         onLoad={onLoad}
         onUnmount={onUnMount}
