@@ -78,13 +78,14 @@ export default function manageShops(){
     const [editShop, setEditShop] = useState<any>()
     const [removeShop, setRemoveShop] = useState<any>()
 
-    const [submissionType, setSubmissionType] = useState<string>()
-    
+    const [submissionType, setSubmissionType] = useState<string>('')
+    const [userLocation, setUserLocation] = useState<any>()
+
 
     const router = useRouter()
     const { isLoading, session, error } = useSessionContext();
     const user = useUser()
-    const userID = user?.id
+    const userID = user?.id as NonNullable<string>
 
     const [images, setImages] = useState<ImageContent>()
 
@@ -93,14 +94,26 @@ export default function manageShops(){
 
     const [open, setOpen] = useState(false)
 
-
-
+    // console.log('chan. sub. type: ',ChangeSubmissionType)
+    // console.log('typeof chan. sub. type: ', typeof(ChangeSubmissionType))
+    const ChangeSubmissionType = (arg:string) => {
+        setSubmissionType(arg)
+    }
 
     const deleteShop = async (shopID:string) => {
+
+        const bucket = "shop-images"
+
         const {data, error} = await supabase
         .from('shops')
         .delete()
         .eq('shopID', shopID)
+
+
+        const { data:list, error:listError } = await supabase.storage.from(bucket).list(`${userID}/${shopID}`);
+        const filesToRemove = list?.map((x) => `${userID}/${shopID}/${x.name}`) as NonNullable<Array<string>>;
+        const { data:resRemove, error:resRemoveError } = await supabase.storage.from(bucket).remove(filesToRemove);
+
     }
 
     const  EnableShop = async (shop: shopType) => {
@@ -158,7 +171,6 @@ export default function manageShops(){
     
     //retrieve user current location on page build.
     
-
     useEffect( () => {
         const getVendor = async () =>{
             if (userID)
@@ -181,15 +193,16 @@ export default function manageShops(){
         getShops().catch(console.error)
     }, [userID])
 
+    console.log(userLocation)
 
     console.log('SUBMISSION TYPE CONTENTS: ', submissionType)
     if (submissionType === 'CREATE'){
         toast("Successfully created your shop!")
-        setSubmissionType(undefined)
+        setSubmissionType('')
         
     }else if (submissionType === 'EDIT'){
         toast('Successfully edited your shop!')
-        setSubmissionType(undefined)
+        setSubmissionType('')
     }
     
     console.log('2nd section mapped imanges: ', images)
@@ -221,7 +234,7 @@ export default function manageShops(){
                         )}
     
 
-                    {showModal &&  <ManageShopsForm  userID={userID} images={images} showModal={showModal} setShowModal={setShowModal}/>}
+                    {showModal &&  <ManageShopsForm  userID={userID} setSubmissionType={setSubmissionType} showModal={showModal} setShowModal={setShowModal}/>}
                     </div>
                 </div>
             )}
@@ -393,7 +406,7 @@ export default function manageShops(){
                             </div>
                             )}
                         <div className="text-black">
-                            {showModal &&  <ManageShopsForm  shop={editShop} userID={userID} images={images} setSubmissionType={setSubmissionType} showModal={showModal} setShowModal={setShowModal} editFlag={editClicked} formProps={editShop} />}
+                            {showModal &&  <ManageShopsForm  shop={editShop} userID={userID} setSubmissionType={setSubmissionType} showModal={showModal} setShowModal={setShowModal} editFlag={editClicked} formProps={editShop} />}
                         </div>
                         <ToastContainer/>
                         </>

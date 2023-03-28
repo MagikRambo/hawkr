@@ -1,6 +1,6 @@
 import { useSessionContext, useSupabaseClient, useUser } from "@supabase/auth-helpers-react"
 import { useRouter } from "next/router";
-import { Fragment, useEffect, useState } from "react"
+import { Fragment, Dispatch, SetStateAction, useEffect, useState } from "react"
 import { useForm } from "react-hook-form";
 import { supabase } from "../utils/supabaseClient";
 import { getBaseHawkrImage, getShopImage, removeShopImage, replaceShopImage, uploadShopImage } from "../pages/api/cdnHelpers";
@@ -15,11 +15,15 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 
 
 type ManageShopsFormProps = {
+
+    shop?: any,
     userID: string,
-    images: FileList,
-    showModal:boolean
-    setShowModal:any,
-    formProps: formProps
+    setSubmissionType: Dispatch<SetStateAction<string>>,
+    // ChangeSubmissionType: (arg:string) => void,
+    setShowModal: Dispatch<SetStateAction<boolean>>,
+    showModal: boolean,
+    editFlag?: boolean,
+    formProps?: formProps,
 
 }
 
@@ -40,18 +44,17 @@ type formProps = {
 }
 
 
-export default function ManageShopsForm({shop, userID, setSubmissionType, showModal, setShowModal, editFlag, formProps}: any){
+export default function ManageShopsForm({shop, userID, setSubmissionType, showModal, setShowModal, editFlag, formProps}: ManageShopsFormProps){
 
   
     console.log(showModal)
-    console.log(setShowModal)
+    console.log(setShowModal)        
 
     type VendorContent = Awaited<ReturnType<typeof get_vendor_by_id>>
     type ImageContent = Awaited<ReturnType<typeof getShopImage>>
     type shopsContent = Awaited<ReturnType<typeof getShopsByVendorId>>
 
-
-
+    
     // const router = useRouter()
     // type ContentKind = Parameters<typeof get_vendor_by_id>
     
@@ -85,6 +88,10 @@ export default function ManageShopsForm({shop, userID, setSubmissionType, showMo
         defaultValues: formProps
       });
       
+
+  
+
+
       useEffect( () => {
 
         const getImages = async (shopID) => {
@@ -95,6 +102,8 @@ export default function ManageShopsForm({shop, userID, setSubmissionType, showMo
               }
           }
 
+        
+
 
         if (editFlag){
             getImages(formProps.shopID).catch(console.error)
@@ -102,7 +111,20 @@ export default function ManageShopsForm({shop, userID, setSubmissionType, showMo
 
     }, [editFlag])
 
+    useEffect( () => {
+        const getUserCurrentLocation = () =>{
+            navigator.geolocation.getCurrentPosition(position => {
+                const userPosition = {lat: position.coords.latitude, lng: position.coords.longitude}
+                console.log(userPosition)
+                setUserLocation(userPosition)
+            });
+          }
+
+          getUserCurrentLocation()
+    }, [userID])
+
       
+    console.log(userLocation)
       
       const onSubmit = async (formData:any) => {
           
@@ -472,7 +494,7 @@ return(
                                             {console.log(image)}
                                             {console.log(`Image ID: ${image.id}\tImage Name: ${image.name}`)}
                                             {console.log(`URL: ${SHOP_CDN_URL}/${userID}/${image.name}`)}  
-                                            <Image key={image.id} height={100} width={100} alt="hi" src={SHOP_CDN_URL + '/' + userID + '/' + image.name}/>
+                                            <Image key={image.id} height={100} width={100} alt="hi" src={SHOP_CDN_URL + '/' + userID + '/' + shop.shopID + '/'+ image.name}/>
                                             </>
                                             );
                                     })}
