@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react"
 import { useForm } from "react-hook-form";
 import { supabase } from "../utils/supabaseClient";
-import { getShopImage, uploadShopImage } from "../pages/api/cdnHelpers";
+import { getBaseHawkrImage, getShopImage, removeShopImage, replaceShopImage, uploadShopImage } from "../pages/api/cdnHelpers";
 import get_vendor_by_id from "../pages/api/getVendorByID";
 import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
@@ -74,7 +74,7 @@ export default function ManageShopsForm({shop, userID, setSubmissionType, showMo
 
     const [images, setImages] = useState<ImageContent>()
     const SHOP_CDN_URL = 'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/shop-images'
-
+    const base_hawkr_img =  'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/base-hawkr/hawkr_icon.png'
     const {
         register,
         handleSubmit,
@@ -131,75 +131,77 @@ export default function ManageShopsForm({shop, userID, setSubmissionType, showMo
             const { data, error } = await supabase
             .from('shops')
             .insert([
-            { vendorID: vendorID,
-                shopName: shopName ,
-                shopDescription: shopDescription ,
-                open: false ,
-                timeOpen: timeOpen,
-                timeClosed: timeClosed ,
-                messagesOn: messagesOn ,
-                liveTracking: liveTracking ,
-                hawkrType: hawkrType, 
-                shop_image_url: null},
+                { vendorID: vendorID,
+                    shopName: shopName ,
+                    shopDescription: shopDescription ,
+                    open: false ,
+                    timeOpen: timeOpen,
+                    timeClosed: timeClosed ,
+                    messagesOn: messagesOn ,
+                    liveTracking: liveTracking ,
+                    hawkrType: hawkrType, 
+                    shop_image_url: base_hawkr_img
+                },
             ])
+
+            const { data:resShop, error:resShopError } = await supabase
+            .from('shops')
+            .select('shopID')
+            .match(
+                { vendorID: vendorID,
+                    shopName: shopName ,
+                    shopDescription: shopDescription ,
+                    // open: 'false' ,
+                    timeOpen: timeOpen,
+                    timeClosed: timeClosed ,
+                    messagesOn: messagesOn ,
+                    liveTracking: liveTracking ,
+                    hawkrType: hawkrType, 
+                    shop_image_url: base_hawkr_img
+                },
+            )
+            const shopID = resShop ? resShop[0].shopID : ''
+
+            //Hawkr file retrieval
+            // const {data:hawkr_icon, error:hawkr_icon_error} = await getBaseHawkrImage(supabase)
+
+            // const hawkr_icon_file:HTMLImageElement = hawkr_icon[0] 
+            // console.log(hawkr_icon_file)
+            // await uploadShopImage(hawkr_icon_file, supabase, user?.id, shopID)
 
             console.log('SUPABASE SHOP CREATION DATA CONENTS: ', data)
         
             if (formData.file['length'] > 0){
 
 
-                const { data:resShop, error:error3 } = await supabase
+                console.log(formData.file[0])
+                console.log(formData.file)
+
+                const file = formData.file[0]
+
+                console.log(file)
+
+                // await replaceShopImage(old_path, file, supabase, user?.id, shopID)
+
+                //remove  existing image and upload new one
+                console.log(user?.id, shopID)
+                // await removeShopImage('hawkr_icon.png', supabase, user?.id, shopID)
+                //TODO / NOTE: when creating shop. can upload 1 image, but when editing. Needs to get first then remove from CDN and update DB
+                await uploadShopImage(file, supabase, user?.id, shopID)
+        
+                console.log('USE STATE CONTENT OF IMAGES: ', images)
+
+                //TODO: Change the path from userID to /UserID/ShopID/picture
+                img_src =`${SHOP_CDN_URL}/${userID}/${shopID}/${file.name}`
+
+                const { data:data2, error:error2 } = await supabase
                 .from('shops')
-                .select('shopID')
+                .update({ shop_image_url: img_src })
                 .match(
                     { vendorID: vendorID,
                         shopName: shopName ,
                         shopDescription: shopDescription ,
                         // open: 'false' ,
-                        timeOpen: timeOpen,
-                        timeClosed: timeClosed ,
-                        messagesOn: messagesOn ,
-                        liveTracking: liveTracking ,
-                        hawkrType: hawkrType, 
-                        // shop_image_url: 'NULL',
-                    },
-                )
-
-                const shopID = resShop ? resShop[0].shopID : ''
-
-
-                console.log(formData.file[0])
-                console.log(formData.file)
-
-                //TODO / NOTE: when creating shop. can upload 1 image, but when editing. Needs to get first then remove from CDN and update DB
-                await uploadShopImage(formData.file[0], supabase, user?.id, shopID)
-                // const res_image =  await getShopImage(userID, supabase)
-                
-                // console.log('res image return: ', res_image)
-                // setImages(res_image)
-        
-                console.log('USE STATE CONTENT OF IMAGES: ', images)
-            //    console.log('VARIABLE D: ', d)
-        
-                // const image:any = images[0] //TODO: make type for this
-        
-                // console.log(res_image)
-
-                //TODO: Change the path from userID to /UserID/ShopID/picture
-                img_src =`${SHOP_CDN_URL}/${userID}/${shopID}/${formData.file[0].name}`
-                
-                // console.log("SUCCESSFULLLY ADDED TO CDN BRO!!!! :)")
-                // formData.append('file', src)
-
-
-                const { data:data2, error:error2 } = await supabase
-                .from('shops')
-                .update({ shop_image_url: img_src ? img_src : null })
-                .match(
-                    { vendorID: vendorID,
-                        shopName: shopName ,
-                        shopDescription: shopDescription ,
-                        open: 'false' ,
                         timeOpen: timeOpen,
                         timeClosed: timeClosed ,
                         messagesOn: messagesOn ,
@@ -240,25 +242,31 @@ export default function ManageShopsForm({shop, userID, setSubmissionType, showMo
                     alert('Error in uploading locations')
                 }
             }
-        
-            reset()
         }
 
         //Edit flag set
         else{
-
             var img_src;
-            
             console.log('EDIT FLASG FILE CONTENTS: ',formData.file)
             console.log('EDIT FLAG SHOP CONTENTS - Shop ID: ', shopID)
 
             //update with new image
             if (formData.file['length'] > 0){
+
+                const {data:resShopImage, error:resShopImageError } = await getShopImage(userID, shopID, supabase)
+
+                const shopImage = resShopImage[0]
+
+                
+                if( resShopImage["length"] > 0){
+                    await removeShopImage(shopImage.name, supabase, user?.id, shopID)
+                }
+
                 await uploadShopImage(formData.file[0], supabase, user?.id, shopID)
+
                 img_src =`${SHOP_CDN_URL}/${userID}/${shopID}/${formData.file[0].name}`
                 
                 console.log('EDIT flag img src: ', img_src)
-                
                 
                 const {data, error} = await supabase
                 .from('shops')
@@ -290,7 +298,16 @@ export default function ManageShopsForm({shop, userID, setSubmissionType, showMo
             }else{
 
                 //Update with already existing image
-                img_src =`${SHOP_CDN_URL}/${userID}/${shopID}/${images?.data[0].name}`
+
+                var img_src
+                const {data:resShopImage, error:resShopImageError } = await getShopImage(userID, shopID, supabase)
+                const shopImage = resShopImage[0]
+
+                if(resShopImage["length"] > 0){
+                    img_src =`${SHOP_CDN_URL}/${userID}/${shopID}/${shopImage.name}`
+                }else{
+                    img_src = base_hawkr_img
+                }
 
                 const {data, error} = await supabase
                 .from('shops')
@@ -319,17 +336,13 @@ export default function ManageShopsForm({shop, userID, setSubmissionType, showMo
                 shop.liveTracking = liveTracking
                 shop.hawkrType = hawkrType
                 shop.shop_image_url = img_src
-                
+
                 console.log('IMAGE DIFF STUFF : ', images?.data[0])
             }
-            
-
-
-            
+            setSubmissionType('EDIT')            
         }
-        setSubmissionType('EDIT')
         setShowModal(false)
-
+        reset()
 
         };
 
