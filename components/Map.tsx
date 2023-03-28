@@ -4,7 +4,7 @@ import { GetStaticProps, InferGetServerSidePropsType, InferGetStaticPropsType } 
 // import { useQuery } from 'react-query'
 
 // Components
-import CurrentLocation from '../components/CurrentLocation';
+import CurrentLocation from './CurrentLocation';
 
 //Map Settings
 import { containerStyle, center, options } from './settings';

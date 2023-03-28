@@ -4,7 +4,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline'
 //import info from '../utils/info'
 import InfoCard from './InfoCard'
 import {motion} from 'framer-motion'
-import Map from '../pages/Map';
+import Map from './Map';
 
 //const searchResults = info;
 

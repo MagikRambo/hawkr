@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Map from '../../../Map'
+import Map from '../../../../components/Map'
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType} from "next";
 import get_shops_with_location from "../../../api/getVendors";
 import get_shops_by_id from "../../../api/getShopById";
@@ -21,7 +21,9 @@ export const getStaticPaths = async () => {
 
     const paths = data?.map(item => {
         return {
-            params: {id: item.shopID.toString()}
+            params: {
+              hawkrType: item.hawkrType.toString(),
+              id: item.shopID.toString()}
         }
     })
     return {

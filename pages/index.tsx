@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from 'react'
-import Map from './Map';
+import Map from '../components/Map';
 import TypesMenu from '../components/typesMenu';
 import Navbar from '../components/navbar';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';

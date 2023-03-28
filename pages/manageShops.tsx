@@ -243,7 +243,7 @@ export default function useManageShops(){
                         {/* TODO: Make map function IMAGES BELOW */}
                         <>
                         {shops.data.map((shop) => 
-                            <div className="w-80 rounded-2xl bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-1 shadow-xl">
+                            <div key={shop.shopID} className="w-80 rounded-2xl bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-1 shadow-xl">
                                 <div className="h-64 w-full bg-gray-200 flex flex-col justify-between p-4 bg-cover rounded-xl bg-center"
                                      style={{backgroundImage: `url(${shop.shop_image_url ? shop.shop_image_url :'https://via.placeholder.com/500'})`}}
                                 >

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Map from '../../Map';
+import Map from '../../../components/Map';
 import { Transition } from '@headlessui/react'
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next';
 import get_shops_with_location from "../../api/getVendors";
@@ -79,7 +79,7 @@ function Types_Dyn_Menu(props: ExploreMenuProps) {
 
             <div className="flex flex-col">
               {props.shops?.map((item: any) => (
-                <Link href={`/shops/${item.shopID}`}>
+                <Link key={item.shopID} href={`/shops/${item.shopID}`}>
                 <InfoCard
                   key={item.shopID}
                   img={hawkr_icon}
