@@ -91,6 +91,7 @@ export default function manageShops(){
 
     const [showModal, setShowModal] = useState(false);
 
+    const [getShops, setGetShops] = useState(true);
 
     const [open, setOpen] = useState(false)
 
@@ -114,6 +115,29 @@ export default function manageShops(){
         const filesToRemove = list?.map((x) => `${userID}/${shopID}/${x.name}`) as NonNullable<Array<string>>;
         const { data:resRemove, error:resRemoveError } = await supabase.storage.from(bucket).remove(filesToRemove);
 
+        if (shops){
+            for (let i = 0; i < shops.data["length"]; i++ ){
+                console.log(shops.data[i].shopID)
+                console.log(shopID)
+                if (shops.data[i].shopID === shopID){
+                    //quick fix
+
+                    if (shops.data[i].open){
+                        shops.data[i].open = false
+                        setEnabled(false)
+                    }
+
+                    console.log(i)
+                    delete(shops.data[i])
+                    // shops.data.splice(i,1)
+                    setGetShops(true)
+                    console.log(shops)
+                    break
+                }
+            }
+        }
+            
+        console.log(shops)
     }
 
     const  EnableShop = async (shop: shopType) => {
@@ -178,20 +202,21 @@ export default function manageShops(){
                 const v = await get_vendor_by_id(userID.toString())
                 setVendor(v)
             }
-        }
+        }  
+        getVendor().catch(console.error)
+    }, [userID])
 
-
-
+    useEffect( ()  => {
         const getShops = async () => {
             if (userID){
                 const res_shops = await getShopsByVendorId(userID.toString())
                 setShops(res_shops)
+                setGetShops(false)
             }
         }
-
-        getVendor().catch(console.error)
         getShops().catch(console.error)
-    }, [userID])
+
+    }, [userID, getShops])
 
     console.log(userLocation)
 
@@ -234,7 +259,7 @@ export default function manageShops(){
                         )}
     
 
-                    {showModal &&  <ManageShopsForm  userID={userID} setSubmissionType={setSubmissionType} showModal={showModal} setShowModal={setShowModal}/>}
+                    {showModal &&  <ManageShopsForm shops={shops} userID={userID} setSubmissionType={setSubmissionType} showModal={showModal} setShowModal={setShowModal}/>}
                     </div>
                 </div>
             )}
@@ -406,7 +431,7 @@ export default function manageShops(){
                             </div>
                             )}
                         <div className="text-black">
-                            {showModal &&  <ManageShopsForm  shop={editShop} userID={userID} setSubmissionType={setSubmissionType} showModal={showModal} setShowModal={setShowModal} editFlag={editClicked} formProps={editShop} />}
+                            {showModal &&  <ManageShopsForm shops={shops} shop={editShop} userID={userID} setSubmissionType={setSubmissionType} showModal={showModal} setShowModal={setShowModal} editFlag={editClicked} formProps={editShop} />}
                         </div>
                         <ToastContainer/>
                         </>
