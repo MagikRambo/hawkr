@@ -1,32 +1,23 @@
-import { useSessionContext, useSupabaseClient, useUser } from "@supabase/auth-helpers-react"
-import { useRouter } from "next/router";
+import { useUser } from "@supabase/auth-helpers-react"
 import { Fragment, Dispatch, SetStateAction, useEffect, useState } from "react"
 import { useForm } from "react-hook-form";
 import { supabase } from "../utils/supabaseClient";
-import { getBaseHawkrImage, getShopImage, removeShopImage, replaceShopImage, uploadShopImage } from "../pages/api/cdnHelpers";
-import get_vendor_by_id from "../pages/api/getVendorByID";
+import {getShopImage, removeShopImage, uploadShopImage } from "../pages/api/cdnHelpers";
 import Image from "next/image";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import getShopsByVendorId from "../pages/api/getShopsByVendorId";
 
-import { Dialog, Switch, Transition } from '@headlessui/react'
+import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from "@heroicons/react/24/outline";
 
 
 type ManageShopsFormProps = {
-
-    // shops?: any,
     shop?: any,
     getShops: Dispatch<SetStateAction<boolean>>,
     userID: string,
     setSubmissionType: Dispatch<SetStateAction<string>>,
-    // ChangeSubmissionType: (arg:string) => void,
     setShowModal: Dispatch<SetStateAction<boolean>>,
     showModal: boolean,
     editFlag?: boolean,
     formProps?: formProps,
-
 }
 
 type formProps = {
@@ -48,35 +39,11 @@ type formProps = {
 
 export default function ManageShopsForm({getShops, shop, userID, setSubmissionType, showModal, setShowModal, editFlag, formProps}: ManageShopsFormProps){
 
-  
-    console.log(showModal)
-    console.log(setShowModal)        
-
-    type VendorContent = Awaited<ReturnType<typeof get_vendor_by_id>>
     type ImageContent = Awaited<ReturnType<typeof getShopImage>>
-    type shopsContent = Awaited<ReturnType<typeof getShopsByVendorId>>
 
-    
-    // const router = useRouter()
-    // type ContentKind = Parameters<typeof get_vendor_by_id>
-    
-    const [vendor, setVendor] = useState<VendorContent>()    
-    // const [user, setUser] = useState<any>()
-    // const [userID, setUserID] = useState<NonNullable<string>>()
-    const [reloading, setReloading] = useState<boolean>(true)
     const [userLocation, setUserLocation] = useState<any>()
-    // const [shops, setShops] = useState<shopsContent>()
 
-    const [enabled, setEnabled] = useState(false)
-
-
-
-    // const userID = user?.id
-    const router = useRouter()
-    const { isLoading, session, error } = useSessionContext();
     const user = useUser()
-    // const userID = user?.id
-
     const [images, setImages] = useState<ImageContent>()
     const SHOP_CDN_URL = 'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/shop-images'
     const base_hawkr_img =  'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/base-hawkr/hawkr_icon.png'
@@ -90,26 +57,18 @@ export default function ManageShopsForm({getShops, shop, userID, setSubmissionTy
         defaultValues: formProps
       });
       
-
-  
-
-
-      useEffect( () => {
-
-        const getImages = async (shopID) => {
-              if (userID)
-              {
-                  const i = await getShopImage(userID, shopID, supabase)
-                  setImages(i)
-              }
-          }
-
-        
-
-
-        if (editFlag){
-            getImages(formProps.shopID).catch(console.error)
+    useEffect( () => {
+    const getImages = async (shopID:any) => {
+            if (userID)
+            {
+                const i = await getShopImage(userID, shopID, supabase)
+                setImages(i)
+            }
         }
+
+    if (editFlag && formProps){
+        getImages(formProps.shopID).catch(console.error)
+    }
 
     }, [editFlag])
 
@@ -125,18 +84,9 @@ export default function ManageShopsForm({getShops, shop, userID, setSubmissionTy
           getUserCurrentLocation()
     }, [userID])
 
-      
-    // console.log(userLocation)
-    // console.log(shop)
-      
       const onSubmit = async (formData:any) => {
           
-          console.log('data contents: ',formData)
         var img_src
-        console.log('FILE STATUS: ', formData.file)
-
-    
-        // console.log('USER CURRENT LOCATION: ', userLocation)
         
         let shopID = formData.shopID
         let vendorID = userID
@@ -147,11 +97,7 @@ export default function ManageShopsForm({getShops, shop, userID, setSubmissionTy
         let hawkrType = formData.hawkrType
         let timeOpen = `${formData.hoursOpen}:${formData.minutesOpen}${formData.ampmOpen}`
         let timeClosed = `${formData.hoursClosed}:${formData.minutesClosed}${formData.ampmClosed}`
-        
-        console.log(timeOpen, timeClosed)
 
-
-        console.log(editFlag)
         if (!editFlag){
             const { data, error } = await supabase
             .from('shops')
@@ -186,37 +132,19 @@ export default function ManageShopsForm({getShops, shop, userID, setSubmissionTy
                 },
             )
             const shopID = resShop ? resShop[0].shopID : ''
-
-            //Hawkr file retrieval
-            // const {data:hawkr_icon, error:hawkr_icon_error} = await getBaseHawkrImage(supabase)
-
-            // const hawkr_icon_file:HTMLImageElement = hawkr_icon[0] 
-            // console.log(hawkr_icon_file)
-            // await uploadShopImage(hawkr_icon_file, supabase, user?.id, shopID)
-
-            console.log('SUPABASE SHOP CREATION DATA CONENTS: ', data)
         
             if (formData.file['length'] > 0){
-
-
-                console.log(formData.file[0])
-                console.log(formData.file)
 
                 const file = formData.file[0]
 
                 console.log(file)
 
-                // await replaceShopImage(old_path, file, supabase, user?.id, shopID)
-
                 //remove  existing image and upload new one
                 console.log(user?.id, shopID)
-                // await removeShopImage('hawkr_icon.png', supabase, user?.id, shopID)
-                //TODO / NOTE: when creating shop. can upload 1 image, but when editing. Needs to get first then remove from CDN and update DB
                 await uploadShopImage(file, supabase, user?.id, shopID)
         
                 console.log('USE STATE CONTENT OF IMAGES: ', images)
 
-                //TODO: Change the path from userID to /UserID/ShopID/picture
                 img_src =`${SHOP_CDN_URL}/${userID}/${shopID}/${file.name}`
 
                 const { data:data2, error:error2 } = await supabase
@@ -236,50 +164,13 @@ export default function ManageShopsForm({getShops, shop, userID, setSubmissionTy
                     },
                 )
 
-                //TODO: either reload the page upon shop creation, or edit shops array and individual shop/shops array when making changes.
-
-                // shops.data.push(
-                //     {   shopID: shopID,
-                //         vendorID: vendorID,
-                //         shopName: shopName ,
-                //         shopDescription: shopDescription ,
-                //         open: false ,
-                //         timeOpen: timeOpen,
-                //         timeClosed: timeClosed ,
-                //         messagesOn: messagesOn ,
-                //         liveTracking: liveTracking ,
-                //         hawkrType: hawkrType, 
-                //         shop_image_url: img_src
-                //     },
-                // )
                 getShops(true)
 
             }
             else{
-                // shops.data.push(
-                //     {   
-                //         shopID: shopID,
-                //         vendorID: vendorID,
-                //         shopName: shopName ,
-                //         shopDescription: shopDescription ,
-                //         open: false ,
-                //         timeOpen: timeOpen,
-                //         timeClosed: timeClosed ,
-                //         messagesOn: messagesOn ,
-                //         liveTracking: liveTracking ,
-                //         hawkrType: hawkrType, 
-                //         shop_image_url: base_hawkr_img
-                //     },
-                // )
                 getShops(true)
 
             }
-
-            //get Shop ID that was recently posted
-    
-            // TEST IF THIS WORKS ^^^^^^^^^^ !!!!!!!!!!!!!!!!!
-
-            // console.log('!!!!!!!!!!! SHOP ID VALUE: ', data5, error5)
             console.log('VALUE OF IMG SRC: ', img_src)
 
         
@@ -288,15 +179,10 @@ export default function ManageShopsForm({getShops, shop, userID, setSubmissionTy
             .insert([
             { UUID: vendorID, location: userLocation },
             ])
-        
-        
-            // console.log('supabase DETAILA !!!!!!! \t ', data2, error2)
-            // console.log('form Data contents: ', formData);
-        
+
             if  (!error){
                 setSubmissionType('CREATE')
 
-                // toast("Successfully created your shop!")
                 console.log('should have toasted' )
             }else{
                 if (error){
@@ -310,8 +196,6 @@ export default function ManageShopsForm({getShops, shop, userID, setSubmissionTy
         //Edit flag set
         else{
             var img_src;
-            console.log('EDIT FLASG FILE CONTENTS: ',formData.file)
-            console.log('EDIT FLAG SHOP CONTENTS - Shop ID: ', shopID)
 
             //update with new image
             if (formData.file['length'] > 0){
@@ -348,24 +232,6 @@ export default function ManageShopsForm({getShops, shop, userID, setSubmissionTy
                     shopID: shopID
                 })
 
-                // for (let i = 0; i < shops.data["length"]; i++ ){
-                //     if (shops.data[i].shopID === shop.shopID){
-                //         shops.data[i] = 
-                //             {   shopID: shopID,
-                //                 vendorID: vendorID,
-                //                 shopName: shopName ,
-                //                 shopDescription: shopDescription ,
-                //                 open: shop.open,
-                //                 timeOpen: timeOpen,
-                //                 timeClosed: timeClosed ,
-                //                 messagesOn: messagesOn ,
-                //                 liveTracking: liveTracking ,
-                //                 hawkrType: hawkrType, 
-                //                 shop_image_url: img_src
-                //             }
-                //             break
-                //     }
-                // }
                 getShops(true)
 
 
@@ -402,30 +268,8 @@ export default function ManageShopsForm({getShops, shop, userID, setSubmissionTy
                     shopID: shopID
                 })
 
-                // console.log('P3 : ', shops.data)
-
-                // for (let i = 0; i < shops.data["length"]; i++ ){
-                //     if (shops.data[i].shopID === shop.shopID){
-                //         shops.data[i] = 
-                //             {   shopID: shopID,
-                //                 vendorID: vendorID,
-                //                 shopName: shopName ,
-                //                 shopDescription: shopDescription ,
-                //                 open: shop.open,
-                //                 timeOpen: timeOpen,
-                //                 timeClosed: timeClosed ,
-                //                 messagesOn: messagesOn ,
-                //                 liveTracking: liveTracking ,
-                //                 hawkrType: hawkrType, 
-                //                 shop_image_url: img_src
-                //             }
-                //             break
-                //     }
-                // }
                 getShops(true)
 
-
-                console.log('IMAGE DIFF STUFF : ', images?.data[0])
             }
             setSubmissionType('EDIT')            
         }
@@ -557,10 +401,7 @@ return(
                                     {images?.data?.map( (image:any) => {
                                         return(
                                             <>
-                                            {console.log(image)}
-                                            {console.log(`Image ID: ${image.id}\tImage Name: ${image.name}`)}
-                                            {console.log(`URL: ${SHOP_CDN_URL}/${userID}/${image.name}`)}  
-                                            <Image key={image.id} height={100} width={100} alt="hi" src={SHOP_CDN_URL + '/' + userID + '/' + shop.shopID + '/'+ image.name}/>
+                                            <Image key={image.id} height={100} width={100} alt={shop.shopName} src={SHOP_CDN_URL + '/' + userID + '/' + shop.shopID + '/'+ image.name}/>
                                             </>
                                             );
                                     })}
@@ -736,14 +577,11 @@ return(
                         </div>
                         </div>
                     </div>
-                                    {/* ---------- BUTTONS SECTION --------- */}
-                <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
-                
+                {/* ---------- BUTTONS SECTION --------- */}
+                <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse pt-4">
                 <button
                     type="submit"
-                    className="inline-flex w-full justify-center rounded-md bg-sky-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-500 sm:ml-3 sm:w-auto"
-                    // onClick={() => setShowModal(false)}
-                >
+                    className="inline-flex w-full justify-center rounded-md bg-sky-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-500 sm:ml-3 sm:w-auto"                >
                     Submit
                 </button>
                 <button
@@ -773,7 +611,6 @@ return(
         </div>
     </Dialog>
 </Transition.Root>
-{/* <ToastContainer /> */}
 
     </>
 
