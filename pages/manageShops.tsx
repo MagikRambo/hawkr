@@ -128,7 +128,7 @@ export default function manageShops(){
                     }
 
                     console.log(i)
-                    delete(shops.data[i])
+                    // delete(shops.data[i])
                     // shops.data.splice(i,1)
                     setGetShops(true)
                     console.log(shops)
