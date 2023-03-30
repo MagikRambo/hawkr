@@ -41,6 +41,24 @@ export type MarkerType = {
   const [userLocationReceived, setUserLocationReceived] = React.useState<boolean>(false);
   const [userLocationRenderCount, setUserLocationRenderCount] = React.useState<number>(0);
 
+  const [timer, setTimer] = useState(0);
+
+  const interval = 5 * 1000;
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setTimer((prevTimer) => {
+        getUserCurrentLocation()
+        return prevTimer + interval;
+      });
+    }, interval);
+
+    // clear timer
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
+
   const getUserCurrentLocation = () =>{
 
     //Note: userLocationRenderCount needed atleast 2 times, 5 for safety.
