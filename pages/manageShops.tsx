@@ -259,7 +259,7 @@ export default function manageShops(){
                         )}
     
 
-                    {showModal &&  <ManageShopsForm shops={shops} userID={userID} setSubmissionType={setSubmissionType} showModal={showModal} setShowModal={setShowModal}/>}
+                    {showModal &&  <ManageShopsForm getShops={setGetShops} userID={userID} setSubmissionType={setSubmissionType} showModal={showModal} setShowModal={setShowModal}/>}
                     </div>
                 </div>
             )}
@@ -431,7 +431,7 @@ export default function manageShops(){
                             </div>
                             )}
                         <div className="text-black">
-                            {showModal &&  <ManageShopsForm shops={shops} shop={editShop} userID={userID} setSubmissionType={setSubmissionType} showModal={showModal} setShowModal={setShowModal} editFlag={editClicked} formProps={editShop} />}
+                            {showModal &&  <ManageShopsForm getShops={setGetShops} shop={editShop} userID={userID} setSubmissionType={setSubmissionType} showModal={showModal} setShowModal={setShowModal} editFlag={editClicked} formProps={editShop} />}
                         </div>
                         <ToastContainer/>
                         </>

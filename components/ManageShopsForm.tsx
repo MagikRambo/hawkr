@@ -16,8 +16,9 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 
 type ManageShopsFormProps = {
 
-    shops?: any,
+    // shops?: any,
     shop?: any,
+    getShops: Dispatch<SetStateAction<boolean>>,
     userID: string,
     setSubmissionType: Dispatch<SetStateAction<string>>,
     // ChangeSubmissionType: (arg:string) => void,
@@ -45,7 +46,7 @@ type formProps = {
 }
 
 
-export default function ManageShopsForm({shops, shop, userID, setSubmissionType, showModal, setShowModal, editFlag, formProps}: ManageShopsFormProps){
+export default function ManageShopsForm({getShops, shop, userID, setSubmissionType, showModal, setShowModal, editFlag, formProps}: ManageShopsFormProps){
 
   
     console.log(showModal)
@@ -126,7 +127,7 @@ export default function ManageShopsForm({shops, shop, userID, setSubmissionType,
 
       
     // console.log(userLocation)
-    console.log(shop)
+    // console.log(shop)
       
       const onSubmit = async (formData:any) => {
           
@@ -237,38 +238,41 @@ export default function ManageShopsForm({shops, shop, userID, setSubmissionType,
 
                 //TODO: either reload the page upon shop creation, or edit shops array and individual shop/shops array when making changes.
 
-                shops.data.push(
-                    {   shopID: shopID,
-                        vendorID: vendorID,
-                        shopName: shopName ,
-                        shopDescription: shopDescription ,
-                        open: false ,
-                        timeOpen: timeOpen,
-                        timeClosed: timeClosed ,
-                        messagesOn: messagesOn ,
-                        liveTracking: liveTracking ,
-                        hawkrType: hawkrType, 
-                        shop_image_url: img_src
-                    },
-                )
+                // shops.data.push(
+                //     {   shopID: shopID,
+                //         vendorID: vendorID,
+                //         shopName: shopName ,
+                //         shopDescription: shopDescription ,
+                //         open: false ,
+                //         timeOpen: timeOpen,
+                //         timeClosed: timeClosed ,
+                //         messagesOn: messagesOn ,
+                //         liveTracking: liveTracking ,
+                //         hawkrType: hawkrType, 
+                //         shop_image_url: img_src
+                //     },
+                // )
+                getShops(true)
 
             }
             else{
-                shops.data.push(
-                    {   
-                        shopID: shopID,
-                        vendorID: vendorID,
-                        shopName: shopName ,
-                        shopDescription: shopDescription ,
-                        open: false ,
-                        timeOpen: timeOpen,
-                        timeClosed: timeClosed ,
-                        messagesOn: messagesOn ,
-                        liveTracking: liveTracking ,
-                        hawkrType: hawkrType, 
-                        shop_image_url: base_hawkr_img
-                    },
-                )
+                // shops.data.push(
+                //     {   
+                //         shopID: shopID,
+                //         vendorID: vendorID,
+                //         shopName: shopName ,
+                //         shopDescription: shopDescription ,
+                //         open: false ,
+                //         timeOpen: timeOpen,
+                //         timeClosed: timeClosed ,
+                //         messagesOn: messagesOn ,
+                //         liveTracking: liveTracking ,
+                //         hawkrType: hawkrType, 
+                //         shop_image_url: base_hawkr_img
+                //     },
+                // )
+                getShops(true)
+
             }
 
             //get Shop ID that was recently posted
@@ -344,24 +348,26 @@ export default function ManageShopsForm({shops, shop, userID, setSubmissionType,
                     shopID: shopID
                 })
 
-                for (let i = 0; i < shops.data["length"]; i++ ){
-                    if (shops.data[i].shopID === shop.shopID){
-                        shops.data[i] = 
-                            {   shopID: shopID,
-                                vendorID: vendorID,
-                                shopName: shopName ,
-                                shopDescription: shopDescription ,
-                                open: shop.open,
-                                timeOpen: timeOpen,
-                                timeClosed: timeClosed ,
-                                messagesOn: messagesOn ,
-                                liveTracking: liveTracking ,
-                                hawkrType: hawkrType, 
-                                shop_image_url: img_src
-                            }
-                            break
-                    }
-                }
+                // for (let i = 0; i < shops.data["length"]; i++ ){
+                //     if (shops.data[i].shopID === shop.shopID){
+                //         shops.data[i] = 
+                //             {   shopID: shopID,
+                //                 vendorID: vendorID,
+                //                 shopName: shopName ,
+                //                 shopDescription: shopDescription ,
+                //                 open: shop.open,
+                //                 timeOpen: timeOpen,
+                //                 timeClosed: timeClosed ,
+                //                 messagesOn: messagesOn ,
+                //                 liveTracking: liveTracking ,
+                //                 hawkrType: hawkrType, 
+                //                 shop_image_url: img_src
+                //             }
+                //             break
+                //     }
+                // }
+                getShops(true)
+
 
             }else{
 
@@ -377,8 +383,8 @@ export default function ManageShopsForm({shops, shop, userID, setSubmissionType,
                     img_src = base_hawkr_img
                 }
 
-                console.log('P1 : ', shops.data)
-                console.log('P2 : ', shops.data[shop])
+                // console.log('P1 : ', shops.data)
+                // console.log('P2 : ', shops.data[shop])
                 const {data, error} = await supabase
                 .from('shops')
                 .update({
@@ -396,26 +402,28 @@ export default function ManageShopsForm({shops, shop, userID, setSubmissionType,
                     shopID: shopID
                 })
 
-                console.log('P3 : ', shops.data)
+                // console.log('P3 : ', shops.data)
 
-                for (let i = 0; i < shops.data["length"]; i++ ){
-                    if (shops.data[i].shopID === shop.shopID){
-                        shops.data[i] = 
-                            {   shopID: shopID,
-                                vendorID: vendorID,
-                                shopName: shopName ,
-                                shopDescription: shopDescription ,
-                                open: shop.open,
-                                timeOpen: timeOpen,
-                                timeClosed: timeClosed ,
-                                messagesOn: messagesOn ,
-                                liveTracking: liveTracking ,
-                                hawkrType: hawkrType, 
-                                shop_image_url: img_src
-                            }
-                            break
-                    }
-                }
+                // for (let i = 0; i < shops.data["length"]; i++ ){
+                //     if (shops.data[i].shopID === shop.shopID){
+                //         shops.data[i] = 
+                //             {   shopID: shopID,
+                //                 vendorID: vendorID,
+                //                 shopName: shopName ,
+                //                 shopDescription: shopDescription ,
+                //                 open: shop.open,
+                //                 timeOpen: timeOpen,
+                //                 timeClosed: timeClosed ,
+                //                 messagesOn: messagesOn ,
+                //                 liveTracking: liveTracking ,
+                //                 hawkrType: hawkrType, 
+                //                 shop_image_url: img_src
+                //             }
+                //             break
+                //     }
+                // }
+                getShops(true)
+
 
                 console.log('IMAGE DIFF STUFF : ', images?.data[0])
             }
