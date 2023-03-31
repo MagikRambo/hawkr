@@ -21,19 +21,21 @@ type ManageShopsFormProps = {
 }
 
 type formProps = {
-    shopID: string | undefined
+    shopID: string | undefined,
     shopName: string,
     shopDescription: string,
     hawkrType: string,
     file: FileList,
-    hoursOpen: string,
-    minutesOpen: string, 
-    ampmOpen: string,
-    hoursClosed: string,
-    minutesClosed: string,
-    ampmClosed: string,
+    timeOpen: string,
+    timeClosed: string,
+    // hoursOpen: string,
+    // minutesOpen: string, 
+    // ampmOpen: string,
+    // hoursClosed: string,
+    // minutesClosed: string,
+    // ampmClosed: string,
     liveTracking: Boolean,
-    messagesFlag: Boolean
+    messagesOn: Boolean,
 }
 
 
@@ -47,6 +49,49 @@ export default function ManageShopsForm({getShops, shop, userID, setSubmissionTy
     const [images, setImages] = useState<ImageContent>()
     const SHOP_CDN_URL = 'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/shop-images'
     const base_hawkr_img =  'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/base-hawkr/hawkr_icon.png'
+
+    let editDefaultValues = {}
+    console.log('formProps: ' , formProps)
+    if (formProps){
+
+        const timeOpen = formProps.timeOpen
+        const timeClosed = formProps.timeClosed
+
+        var dateOpen = new Date(`February 04, 2011 ${timeOpen}`);
+        var timeOpenString = dateOpen.toLocaleTimeString()
+        console.log(timeOpenString)
+          
+
+        const hoursOpen = timeOpenString.split(':')[0]
+        const minutesOpen = timeOpenString.split(':')[1]
+        const suffixOpen  = timeOpenString.split(' ')[1].toLowerCase()
+
+        var dateClosed = new Date(`February 04, 2011 ${timeClosed}`);
+        var timeClosedString = dateClosed.toLocaleTimeString()
+        const hoursClosed = timeClosedString.split(':')[0]
+        const minutesClosed = timeClosedString.split(':')[1]
+        const suffixClosed  = timeClosedString.split(' ')[1].toLowerCase()
+
+
+        editDefaultValues = {
+            shopID: formProps.shopID,
+            shopName: formProps.shopName,
+            shopDescription: formProps.shopDescription,
+            hawkrType: formProps.hawkrType,
+            file: formProps.file,
+            hoursOpen: hoursOpen,
+            minutesOpen: minutesOpen, 
+            ampmOpen: suffixOpen,
+            hoursClosed: hoursClosed,
+            minutesClosed: minutesClosed,
+            ampmClosed: suffixClosed,
+            liveTracking: formProps.liveTracking,
+            messagesOn: formProps.messagesOn,
+            
+        }   
+
+    }
+      
     const {
         register,
         handleSubmit,
@@ -54,9 +99,8 @@ export default function ManageShopsForm({getShops, shop, userID, setSubmissionTy
         reset,
         formState: { errors },
       } = useForm({
-        defaultValues: formProps
+        defaultValues: editDefaultValues
       });
-      
     useEffect( () => {
     const getImages = async (shopID:any) => {
             if (userID)
@@ -92,7 +136,10 @@ export default function ManageShopsForm({getShops, shop, userID, setSubmissionTy
         let vendorID = userID
         let shopName = formData.shopName
         let shopDescription = formData.shopDescription
-        let messagesOn = formData.messagesFlag
+        let messagesOn = formData.messagesOn
+        
+        console.log(messagesOn)
+        console.log(formData)
         let liveTracking = formData.liveTracking
         let hawkrType = formData.hawkrType
         let timeOpen = `${formData.hoursOpen}:${formData.minutesOpen}${formData.ampmOpen}`
@@ -164,13 +211,9 @@ export default function ManageShopsForm({getShops, shop, userID, setSubmissionTy
                     },
                 )
 
-                getShops(true)
-
             }
-            else{
-                getShops(true)
 
-            }
+            getShops(true)
             console.log('VALUE OF IMG SRC: ', img_src)
 
         
@@ -238,7 +281,6 @@ export default function ManageShopsForm({getShops, shop, userID, setSubmissionTy
             }else{
 
                 //Update with already existing image
-
                 var img_src
                 const {data:resShopImage, error:resShopImageError } = await getShopImage(userID, shopID, supabase)
                 const shopImage = resShopImage[0]
@@ -249,8 +291,6 @@ export default function ManageShopsForm({getShops, shop, userID, setSubmissionTy
                     img_src = base_hawkr_img
                 }
 
-                // console.log('P1 : ', shops.data)
-                // console.log('P2 : ', shops.data[shop])
                 const {data, error} = await supabase
                 .from('shops')
                 .update({
@@ -274,7 +314,7 @@ export default function ManageShopsForm({getShops, shop, userID, setSubmissionTy
             setSubmissionType('EDIT')            
         }
         setShowModal(false)
-        reset()
+        // reset()
 
         };
 
@@ -558,14 +598,14 @@ return(
                                 <div className="relative flex items-start">
                                     <div className="flex h-6 items-center">
                                         <input
-                                        id="messagesFlag"
+                                        id="messagesOn"
                                         type="checkbox"
                                         className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                        {...register("messagesFlag", {required: false})}
+                                        {...register("messagesOn", {required: false})}
                                         />
                                     </div>
                                     <div className="ml-3">
-                                        <label htmlFor="messagesFlag" className="text-sm font-medium leading-6 text-gray-900">
+                                        <label htmlFor="messagesOn" className="text-sm font-medium leading-6 text-gray-900">
                                         Messages
                                         </label>
                                         <p className="text-sm text-gray-500">Ability to accept messages from client</p>

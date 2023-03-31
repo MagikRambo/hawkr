@@ -95,8 +95,7 @@ export default function manageShops(){
 
     const [open, setOpen] = useState(false)
 
-    // console.log('chan. sub. type: ',ChangeSubmissionType)
-    // console.log('typeof chan. sub. type: ', typeof(ChangeSubmissionType))
+
     const ChangeSubmissionType = (arg:string) => {
         setSubmissionType(arg)
     }
@@ -128,8 +127,7 @@ export default function manageShops(){
                     }
 
                     console.log(i)
-                    // delete(shops.data[i])
-                    // shops.data.splice(i,1)
+
                     setGetShops(true)
                     console.log(shops)
                     break
