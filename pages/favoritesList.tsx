@@ -3,7 +3,7 @@ import Map from './Map';
 import { Transition } from '@headlessui/react'
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import getShopsWithLocations from './api/getVendors';
-import InfoCard from '../components/InfoCard'
+import InfoCard from '../components/favoritesList/InfoCard'
 import Pagination from '../components/pagination';
 
 //Image imports
@@ -28,24 +28,8 @@ export const getStaticProps: GetStaticProps = async () => {
 
 function FavoritesMenu(props: ExploreMenuProps) {
 
-  const session = useSession()
-  const userAlex = useUser()
-
-  if(session){
-    console.log("WE ARE ALIVE!! SESSION IS READY!!!", session)
-  }else{
-    console.log("NO SESSION NO SESSION : ", session)
-  }
-
-  if(userAlex){
-    console.log("ALEX YOU ARE ALIVE: ", userAlex)
-  }
-  else{
-    console.log(" ALEX IS NOT ALIVE, HE DEAD! ", userAlex)
-  }
   const [curr_page, setCurrPage] = useState(1)
 
-  console.log(props.shops)
   //Hawkr-blue is #1498
   return (
       <main className="flex">
@@ -54,16 +38,41 @@ function FavoritesMenu(props: ExploreMenuProps) {
 
             <div className="flex flex-col">
               {props.shops?.map((item: any) => (
+                <>
+                {item.open && (
                 <Link href={`shops/${item.shopID}`}>
                 <InfoCard
                   key={item.shopID}
                   img={hawkr_icon}
                   description={item.shopDescription}
                   title={item.shopName}
+                  open={item.open}
                   />
                   </Link>
+                )}
+                  </>
                 ))}
             </div>
+
+            <h1 className=' pb-2 pl-2 font-bold text-gray-600 text-2xl'> Closed Shops</h1>
+            <div className="flex flex-col">
+              {props.shops?.map((item: any) => (
+                <>
+                {!item.open && (
+                <Link href={`shops/${item.shopID}`}>
+                <InfoCard
+                  key={item.shopID}
+                  img={hawkr_icon}
+                  description={item.shopDescription}
+                  title={item.shopName}
+                  open={item.open}
+                  />
+                  </Link>
+                )}
+                  </>
+                ))}
+            </div>
+
             <div className="flex flex-col items-center justify-center">
               {/* TODO: Set up the links to the set-up hawkr page*/}
               <Link href='#' className="text-xl font-medium text-black">Want to run your business?</Link>
@@ -80,25 +89,8 @@ export default function FavoritesList({ shops }: InferGetStaticPropsType<typeof 
 
   let [showOpen, setShowOpen] = useState(true)
 
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [userId, setUserID] = useState<string | undefined>();
-
-  // useEffect( () => {
-  //   const getUser = async () => {
-  //     const user = await supabase.auth.getUser()
-  //     console.log("user", user);
-  //     if(user){
-  //       const userId = user.data.user?.id;
-  //       setIsAuthenticated(true);
-  //       setUserID(userId);
-  //     }
-  //   };
-  //   getUser();
-  // }, [])
-
-  if(isAuthenticated && userId){
-    console.log("User", userId, "Authenticated", isAuthenticated)
-  }
+  //filter to only get open shops to pass to Map
+  let openShops = shops.filter((shop:any) => shop.open === true)
 
   return (
     <>
@@ -114,7 +106,7 @@ export default function FavoritesList({ shops }: InferGetStaticPropsType<typeof 
             onClick={() => setShowOpen(!showOpen)}>
             {showOpen ? <Image width={23} height={23} alt="LeftArrow" src={LeftArrow.src} /> : <div className="flex text-blue-500 text-base"><Image width={20} height={20} alt="RightArrow" src={RightArrow.src} />Show List</div>}
           </button>
-          <Map shops={shops} />
+          <Map shops={openShops} />
         </div>
       </div>
     </>
