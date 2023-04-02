@@ -11,9 +11,9 @@ type ShopCardProps = {
 export default function ShopCard(props: ShopCardProps){
 
   return (
-    <main className="flex">
-      <section className='flex-grow h-screen pt-10 px-16 bg-slate-200 overflow-y-auto [&::-webkit-scrollbar]:hidden'>
-        <div className='h-60'/>
+    <main className="flex text-slate-950">
+      <section className='flex-grow h-screen px-16 bg-slate-200 overflow-y-auto [&::-webkit-scrollbar]:hidden'>
+        <img className='m-0 object-fill' src='\img\hawkr_icon.png' />
         <div className='flex justify-between items-center'>
           <div>
             <h1 className='text-6xl font-bold pt-8'>{props.shopName}</h1>
@@ -39,7 +39,7 @@ export default function ShopCard(props: ShopCardProps){
         </div>
         <div className="mt-2 flex justify-end">
         <button type="submit"
-          className="inline-flex items-center rounded-md border border-transparent bg-cyan-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+          className="inline-flex mb-10 items-center rounded-md border border-transparent bg-cyan-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
           Post
         </button>
       </div>

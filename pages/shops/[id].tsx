@@ -76,7 +76,7 @@ function shopDetails({shopData}:InferGetStaticPropsType<typeof getStaticProps>){
 
     // console.log("WE MADE IT TO DETAILS")
 
-    console.log(shopData[0])
+    //console.log(shopData[0])
     // shopData = shopData[0]
     let [showOpen, setShowOpen] = useState(true)
 
