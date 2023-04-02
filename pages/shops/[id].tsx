@@ -63,7 +63,7 @@ function ExploreMenu (props: any){
                 shopDescription={item.shopDescription}
                 shopID={item.shopID}
                 shopName={item.shopName}
-
+                shop_image_url={item.shop_image_url}
                 />
                 ))}
           </div>
