@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Map from '../Map'
+import Map from '../../components/Map'
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType} from "next";
 import get_shops_with_location from "../api/getVendors";
 import get_shops_by_id from "../api/getShopById";
@@ -73,7 +73,7 @@ function ExploreMenu (props: any){
     )
 }
 
-function shopDetails({shopData}:InferGetStaticPropsType<typeof getStaticProps>){
+function useShopDetails({shopData}:InferGetStaticPropsType<typeof getStaticProps>){
 
     // console.log("WE MADE IT TO DETAILS")
 
@@ -104,4 +104,4 @@ function shopDetails({shopData}:InferGetStaticPropsType<typeof getStaticProps>){
         </>
       )
 }
-export default shopDetails
+export default useShopDetails

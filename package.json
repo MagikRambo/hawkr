@@ -41,6 +41,7 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "@types/formidable": "^2.0.5",
     "@types/google.maps": "^3.50.5",
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.19",

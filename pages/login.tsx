@@ -13,7 +13,7 @@ import { useRouter } from 'next/router'
 
 
 
-const login: NextPage = () => {
+const useLogin: NextPage = () => {
 
 
     const { isLoading, session, error } = useSessionContext();
@@ -93,4 +93,4 @@ const login: NextPage = () => {
     )
 }
 
-export default login
+export default useLogin

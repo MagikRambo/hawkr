@@ -1,12 +1,12 @@
 import React, { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import info from '../utils/info'
+//import info from '../utils/info'
 import InfoCard from './InfoCard'
 import {motion} from 'framer-motion'
-import Map from '../pages/Map';
+import Map from './Map';
 
-const searchResults = info;
+//const searchResults = info;
 
 type ExploreProps = {
   handleOpen: (o: boolean, idx:number)=>void,
@@ -35,7 +35,7 @@ function ExploreMenu(ExploreProps : any){
             <p className="button">More filters</p>
           </div> */}
           <div className="flex flex-col">
-            {searchResults?.map((item: any) => (
+            {/* {searchResults?.map((item: any) => (
               <InfoCard
                 key={item.img}
                 img={item.img}
@@ -46,7 +46,7 @@ function ExploreMenu(ExploreProps : any){
                 price={item.price}
                 total={item.total}
               />
-              ))}
+              ))} */}
           </div>
         </section>
 
