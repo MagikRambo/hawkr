@@ -93,9 +93,9 @@ export default function FavoritesList({ shops }: InferGetStaticPropsType<typeof 
   let [showOpen, setShowOpen] = useState(true)
 
   //filter to only get open shops to pass to Map
-  let openShops = shops.filter((shop:any) => shop.open === true)
-
+  
   const [favoriteShops, setFavoriteShops] = useState<any>([])
+  let openShops = favoriteShops.filter((shop:any) => shop.open === true)
   const [shopIDs, setShopIDs] = useState<any>('')
 
   let user = useUser()
@@ -179,7 +179,7 @@ export default function FavoritesList({ shops }: InferGetStaticPropsType<typeof 
              onClick={() => setShowOpen(!showOpen)}>
             {showOpen ? <Image width={23} height={23} alt="LeftArrow" src={LeftArrow.src} /> : <div className="flex text-blue-500 text-base"><Image width={20} height={20} alt="RightArrow" src={RightArrow.src} />Show List</div>}
           </button>
-          <Map shops={favoriteShops} />
+          <Map shops={openShops} />
         </div>
       </div>
     </>
