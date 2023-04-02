@@ -9,7 +9,7 @@ type ShopCardProps = {
     shopDescription: string,
     shopID: string,
     shopName: string,
-    open: boolean,
+    open?: boolean,
   }
 
   // <!-- Please refer: https://github.com/shubhamjain/svg-loader -->
