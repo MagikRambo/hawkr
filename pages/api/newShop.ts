@@ -5,7 +5,6 @@ import formidable from 'formidable';
 
 
 import { createClient } from '@supabase/supabase-js'
-import { IncomingMessage } from "http";
 
 const supabaseUrl = 'https://mlijczvqqsvotbjytzjm.supabase.co'
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
@@ -34,10 +33,10 @@ export const config = {
 };
 
 
-export default async (req: IncomingMessage, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: { status: string; }): void; new(): any; }; }; }) => {
+export default async (req, res) => {
   const form = new formidable.IncomingForm();
-  // form.uploadDir = "./";
-  // form.keepExtensions = true;
+  form.uploadDir = "./";
+  form.keepExtensions = true;
   form.parse(req, async (err, fields, files) => {
     if (err){
       res.status(400).json({ status: `Error: ${err}` });
@@ -54,8 +53,7 @@ export default async (req: IncomingMessage, res: { status: (arg0: number) => { (
     console.log(time)
     let currDate = new Date()
     var userTimezoneOffset = currDate.getTimezoneOffset() * 60000;
-    // changed this to return a 0 if it is a string array. is this the correct thing to do? -- Alex
-    let timeOpen = new Date(currDate.getFullYear(), currDate.getMonth(), currDate.getDate(), hoursOpen, (typeof fields.minutesOpen == "string" ? Number.parseInt(fields.minutesOpen): 0), 0,0 )
+    let timeOpen = new Date(currDate.getFullYear(), currDate.getMonth(), currDate.getDate(), hoursOpen, fields.minutesOpen, 0,0 )
     // timeOpen.
     console.log(timeOpen)
 
@@ -80,7 +78,7 @@ export default async (req: IncomingMessage, res: { status: (arg0: number) => { (
     console.log(err, fields, files);
 
   
-    //console.log(data, error)
+    console.log(data, error)
   });
   res.status(200).json({ status: "OK" });
 
