@@ -14,6 +14,9 @@ import Link from "next/link";
 import LeftArrow from '../../public/img/Left_Arrow.svg'
 import RightArrow from '../../public/img/Right_Arrow.svg'
 import ShopCard from '../../components/ShopCard';
+import { supabase } from '../../utils/supabaseClient';
+import { useUser } from '@supabase/auth-helpers-react';
+
 
 
 export const getStaticPaths = async () => {
@@ -35,13 +38,11 @@ export const getStaticProps = async ( {params}:any ) => {
 
 
     const id = params.id
-    // console.log(id)
     const {data} = await get_shops_by_id(id)
-    // console.log(data)
-    // console.log(error)
     return {props: {shopData: data}}
-
 }
+
+
 function ExploreMenu (props: any){
 
     return (
@@ -76,9 +77,10 @@ function shopDetails({shopData}:InferGetStaticPropsType<typeof getStaticProps>){
 
     // console.log("WE MADE IT TO DETAILS")
 
-    //console.log(shopData[0])
-    // shopData = shopData[0]
+    console.log(shopData[0])
+    
     let [showOpen, setShowOpen] = useState(true)
+
 
     return (
         <>
