@@ -23,7 +23,7 @@ type ExploreMenuProps = {
 
 export const getStaticPaths = async () => {
   const {data} = await get_hawkr_types();
-  const paths = data?.map(item => {
+  const paths = data?.map((item:any) => {
     return {
       params: {hawkrType: item.hawkrType.toString()}
     }
@@ -34,27 +34,9 @@ export const getStaticPaths = async () => {
   };
 }
 
-// export const getStaticProps = async ( ) => {
+export const getStaticProps: GetStaticProps = async ({params}:NonNullable<any>) => {
 
-//     // const {params} = context
-//     // console.log(context)
-    
-//     // console.log(type)
-//     // const id = params.id
-//     // console.log(id)
-//     // const {data} = await get_shops_by_id(id)
-//     // console.log(data)
-//     // console.log(error)
-//     // return {props: {shopData: data}}
-
-// }
-export const getStaticProps: GetStaticProps = async (context) => {
-    // console.log("THIS IS THE STATIC PROPS")
-    // console.log(context)
-    // console.log("context params", context.params.hawkrType)
-    // const data = null
-    const { data } = await get_shops_by_type(context.params.hawkrType);
-    // console.log(data)
+    const { data } = await get_shops_by_type(params.hawkrType);
     return { props: { shops: data } };
   };
 
@@ -62,7 +44,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
 function Types_Dyn_Menu(props: ExploreMenuProps) {
   const [curr_page, setCurrPage] = useState(1)
 
-  // console.log(props)
   const router = useRouter()
   const routerType = router.query.type
 
