@@ -53,12 +53,8 @@ export const getStaticProps: GetStaticProps = async (context) => {
     // console.log(context)
     // console.log("context params", context.params.hawkrType)
     // const data = null
-    if(typeof context.params == "undefined"){
-      return { props: { shops: null } };
-    }
-    const { data } = await get_shops_by_type(typeof context.params.hawkrType);
+    const { data } = await get_shops_by_type(context.params.hawkrType);
     // console.log(data)
-    
     return { props: { shops: data } };
   };
 
@@ -79,7 +75,7 @@ function Types_Dyn_Menu(props: ExploreMenuProps) {
 
             <div className="flex flex-col">
               {props.shops?.map((item: any) => (
-                <Link key={item.shopID} href={`/shops/${item.shopID}`}>
+                <Link href={`/shops/${item.shopID}`}>
                 <InfoCard
                   key={item.shopID}
                   img={hawkr_icon}
