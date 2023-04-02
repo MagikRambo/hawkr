@@ -4,7 +4,7 @@ import { Fragment, useEffect, useState } from "react"
 import { useForm } from "react-hook-form";
 import { supabase } from "../utils/supabaseClient";
 import { getShopImage, uploadShopImage } from "./api/cdnHelpers";
-import get_vendor_by_id from "./api/getVendorByID";
+import get_vendor_by_id from "./api/getVendorById";
 import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -19,7 +19,7 @@ function classNames(...classes:any) {
     return classes.filter(Boolean).join(' ')
   }
 
-export default function manageShops(){
+export default function useManageShops(){
 
     const supabase = useSupabaseClient();
 
@@ -332,7 +332,7 @@ export default function manageShops(){
                         {/* TODO: Make map function IMAGES BELOW */}
                         <>
                         {shops.data.map((shop) => 
-                            <div className="w-80 rounded-2xl bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-1 shadow-xl">
+                            <div key={shop.shopID} className="w-80 rounded-2xl bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-1 shadow-xl">
                                 <div className="h-64 w-full bg-gray-200 flex flex-col justify-between p-4 bg-cover rounded-xl bg-center"
                                      style={{backgroundImage: `url(${shop.shop_image_url})`}}
                                 >

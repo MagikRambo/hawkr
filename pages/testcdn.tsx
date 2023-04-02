@@ -19,7 +19,7 @@ import { useUser } from "@supabase/auth-helpers-react";
 //   };
   
 
-export default function testcdn({data}:any){
+export default function useTestcdn({data}:any){
     const SHOP_CDN_URL = 'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/shop-images'
     const last = '01f77779-1153-4869-b2c1-64e7b3fb8588/MagikRambo.jpeg'
 
@@ -42,10 +42,10 @@ export default function testcdn({data}:any){
                 {images.map( (image) => {
                     return(
                         <>
-                        {console.log(image)}
+                        {/* {console.log(image)}
                         {console.log(`Image ID: ${image.id}\tImage Name: ${image.name}`)}
-                        {console.log(`URL: ${SHOP_CDN_URL}/${userID}/${image.name}`)}
-                        <Image key={image.id} height={100} width={100} alt="hi" src={SHOP_CDN_URL + '/' + userID + '/' + image.name}/>
+                        {console.log(`URL: ${SHOP_CDN_URL}/${userID}/${image.name}`)} */}
+                        {/* <Image key={image.id} height={100} width={100} alt="hi" src={SHOP_CDN_URL + '/' + userID + '/' + image.name}/> */}
                         </>
                         );
                 })}

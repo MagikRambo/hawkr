@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Map from './Map';
+import Map from '../components/Map';
 import { Transition } from '@headlessui/react'
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import getShopsWithLocations from './api/getVendors';
@@ -54,7 +54,7 @@ function ExploreMenu(props: ExploreMenuProps) {
 
             <div className="flex flex-col">
               {props.shops?.map((item: any) => (
-                <Link href={`shops/${item.shopID}`}>
+                <Link key={item.shopID} href={`shops/${item.shopID}`}>
                 <InfoCard
                   key={item.shopID}
                   img={hawkr_icon}
