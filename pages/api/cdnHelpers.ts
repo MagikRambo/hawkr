@@ -1,5 +1,5 @@
 import { useSupabaseClient } from "@supabase/auth-helpers-react"
-import { createClient, SupabaseClient } from "@supabase/supabase-js";
+import { createClient } from "@supabase/supabase-js";
 import { useState } from "react"
 
 // const supabase = useSupabaseClient();
@@ -61,10 +61,9 @@ export async function uploadShopImage(e, supabase, userID, shopID){
     else{
         console.log(error)
     }
-
 }
 
-export async function useUploadProfileImage(e: { target: { files: any[]; }; },user: { id: string; }){
+export async function uploadProfileImage(e,user){
     console.log(e.target.files)
     let file = e.target.files[0]
     const supabase = useSupabaseClient();
@@ -148,7 +147,7 @@ export async function getShopImage(userID, shopID, supabase){
         }
     }
 }
-export async function getProfileImage(profileID: string, supabase: { storage: { from: (arg0: string) => { (): any; new(): any; list: { (arg0: string, arg1: { limit: number; offset: number; sortBy: { column: string; order: string; }; }): PromiseLike<{ data: any; error: any; }> | { data: any; error: any; }; new(): any; }; }; }; }, setImages: (arg0: any) => void){
+export async function getProfileImage(profileID, supabase, setImages){
     const {data, error} = await supabase
     .storage
     .from('shop-images')
