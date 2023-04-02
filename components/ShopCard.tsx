@@ -10,6 +10,7 @@ type ShopCardProps = {
     shopID: string,
     shopName: string,
     open?: boolean,
+    shop_image_url: string
   }
 
   // <!-- Please refer: https://github.com/shubhamjain/svg-loader -->
@@ -104,7 +105,7 @@ const retrieveFavoritesList = async () => {
           <StarIcon className="h-10 cursor-pointer" />
           <StarIcon className="h-10 cursor-pointer" />
         </div>
-        <div className='py-2 mt-1 h-52'>
+        <div className='py-2 mt-1 h-52 text-black'>
           <textarea className='block h-full w-full rounded-md border-gray-300 shadow-sm focus:border-cyan-500 focus:ring-cyan-500 sm:text-sm'/>
         </div>
         <div className="mt-2 flex justify-end">
