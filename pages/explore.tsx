@@ -23,7 +23,7 @@ export const getStaticProps: GetStaticProps = async () => {
 };
 
 
-function ExploreMenu(props: ExploreMenuProps) {
+function SidePanelMenu(props: ExploreMenuProps) {
   const [curr_page, setCurrPage] = useState(1)
 
   //Hawkr-blue is #1498
@@ -66,7 +66,7 @@ function Explore({ shops }: InferGetStaticPropsType<typeof getStaticProps>) {
         <Transition className="w-2/5" show={showOpen}
           enter='transition-all' enterFrom='opacity-0 w-0' enterTo='opacity-100 w-2/5'
           leave='transition-all' leaveFrom='opacity-100 w-2/5' leaveTo='opacity-0 w-0'>
-          <ExploreMenu shops={openShops} />
+          <SidePanelMenu shops={openShops} />
         </Transition>
         <div className='relative grow'>
           <button className='absolute z-10 rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm
