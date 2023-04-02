@@ -5,12 +5,14 @@ import { HeartIcon } from "@heroicons/react/24/outline";
 import { StarIcon, StopIcon  } from "@heroicons/react/24/solid";
 
 type InfoCardProps = {
-  img: any;
-  description: any;
-  title: any;
+  img: any,
+  description: any,
+  title: any,
+  open?: boolean,
 };
 
 function InfoCard(ICProps:InfoCardProps) {
+
   return (
     <motion.div
       initial={{
@@ -40,7 +42,8 @@ function InfoCard(ICProps:InfoCardProps) {
         <p className="pt-2 text-sm text-gray-500 w-full flex-grow">{ICProps.description}</p>
       </div>
       <div className="col-span-1 justify-self-end">
-      <StopIcon className="relative -top-4 -right-4 w-8 h-8  text-green-300"/>
+        
+      {ICProps.open ? <StopIcon className="relative -top-4 -right-4 w-8 h-8  text-green-300"/> : <StopIcon className="relative -top-4 -right-4 w-8 h-8  text-red-300"/> }
       </div>
     </motion.div>
   );
