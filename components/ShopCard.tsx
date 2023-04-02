@@ -1,7 +1,7 @@
 import { HeartIcon, StarIcon } from '@heroicons/react/24/outline';
 import { useUser } from '@supabase/auth-helpers-react';
 // import { HeartIcon } from '@heroicons/react/24/solid';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { supabase } from '../utils/supabaseClient';
 type ShopCardProps = {
     hawkrType: string,
@@ -16,9 +16,19 @@ type ShopCardProps = {
 export default function ShopCard(props: ShopCardProps){
 
   const [HeartStatus, setHeartStatus] = useState<boolean>(false)
-
+  const [favoritesList, setFavoritesList] = useState<any>()
+  const [loading, setLoading] = useState<boolean>(false)
   const user = useUser();
   const userID = user?.id
+
+  useEffect(() => {
+    setLoading(true)
+    retrieveFavoritesList().catch(console.error)
+    
+    setLoading(false)
+    
+    }, [userID])
+
 
   async function toggleHeart(shopID:string){
     if (HeartStatus){
@@ -29,7 +39,6 @@ export default function ShopCard(props: ShopCardProps){
       insertFavorites(shopID)
     }
   }
-
 
 const insertFavorites = async (shopID:string) => {
   const { data, error } = await supabase
@@ -44,6 +53,26 @@ const removeFromFavorites  = async(shopID:string) => {
   .from('favoritesList')
   .delete()
   .match({clientID: userID, shopID: shopID})
+}
+
+const retrieveFavoritesList = async () => {
+
+  if(userID)
+  {
+    const {data, error} = await supabase
+    .from('favoritesList')
+    .select('*')
+    .eq('clientID', userID)
+    setFavoritesList(data)
+
+    if(data){
+      for (let i = 0; i < data["length"]; i++){
+        if(data[i].shopID === props.shopID){
+          setHeartStatus(true)
+        }
+      }
+    }
+  }
 }
 
   return (
