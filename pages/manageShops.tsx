@@ -56,60 +56,86 @@ export default function useManageShops(){
         shop_image_url: string
     }
      
+    const tabs = [
+        { name: 'ALL SHOPS', href: '#', current: true },
+        { name: 'ACTIVE', href: '#', current: false },
+        { name: 'INACTIVE', href: '#', current: false },
+
+      ]
+      
+      function classNames(...classes) {
+        return classes.filter(Boolean).join(' ')
+      }
+
     const [vendor, setVendor] = useState<VendorContent>()    
-    const [reloading, setReloading] = useState<boolean>(true)
-    const [userLocation, setUserLocation] = useState<any>()
+
     const [shops, setShops] = useState<shopsContent>()
 
     const [enabled, setEnabled] = useState(false)
-    const [disabled, setDisabled] = useState(false)
 
     const [editClicked, setEditClicked] = useState(false)
 
     const [editShop, setEditShop] = useState<any>()
     const [removeShop, setRemoveShop] = useState<any>()
 
-
-
-    const [formData, setFormData] = useState<formProps>()
+    const [submissionType, setSubmissionType] = useState<string>('')
+    const [userLocation, setUserLocation] = useState<any>()
 
 
     const router = useRouter()
     const { isLoading, session, error } = useSessionContext();
     const user = useUser()
-    const userID = user?.id
+    const userID = user?.id as NonNullable<string>
 
     const [images, setImages] = useState<ImageContent>()
-    const SHOP_CDN_URL = 'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/shop-images'
 
     const [showModal, setShowModal] = useState(false);
 
+    const [getShops, setGetShops] = useState(true);
 
     const [open, setOpen] = useState(false)
 
 
-    const getUserCurrentLocation = () =>{
-        //Getting the current location of user
-        navigator.geolocation.getCurrentPosition(position => {
-        // Activate button when geolocation has finished
-        // Call the callback function
-            const userPosition = {lat: position.coords.latitude, lng: position.coords.longitude}
-            setUserLocation(userPosition)
-        });
+    const ChangeSubmissionType = (arg:string) => {
+        setSubmissionType(arg)
     }
 
     const deleteShop = async (shopID:string) => {
+
+        const bucket = "shop-images"
+
         const {data, error} = await supabase
         .from('shops')
         .delete()
         .eq('shopID', shopID)
 
-        // console.log(shops.data?.map((shop) => {
-        //     if (shop.shopID == shopID){
-        //         shops?.data
-        //     }
-        // }))
-        
+
+        const { data:list, error:listError } = await supabase.storage.from(bucket).list(`${userID}/${shopID}`);
+        const filesToRemove = list?.map((x) => `${userID}/${shopID}/${x.name}`) as NonNullable<Array<string>>;
+        const { data:resRemove, error:resRemoveError } = await supabase.storage.from(bucket).remove(filesToRemove);
+
+        if (shops){
+            for (let i = 0; i < shops.data["length"]; i++ ){
+                console.log(shops.data[i].shopID)
+                console.log(shopID)
+                if (shops.data[i].shopID === shopID){
+                    //quick fix
+
+                    if (shops.data[i].open){
+                        shops.data[i].open = false
+                        setEnabled(false)
+                    }
+
+                    console.log(i)
+
+                    setGetShops(true)
+                    console.log(shops)
+                    break
+                }
+            }
+        }
+            
+        console.log(shops)
     }
 
     const  EnableShop = async (shop: shopType) => {
@@ -134,11 +160,9 @@ export default function useManageShops(){
             shop.open = false;
 
             setEnabled(false)
-            setDisabled(true)
         }
         else if (enabled){
             setEnabled(true)
-            setDisabled(false)
             alert('Error: Cannot enable a shop, one is already active')
         }
         else{
@@ -159,7 +183,6 @@ export default function useManageShops(){
             )
             shop.open = true;
             setEnabled(true)
-            setDisabled(false)
         }
 
     }
@@ -170,7 +193,6 @@ export default function useManageShops(){
     
     //retrieve user current location on page build.
     
-
     useEffect( () => {
         const getVendor = async () =>{
             if (userID)
@@ -178,22 +200,33 @@ export default function useManageShops(){
                 const v = await get_vendor_by_id(userID.toString())
                 setVendor(v)
             }
-        }
+        }  
+        getVendor().catch(console.error)
+    }, [userID])
 
-
-
+    useEffect( ()  => {
         const getShops = async () => {
             if (userID){
                 const res_shops = await getShopsByVendorId(userID.toString())
                 setShops(res_shops)
+                setGetShops(false)
             }
         }
-
-        getVendor().catch(console.error)
         getShops().catch(console.error)
-        getUserCurrentLocation()
-    }, [userID])
 
+    }, [userID, getShops])
+
+    console.log(userLocation)
+
+    console.log('SUBMISSION TYPE CONTENTS: ', submissionType)
+    if (submissionType === 'CREATE'){
+        toast("Successfully created your shop!")
+        setSubmissionType('')
+        
+    }else if (submissionType === 'EDIT'){
+        toast('Successfully edited your shop!')
+        setSubmissionType('')
+    }
     
     console.log('2nd section mapped imanges: ', images)
     console.log('SHOPS CONTENT: ', shops?.data)
@@ -224,7 +257,7 @@ export default function useManageShops(){
                         )}
     
 
-                    {showModal &&  <ManageShopsForm  userID={userID} images={images} setShowModal={setShowModal}/>}
+                    {showModal &&  <ManageShopsForm getShops={setGetShops} userID={userID} setSubmissionType={setSubmissionType} showModal={showModal} setShowModal={setShowModal}/>}
                     </div>
                 </div>
             )}
@@ -233,19 +266,75 @@ export default function useManageShops(){
             {shops && shops.data && shops.data[0] && (
                 <div className="bg-slate-200 h-screen w-screen">
 
-                    {/* Button to create more shops */}
+                {/* Bar above to creat shops etc.... */}
+                    <div className="relative bg-gray-300 border-b border-gray-400 pb-5 sm:pb-0 w-screen h-30 ">
 
-                    <button onClick={() => (setEditClicked(false), setEditShop(null), setShowModal(true))} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
-                    Create Shop
-                    </button>
+                        <div className="relative pt-8 pl-10 text-2xl font-bold text-black">
+                           
+                           <div className="flex">
+                                <p> Manage Shops </p>
+                                <p className="pl-2"> |</p>
+                                <p className="pl-2"> {shops.data["length"]} Shops </p>
+                                {/* Button to create more shops */}
+
+                                <div className="absolute right-12 top-10  ">
+
+                                    <button 
+                                        onClick={() => (setEditClicked(false), setEditShop(null), setShowModal(true))} 
+                                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+                                        >
+                                    + Create Shop
+                                    </button>
+                                </div>
+                                
+                             </div> 
+                        </div>
+                        <div className="pl-10 mt-4">
+                            <div className="sm:hidden">
+                            <label htmlFor="current-tab" className="sr-only">
+                                Select a tab
+                            </label>
+                            <select
+                                id="current-tab"
+                                name="current-tab"
+                                className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
+                                defaultValue={tabs.find((tab) => tab.current).name}
+                            >
+                                {tabs.map((tab) => (
+                                <option key={tab.name}>{tab.name}</option>
+                                ))}
+                            </select>
+                            </div>
+                            <div className="hidden sm:block">
+                            <nav className="-mb-px flex space-x-8">
+                                {tabs.map((tab) => (
+                                <a
+                                    key={tab.name}
+                                    href={tab.href}
+                                    className={classNames(
+                                    tab.current
+                                        ? 'border-indigo-500 text-indigo-600'
+                                        : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
+                                    'whitespace-nowrap border-b-2 px-1 pb-4 text-sm font-medium'
+                                    )}
+                                    aria-current={tab.current ? 'page' : undefined}
+                                >
+                                    {tab.name}
+                                </a>
+                                ))}
+                            </nav>
+                            </div>
+                        </div>
+                    </div>
+
            
-                    <div className="grid h-screen place-items-center ">
+                    <div className="relative grid grid-cols-4 h-screen place-items-center ">
                         {/* TODO: Make map function IMAGES BELOW */}
                         <>
                         {shops.data.map((shop) => 
                             <div key={shop.shopID} className="w-80 rounded-2xl bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-1 shadow-xl">
                                 <div className="h-64 w-full bg-gray-200 flex flex-col justify-between p-4 bg-cover rounded-xl bg-center"
-                                     style={{backgroundImage: `url(${shop.shop_image_url ? shop.shop_image_url :'https://via.placeholder.com/500'})`}}
+                                     style={{backgroundImage: `url(${shop.shop_image_url})`}}
                                 >
                                     <div className="flex justify-between">
                                         <div className="relative h-32 w-32">
@@ -279,11 +368,14 @@ export default function useManageShops(){
                                         </div>
 
                                     </div>
-                                    <div className="relative flex space-x-40 -left-4 -bottom-4 w-full rounded-xl pl-2 bg-slate-800 bg-opacity-90">
+                                    
+                                    <div className="relative -left-4 -bottom-4 w-full h-18 rounded-xl pl-2 bg-slate-800 bg-opacity-90">
+                                        <p className="text-xl">{shop.shopName}</p>
+                                    <div className="relative flex space-x-40 -left-2  w-full h-10 rounded-xl pl-2 bg-slate-800 bg-opacity-90">
                                         <p className="text-2xl"> Open </p>
 
                                         {/*  Enable flag if open */}
-                                        {shop.open && !enabled && (setEnabled(true), console.log(enabled), setDisabled(false))}
+                                        {shop.open && !enabled && (setEnabled(true), console.log(enabled))}
                                         
                                         <Switch
                                             checked={shop.open}
@@ -330,19 +422,23 @@ export default function useManageShops(){
                                                     </span>
                                                 </span>
                                             </Switch>
+                                    </div>
 
                                     </div>
                                 </div>
                             </div>
                             )}
                         <div className="text-black">
-                            {showModal &&  <ManageShopsForm  userID={userID} images={images} setShowModal={setShowModal} editFlag={editClicked} formProps={editShop} />}
+                            {showModal &&  <ManageShopsForm getShops={setGetShops} shop={editShop} userID={userID} setSubmissionType={setSubmissionType} showModal={showModal} setShowModal={setShowModal} editFlag={editClicked} formProps={editShop} />}
                         </div>
+                        <ToastContainer/>
                         </>
 
                         
 
                     </div>
+
+
                     <Transition.Root show={open} as={Fragment}>
                     <Dialog as="div" className="relative z-10" onClose={setOpen}>
                         <Transition.Child
