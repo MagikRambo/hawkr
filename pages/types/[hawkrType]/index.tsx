@@ -23,7 +23,7 @@ type ExploreMenuProps = {
 
 export const getStaticPaths = async () => {
   const {data} = await get_hawkr_types();
-  const paths = data?.map(item => {
+  const paths = data?.map((item:any) => {
     return {
       params: {hawkrType: item.hawkrType.toString()}
     }
@@ -34,39 +34,18 @@ export const getStaticPaths = async () => {
   };
 }
 
-// export const getStaticProps = async ( ) => {
+export const getStaticProps: GetStaticProps = async ({params}:NonNullable<any>) => {
 
-//     // const {params} = context
-//     // console.log(context)
-    
-//     // console.log(type)
-//     // const id = params.id
-//     // console.log(id)
-//     // const {data} = await get_shops_by_id(id)
-//     // console.log(data)
-//     // console.log(error)
-//     // return {props: {shopData: data}}
-
-// }
-export const getStaticProps: GetStaticProps = async (context) => {
-    // console.log("THIS IS THE STATIC PROPS")
-    // console.log(context)
-    // console.log("context params", context.params.hawkrType)
-    // const data = null
-    const { data } = await get_shops_by_type(context.params.hawkrType);
-    // console.log(data)
+    const { data } = await get_shops_by_type(params.hawkrType);
     return { props: { shops: data } };
   };
 
 
-function Types_Dyn_Menu(props: ExploreMenuProps) {
+function SidePanelMenu(props: ExploreMenuProps) {
   const [curr_page, setCurrPage] = useState(1)
 
-  // console.log(props)
   const router = useRouter()
   const routerType = router.query.type
-
-
   //Hawkr-blue is #1498
   return (
       <main className="flex">
@@ -86,12 +65,11 @@ function Types_Dyn_Menu(props: ExploreMenuProps) {
                 ))}
             </div>
             <div className="flex flex-col items-center justify-center">
-              {/* TODO: Set up the links to the set-up hawkr page*/}
-              <Link href='#' className="text-xl font-medium text-black">Want to run your business?</Link>
-              <Link href='#'className="text-2xl font-bold text-sky-500">Setup a Hawkr</Link>
+              <Link href='/hawkrVendorInfo' className="text-xl font-medium text-black">Want to run your business?</Link>
+              <Link href='/hawkrVendorInfo'className="text-2xl font-bold text-sky-500">Setup a Hawkr</Link>
             </div>
-          {/* <Pagination curr_page_idx={curr_page} total_items={props.shops.length}  */}
-          {/* items_on_each_page={10} on_page_swith_to={(num)=>setCurrPage(num)}/> */}
+          <Pagination curr_page_idx={curr_page} total_items={props.shops.length} 
+          items_on_each_page={10} on_page_swith_to={(num)=>setCurrPage(num)}/>
         </section>
       </main>
   )
@@ -100,15 +78,15 @@ function Types_Dyn_Menu(props: ExploreMenuProps) {
 function Types_Dyn({ shops }: InferGetStaticPropsType<typeof getStaticProps>) {
 
   let [showOpen, setShowOpen] = useState(true)
+  let openShops = shops.filter( (shop:any) => shop.open )
 
   return (
     <>
-    {/* <h1> THIS IS A LANDING PAGE</h1> */}
       <div className="flex justify-between bg-slate-200">
         <Transition className="w-2/5" show={showOpen}
           enter='transition-all' enterFrom='opacity-0 w-0' enterTo='opacity-100 w-2/5'
           leave='transition-all' leaveFrom='opacity-100 w-2/5' leaveTo='opacity-0 w-0'>
-          <Types_Dyn_Menu shops={shops} />
+          <SidePanelMenu shops={openShops} />
         </Transition>
         <div className='relative grow'>
           <button className='absolute z-10 rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm
@@ -116,7 +94,7 @@ function Types_Dyn({ shops }: InferGetStaticPropsType<typeof getStaticProps>) {
             onClick={() => setShowOpen(!showOpen)}>
             {showOpen ? <Image width={23} height={23} alt="LeftArrow" src={LeftArrow.src} /> : <div className="flex text-blue-500 text-base"><Image width={20} height={20} alt="RightArrow" src={RightArrow.src} />Show List</div>}
           </button>
-          <Map shops={shops} />
+          <Map shops={openShops} />
         </div>
       </div>
     </>
