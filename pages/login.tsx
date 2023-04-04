@@ -59,11 +59,11 @@ const login: NextPage = () => {
         <div className='bg-sky-50' style={{ padding: '50px 0 100px 0' }}>
           {!session &&
             (
-            <div className='grid grid-cols-2 '>
+            <div className='sm:grid sm:grid-cols-2 '>
               {/*  GRID LAYOUT */}
 
               {/* Column 1 - Image*/}
-                <div className='border-r border-r-slate-700 m-5'>
+                <div className='border-r border-r-slate-700 m-5 sm:block hidden'>
                   <div className='h-screen flex justify-center items-center'>
                     {/* <h2 className='text-black'> THIS IS LEFT</h2> */}
                     <Image width={800} height={800} alt="hawkr logo" src={hawkr_pic} className='p-5'/>
@@ -72,7 +72,7 @@ const login: NextPage = () => {
               {/* Column 2 - Email form */}
 
               <div className=''>
-                <div className="flex-col pl-5 pt-44 md:w-full lg:w-[36rem] xl:w-[44rem] justify-start items-start text-black ">
+                <div className="flex-col p-5 sm:p-5 sm:pt-44 md:w-full lg:w-[36rem] xl:w-[44rem] justify-start items-start text-black ">
                   {/* Sign up segment and text */}
                   <h2 className='text-black md:text-4xl pb-5'> Welcome!</h2>
                   <div className='flex md:text-xl pl-5 pb-8 text-slate-500'>
