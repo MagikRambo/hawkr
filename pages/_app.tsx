@@ -9,8 +9,6 @@ import { SessionContextProvider, Session, useUser } from '@supabase/auth-helpers
 export default function App({ Component, pageProps }: AppProps<{initialSession: Session}>) {
   
   const [supabaseClient] = useState(() => createBrowserSupabaseClient())
-  type userType = Awaited<ReturnType<typeof supabaseClient.auth.getUser>> 
-  const [user, setUser] = useState<userType>()
   const MINUTE_MS =  15 * 60000;
   
   useEffect(() => {
@@ -23,20 +21,22 @@ export default function App({ Component, pageProps }: AppProps<{initialSession: 
 
         //get user
         const res_user = await supabaseClient.auth.getUser()
+        const userID = res_user.data.user?.id
 
         //update db only if vendor has active shop
-
-        const {data:openShops, error:openShopsError} = await supabaseClient
+        const {data:openTrackedShops, error:openShopsError} = await supabaseClient
         .from('shops')
         .select('*')
-        .eq('open', true)
-        
-        
+        .match(
+        {
+          vendorID: userID,
+          open: true,
+          liveTracking: true
+        })
 
         //update locations db
-        if(openShops && openShops["length"] > 0){
+        if(openTrackedShops && openTrackedShops["length"] > 0){
 
-          const userID = res_user.data.user?.id
           const { data, error } = await supabaseClient
           .from('locations')
           .update({ UUID: userID, location: userPosition })      
