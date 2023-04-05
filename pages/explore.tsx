@@ -70,7 +70,7 @@ function Explore({ shops }: InferGetStaticPropsType<typeof getStaticProps>) {
             onClick={() => setShowOpen(!showOpen)}> 
             {showOpen ? <Image width={23} height={23} alt="LeftArrow" src={LeftArrow.src} /> : <div className="flex text-blue-500 text-base"><Image width={20} height={20} alt="RightArrow" src={RightArrow.src} />Show List</div>}
           </button>
-          <ExploreMenu shops={openShops} />
+          <SidePanelMenu shops={openShops} />
         </Transition>
         <div className='relative grow'>
           <button className={'absolute z-10 sm:rounded sm:border border-gray-300 bg-white sm:px-2.5 sm:py-1.5 sm:text-xs font-medium text-gray-700 sm:shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:m-8' + (showOpen?"":"absolute m-5")}
