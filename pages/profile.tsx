@@ -109,12 +109,13 @@ function Profile(props:any){
   if(user)
     // if(state == 2)
     return (
-      <main className="bg-slate-200 justify-center">
-          <div className="py-36 px-44">
-            <img className="my-12 w-36 h-36 mx-auto rounded-full ring-4 ring-gray-300 hover:ring-5 hover:ring-slate-500"
+      <main className="bg-slate-200">
+          <div className="sm:py-36 sm:px-44">
+            <div className='h-20 sm:hidden'/>
+            <img className="w-36 h-36 mx-auto rounded-full ring-4 ring-gray-300 hover:ring-5 hover:ring-slate-500"
                 src="/img/hawkr_icon.png"
                 alt="Hawkr"/>
-            <h1 className="text-black font-bold text-3xl text-center">{name}</h1>
+            {/* <h1 className="text-black font-bold text-3xl text-center">{name}</h1> */}
             {state == 2 ? (
             <>
             <div className="flex justify-center">
@@ -126,7 +127,7 @@ function Profile(props:any){
               </button>
             </div>
             </>) : (<></>)}
-            <div className="py-1 px-80 content-center">
+            <div className="py-1 px-2.5 content-center">
               <h1 className="text-black py-10 font-bold text-3xl text-center">Description</h1>
               <textarea className='text-black block px-12 py-10 rounded-lg  ring-4 h-full w-full' value={description? description : ""} readOnly>
               </textarea>
@@ -137,7 +138,6 @@ function Profile(props:any){
             <>
               <h1 className="py-10 font-bold text-3xl text-center">Vendor Page</h1>
               <div className='block bg-white px-12 py-10 rounded-lg ring-gray-300 ring-4 h-full w-full'>
-                {/**Content of Vendor Page */}
               </div>
               </>) : (<></>)
             }
