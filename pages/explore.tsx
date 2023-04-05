@@ -117,7 +117,7 @@ function Explore({ shops }: InferGetStaticPropsType<typeof getStaticProps>) {
             onClick={() => setShowOpen(!showOpen)}>
             {showOpen ? <Image width={23} height={23} alt="LeftArrow" src={LeftArrow.src} /> : <div className="flex text-blue-500 text-base"><Image width={20} height={20} alt="RightArrow" src={RightArrow.src} />Show List</div>}
           </button>
-          <Map shops={shops} />
+          <Map shops={shops} showOpen={showOpen}/>
         </div>
       </div>
     </>
