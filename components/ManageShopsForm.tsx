@@ -38,9 +38,23 @@ type formProps = {
     messagesOn: Boolean,
 }
 
+interface IFormValues {
+    shopName: string,
+    shopDescription: string,
+    hawkrType: string,
+    file: FileList,
+    hoursOpen: string,
+    minutesOpen: string, 
+    ampmOpen: string,
+    hoursClosed: string,
+    minutesClosed: string,
+    ampmClosed: string,
+    liveTracking: Boolean,
+    messagesOn: Boolean,
+}
+
 
 export default function ManageShopsForm({getShops, shop, userID, setSubmissionType, showModal, setShowModal, editFlag, formProps}: ManageShopsFormProps){
-
     type ImageContent = Awaited<ReturnType<typeof getShopImage>>
 
     const [userLocation, setUserLocation] = useState<any>()
@@ -98,7 +112,7 @@ export default function ManageShopsForm({getShops, shop, userID, setSubmissionTy
         watch,
         reset,
         formState: { errors },
-      } = useForm({
+      } = useForm<IFormValues>({
         defaultValues: editDefaultValues
       });
     useEffect( () => {
