@@ -3,6 +3,8 @@ import { useUser } from '@supabase/auth-helpers-react';
 // import { HeartIcon } from '@heroicons/react/24/solid';
 import { useEffect, useState } from 'react';
 import { supabase } from '../utils/supabaseClient';
+
+import Image from 'next/image';
 type ShopCardProps = {
     hawkrType: string,
     location: {lat: number, lng: number},
@@ -10,6 +12,7 @@ type ShopCardProps = {
     shopID: string,
     shopName: string,
     open?: boolean,
+    shop_image_url: string
   }
 
   // <!-- Please refer: https://github.com/shubhamjain/svg-loader -->
@@ -20,6 +23,8 @@ export default function ShopCard(props: ShopCardProps){
   const [loading, setLoading] = useState<boolean>(false)
   const user = useUser();
   const userID = user?.id
+  const base_hawkr_img = 'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/base-hawkr/hawkr_icon.png'
+  const shopImage = props.shop_image_url ? props.shop_image_url : base_hawkr_img
 
   useEffect(() => {
     setLoading(true)
@@ -76,8 +81,12 @@ const retrieveFavoritesList = async () => {
 }
 
   return (
-    <main className="flex">
-      <section className='flex-grow h-screen pt-10 px-16 bg-slate-200 overflow-y-auto [&::-webkit-scrollbar]:hidden'>
+    <main className="flex text-slate-950">
+      <section className='flex-grow h-screen px-16 bg-slate-200 overflow-y-auto [&::-webkit-scrollbar]:hidden'>
+      {/* ~~~~~~~ EDITS NEED TO BE MADE HERE FOR IMAGE ~~~~~~~ */}
+      <div className='h-64 w-96 relative'>
+        <Image fill={true} src={shopImage} alt={`picture of the link ${shopImage}`}/>
+      </div>
         <div className='h-60'/>
         <div className='flex justify-between items-center'>
           <div>
@@ -104,12 +113,12 @@ const retrieveFavoritesList = async () => {
           <StarIcon className="h-10 cursor-pointer" />
           <StarIcon className="h-10 cursor-pointer" />
         </div>
-        <div className='py-2 mt-1 h-52'>
+        <div className='py-2 mt-1 h-52 text-black'>
           <textarea className='block h-full w-full rounded-md border-gray-300 shadow-sm focus:border-cyan-500 focus:ring-cyan-500 sm:text-sm'/>
         </div>
         <div className="mt-2 flex justify-end">
         <button type="submit"
-          className="inline-flex items-center rounded-md border border-transparent bg-cyan-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+          className="inline-flex mb-10 items-center rounded-md border border-transparent bg-cyan-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
           Post
         </button>
       </div>

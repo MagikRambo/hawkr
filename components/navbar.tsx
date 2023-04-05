@@ -8,8 +8,9 @@ import { useSession, useSupabaseClient, useUser } from '@supabase/auth-helpers-r
 import { useState } from 'react'
 import TypesMenu from './typesMenu'
 import { Router, useRouter } from 'next/router'
-import get_vendor_by_id from '../pages/api/getVendorById'
+import get_vendor_by_id from '../pages/api/getVendorByID'
 import { Database } from '../utils/database.types'
+import FavoritesList from '../pages/favoritesList';
 type Profiles = Database['public']['Tables']['profiles']['Row']
 
 
@@ -18,7 +19,7 @@ function classNames(...classes: string[]) {
 }
 
 type NavProps = {
-    handleOpen: (o: boolean, idx:number) => void,
+    handleOpen: (o: boolean, idx: number) => void,
     curr_idx: number,
     shops: any,
 };
@@ -27,11 +28,11 @@ type NavState = {
 };
 
 
-function Navbar (){
+function Navbar() {
     const [exploreOpen, setExploreOpen] = useState(false)
-    const [typesOpen, setTypesOpen] = useState(false)  
+    const [typesOpen, setTypesOpen] = useState(false)
     const [currIdx, setCurIdx] = useState(0)
-    const [vendor, setVendor] = useState<VendorContent>()    
+    const [vendor, setVendor] = useState<VendorContent>()
     const router = useRouter()
     const session = useSession()
     const supabase = useSupabaseClient()
@@ -48,10 +49,9 @@ function Navbar (){
 
 
     // FETCH THE VENDOR DATA
-    useEffect( () => {
-        const getVendor = async () =>{
-            if (userID)
-            {
+    useEffect(() => {
+        const getVendor = async () => {
+            if (userID) {
                 const v = await get_vendor_by_id(userID.toString())
                 setVendor(v)
                 loadData()
@@ -59,23 +59,23 @@ function Navbar (){
         }
         getVendor().catch(console.error)
     }, [user])
-    console.log('vendor nav: ',vendor)
-      // End Supabase user code
+    console.log('vendor nav: ', vendor)
+    // End Supabase user code
 
 
-    async function signOut(){
-        try{
-            if(!user){
-                
+    async function signOut() {
+        try {
+            if (!user) {
+
                 throw Error('No user')
-            } 
+            }
 
             await supabase.auth.signOut()
 
             // window.location.href = "/login"
             router.push('/login')
         }
-        catch(error){
+        catch (error) {
             alert(error)
             console.log("Catch: ", error)
         }
@@ -83,57 +83,41 @@ function Navbar (){
 
     async function loadData() {
         try {
-          setLoading(true)
-          if (!user) throw new Error('No user')
-    
-          let { data, error, status } = await supabase
-            .from('profiles')
-            .select(`*`)
-            .eq('UUID', user.id)
-            .single()
-          
-          if (status == 406){
-            console.log("error: no user found")
-          }
-          if (error && status !== 406) {
-            console.log("error: ", error.message)
-          }
-          
-          // setData(data)
-          if (data) {
-            setUUID(data.UUID)
-            setState(data.state)
-            setName(data.name)
-          }
+            setLoading(true)
+            if (!user) throw new Error('No user')
+
+            let { data, error, status } = await supabase
+                .from('profiles')
+                .select(`*`)
+                .eq('UUID', user.id)
+                .single()
+
+            if (status == 406) {
+                console.log("error: no user found")
+            }
+            if (error && status !== 406) {
+                console.log("error: ", error.message)
+            }
+
+            // setData(data)
+            if (data) {
+                setUUID(data.UUID)
+                setState(data.state)
+                setName(data.name)
+            }
         } catch (error) {
-          console.log("error: ", error)
-          console.log(error)
+            console.log("error: ", error)
+            console.log(error)
         } finally {
-          setLoading(false)
-        }
-      }
-    
-    const setOpen = (o: boolean, idx:number) => {
-        console.log(o,idx)
-        if(idx == 1){
-            setExploreOpen(o)
-            setCurIdx(idx)
-        } 
-        else if (idx == 2){
-            setTypesOpen(o)
-            setCurIdx(idx)
-        }
-        else{
-            setExploreOpen(false)
-            setTypesOpen(false)
-            setCurIdx(0)
+            setLoading(false)
         }
     }
+
     return (
-        <>
         <Disclosure as="nav" className="bg-white shadow w-screen">
             {({ open }) => (
                 <>
+                    {/* For Webpage */}
                     <div className="mx-auto max-w-7xl px-2 sm:px-4 lg:px-8">
                         <div className="flex h-16 justify-between">
                             <div className="flex px-2 lg:px-0">
@@ -154,19 +138,18 @@ function Navbar (){
                                 <div className="hidden lg:ml-6 lg:flex lg:space-x-8">
                                     {/* Current: "border-cyan-400 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" */}
                                     <Link href="/explore"
-                                        onClick={()=>setOpen(true, 1)}
                                         className={classNames(currIdx == 1 ? "border-cyan-400 text-gray-900" : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
                                             "inline-flex items-center border-b-4 px-1 pt-1 text-sm font-medium")}
                                     >
                                         Explore Nearby
                                     </Link>
-                                    <Link
-                                        href="/types" onClick={()=>setOpen(true, 2)}
+                                    <a
+                                        href="/types"
                                         className={classNames(currIdx == 2 ? "border-cyan-400 text-gray-900" : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
                                             "inline-flex items-center border-b-4 px-1 pt-1 text-sm font-medium")}
                                     >
                                         Hawkr Type
-                                    </Link>
+                                    </a>
                                 </div>
                             </div>
                             <div className="flex flex-1 items-center px-2 lg:ml-6 lg:justify-center">
@@ -200,206 +183,201 @@ function Navbar (){
                                 </Disclosure.Button>
                             </div>
                             <div className="hidden lg:ml-4 lg:flex lg:items-center">
-                                {! session? (
-                                <Link
-                                    href="/login"  onClick={()=>setOpen(true, 3)}
-                                    className={classNames(currIdx == 3 ? "border-cyan-400 text-gray-900" : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
-                                        "inline-flex items-center border-b-4 px-1 pt-1 text-sm font-medium")}
-                                        >
-                                            Sign In
-                                </Link>) : (
-                                   <>
-                                   {vendor && vendor.data && vendor.data['length'] > 0 && vendor.data[0]["state"] >= 1 && (<Link
-                                        href="/favoritesList" onClick={()=>setOpen(true,3)}
+                                {!session ? (
+                                    <Link
+                                        href="/login"
                                         className={classNames(currIdx == 3 ? "border-cyan-400 text-gray-900" : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
                                             "inline-flex items-center border-b-4 px-1 pt-1 text-sm font-medium")}
-                                            >
-                                                 Favorites List 
-                                    </Link>)}
-                                    {vendor && vendor.data && vendor.data['length'] > 0 && vendor.data[0]["state"] === 2 && (<Link
-                                        href="/manageShops" onClick={()=>setOpen(true,3)}
-                                        className={classNames(currIdx == 3 ? "border-cyan-400 text-gray-900" : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
-                                            "inline-flex items-center border-b-4 px-1 pt-1 text-sm font-medium")}
-                                            >
-                                                 Manage Shops
-                                    </Link>)}
-                                    {vendor && vendor.data && vendor.data['length'] > 0 &&  vendor.data[0]["state"] == 1 && (<Link
-                                        href="/becomeVendor" onClick={() => setOpen(true, 3)}
-                                        className={classNames(currIdx == 3 ? "border-cyan-400 text-gray-900" : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
-                                        "inline-flex items-center border-b-4 px-1 pt-1 text-sm font-medium")}
-                                        >
-                                            Become Vendor
-                                        </Link>)}
-                                   <button
-                                        type="button"
-                                        className="flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2"
                                     >
-                                        <span className="sr-only">View notifications</span>
-                                        <BellIcon className="h-6 w-6" aria-hidden="true" />
-                                    </button>
-
-                                    {/* Profile dropdown */}
-                                    <Menu as="div" className="relative ml-4 flex-shrink-0">
-                                        <div>
-                                            <Menu.Button className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2">
-                                                <span className="sr-only">Open user menu</span>
-                                                <img
-                                                    className="h-8 w-8 rounded-full"
-                                                    src="/img/hawkr_icon.png"
-                                                    alt=""
-                                                />
-                                            </Menu.Button>
-                                        </div>
-                                        <Transition
-                                            as={Fragment}
-                                            enter="transition ease-out duration-100"
-                                            enterFrom="transform opacity-0 scale-95"
-                                            enterTo="transform opacity-100 scale-100"
-                                            leave="transition ease-in duration-75"
-                                            leaveFrom="transform opacity-100 scale-100"
-                                            leaveTo="transform opacity-0 scale-95"
+                                        Sign In
+                                    </Link>) : (
+                                    <>
+                                        <button
+                                            type="button"
+                                            className="flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2"
                                         >
-                                            <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                                <Menu.Item>
-                                                    {({ active }) => (
-                                                        <Link
-                                                            href="/profile"
-                                                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                                                        >
-                                                            Profile
-                                                        </Link>
-                                                    )}
-                                                </Menu.Item>
-                                                <Menu.Item>
-                                                    {({ active }) => (
-                                                        <Link
-                                                            href="#"
-                                                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                                                        >
-                                                            Messages
-                                                        </Link>
-                                                    )}
-                                                </Menu.Item>
-                                                <Menu.Item>
-                                                    {({ active }) => (
-                                                        <Link
-                                                            href="#"
-                                                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                                                        >
-                                                            History
-                                                        </Link>
-                                                    )}
-                                                </Menu.Item>
-                                                <Menu.Item>
-                                                    {({ active }) => (
-                                                        <a
-                                                            href="#"
-                                                            onClick={() => {signOut()}}
-                                                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                                                        >
-                                                            Sign out
-                                                        </a>
-                                                    )}
-                                                </Menu.Item>
-                                            </Menu.Items>
-                                        </Transition>
-                                    </Menu>
-                                   </> 
+                                            <span className="sr-only">View notifications</span>
+                                            <BellIcon className="h-6 w-6" aria-hidden="true" />
+                                        </button>
+
+                                        {/* Profile dropdown */}
+                                        <Menu as="div" className="relative ml-4 flex-shrink-0">
+                                            <div>
+                                                <Menu.Button className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2">
+                                                    <span className="sr-only">Open user menu</span>
+                                                    <img
+                                                        className="h-8 w-8 rounded-full"
+                                                        src="/img/hawkr_icon.png"
+                                                        alt=""
+                                                    />
+                                                </Menu.Button>
+                                            </div>
+                                            <Transition
+                                                as={Fragment}
+                                                enter="transition ease-out duration-100"
+                                                enterFrom="transform opacity-0 scale-95"
+                                                enterTo="transform opacity-100 scale-100"
+                                                leave="transition ease-in duration-75"
+                                                leaveFrom="transform opacity-100 scale-100"
+                                                leaveTo="transform opacity-0 scale-95"
+                                            >
+                                                <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                                    <Menu.Item>
+                                                        {({ active }) => (
+                                                            <a
+                                                                href="/profile"
+                                                                className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                                            >
+                                                                Profile
+                                                            </a>
+                                                        )}
+                                                    </Menu.Item>
+
+                                                    {vendor && vendor.data && vendor.data['length'] > 0 && vendor.data[0]["state"] == 1 && (
+                                                        <Menu.Item>
+                                                            {({ active }) => (<a href="/favoritesList" className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}>
+                                                                Favorites List
+                                                            </a>)}
+                                                        </Menu.Item>)}
+
+                                                    {vendor && vendor.data && vendor.data['length'] > 0 && vendor.data[0]["state"] == 2 && (
+                                                        <Menu.Item>
+                                                            {({ active }) => (<a href="/manageShops" className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}>
+                                                                Manage Shops
+                                                            </a>)}
+                                                        </Menu.Item>)}
+
+                                                    {vendor && vendor.data && vendor.data['length'] > 0 && vendor.data[0]["state"] == 1 && (
+                                                        <Menu.Item>
+                                                            {({ active }) => (<a href="/becomeVendor" className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}>
+                                                                Become Vendor
+                                                            </a>)}
+                                                        </Menu.Item>)}
+
+                                                    {/* <Menu.Item>
+                                                            {({ active }) => (
+                                                                <Link href="#" className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}>
+                                                                    Messages</Link>)}
+                                                        </Menu.Item>
+                                                        <Menu.Item>
+                                                            {({ active }) => ( <Link href="#" className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}>
+                                                                    History</Link>)}
+                                                        </Menu.Item> */}
+
+                                                    <Menu.Item>
+                                                        {({ active }) => (
+                                                            <a
+                                                                href="#"
+                                                                onClick={() => { signOut() }}
+                                                                className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                                            >
+                                                                Sign out
+                                                            </a>
+                                                        )}
+                                                    </Menu.Item>
+                                                </Menu.Items>
+                                            </Transition>
+                                        </Menu>
+                                    </>
                                 )}
-
-
                             </div>
                         </div>
                     </div>
                     {/* For smaller screens */}
-                    {! session? (
-                        <Disclosure.Panel className="lg:hidden">
-                            <div className="border-t border-gray-200 pt-4 pb-3">
-                                <Link
-                                    href="/login"  onClick={()=>setOpen(true, 3)}
-                                    className={classNames(currIdx == 3 ? "border-cyan-400 text-gray-900" : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
-                                        "inline-flex items-center border-b-4 px-1 pt-1 text-sm font-medium")}
+                    {!session ?
+                        (
+                            <Disclosure.Panel className="lg:hidden">
+                                {/** not Signed in*/}
+                                <div className="border-t border-gray-200 pt-4 pb-3">
+                                    <Disclosure.Button as='a'
+                                        href="/explore" className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
+                                    >
+                                        Explore Nearby
+                                    </Disclosure.Button>
+                                    <Disclosure.Button as='a'
+                                        href="/types" className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
+                                    >
+                                        Hawkr Types
+                                    </Disclosure.Button>
+                                    <Disclosure.Button as='a'
+                                        href="/login" className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800">
+                                        Sign In
+                                    </Disclosure.Button>
+                                </div>
+                            </Disclosure.Panel>
+                        ) : (
+                            <Disclosure.Panel className="lg:hidden">
+                                {/** Signed in*/}
+                                <div className="border-t border-gray-200 pt-4 pb-3">
+                                    <div className="flex items-center px-4">
+                                        <div className="flex-shrink-0">
+                                            <img
+                                                className="h-10 w-10 rounded-full"
+                                                src="/img/hawkr_icon.png"
+                                                alt=""
+                                            />
+                                        </div>
+                                        <div className="ml-3">
+                                            <div className="text-base font-medium text-gray-800">{name}</div>
+                                            {/* <div className="text-sm font-medium text-gray-500">tom@example.com</div> */}
+                                        </div>
+                                        <button
+                                            type="button"
+                                            className="mr-auto flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2"
                                         >
-                                            Sign In
-                                </Link>
-                            </div>
-                        </Disclosure.Panel>
-                    ) : (
-                        <Disclosure.Panel className="lg:hidden">
-                        <div className="border-t border-gray-200 pt-4 pb-3">
-                            <div className="flex items-center px-4">
-                                <div className="flex-shrink-0">
-                                    <img
-                                        className="h-10 w-10 rounded-full"
-                                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                        alt=""
-                                    />
-                                </div>
-                                <div className="ml-3">
-                                    <div className="text-base font-medium text-gray-800">{name}</div>
-                                    {/* <div className="text-sm font-medium text-gray-500">tom@example.com</div> */}
-                                </div>
-                                <button
-                                    type="button"
-                                    className="mr-auto flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2"
-                                >
-                                    <span className="sr-only">View notifications</span>
-                                    <BellIcon className="h-6 w-6" aria-hidden="true" />
-                                </button>
-                            </div>
-                            <div className="mt-3 space-y-1">
-                                <Disclosure.Button
-                                    as="a"
-                                    href="./profile"
-                                    className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
-                                >
-                                    Profile
-                                </Disclosure.Button>
-                                <Disclosure.Button
-                                    as="a"
-                                    href="#"
-                                    className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
-                                >
-                                    Settings
-                                </Disclosure.Button>
-                                {/* TODO: FIX Positioning of these buttons */}
-                                {vendor && vendor.data && vendor.data['length'] > 0 && vendor.data[0]["state"] >= 1 && (<Link
-                                        href="/favoritesList" onClick={()=>setOpen(true,3)}
-                                        className={classNames(currIdx == 3 ? "border-cyan-400 text-gray-900" : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
-                                            "inline-flex items-center border-b-4 px-1 pt-1 text-sm font-medium")}
-                                            >
-                                                 Favorites List
-                                    </Link>)}
-                                {vendor && vendor.data && vendor.data['length'] > 0 && vendor.data[0]["state"] === 2 && (<Link
-                                        href="/manageShops" onClick={()=>setOpen(true,3)}
-                                        className={classNames(currIdx == 3 ? "border-cyan-400 text-gray-900" : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
-                                            "inline-flex items-center border-b-4 px-1 pt-1 text-sm font-medium")}
-                                            >
-                                                 Manage Shops
-                                    </Link>)}
-                                    {vendor && vendor.data && vendor.data['length'] > 0 &&  vendor.data[0]["state"] == 1 && (<Link
-                                        href="/becomeVendor" onClick={() => setOpen(true, 3)}
-                                        className={classNames(currIdx == 3 ? "border-cyan-400 text-gray-900" : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
-                                        "inline-flex items-center border-b-4 px-1 pt-1 text-sm font-medium")}
+                                            <span className="sr-only">View notifications</span>
+                                            <BellIcon className="h-6 w-6" aria-hidden="true" />
+                                        </button>
+                                    </div>
+                                    <div className="mt-3 space-y-1">
+                                        <Disclosure.Button
+                                            as="a"
+                                            href="./profile"
+                                            className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
+                                        >
+                                            Profile
+                                        </Disclosure.Button>
+                                        <Disclosure.Button as='a'
+                                            href="/explore" className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
+                                        >
+                                            Explore Nearby
+                                        </Disclosure.Button>
+                                        <Disclosure.Button as='a'
+                                            href="/types" className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
+                                        >
+                                            Hawkr Types
+                                        </Disclosure.Button>
+                                        {vendor && vendor.data && vendor.data['length'] > 0 && vendor.data[0]["state"] >= 1 && (<Link
+                                            href="/favoritesList"
+                                            className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
+                                        >
+                                            Favorites List
+                                        </Link>)}
+                                        {vendor && vendor.data && vendor.data['length'] > 0 && vendor.data[0]["state"] === 2 && (<Link
+                                            href="/manageShops"
+                                            className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
+                                        >
+                                            Manage Shops
+                                        </Link>)}
+                                        {vendor && vendor.data && vendor.data['length'] > 0 && vendor.data[0]["state"] == 1 && (<Link
+                                            href="/becomeVendor"
+                                            className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
                                         >
                                             Become Vendor
                                         </Link>)}
-                                <Disclosure.Button
-                                    
-                                    onClick={() => {signOut()} }
-                                    className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
-                                >
-                                    Sign out
-                                </Disclosure.Button>
-                            </div>
-                        </div>
-                    </Disclosure.Panel>)}
+                                        <Disclosure.Button
+
+                                            onClick={() => { signOut() }}
+                                            className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
+                                        >
+                                            Sign out
+                                        </Disclosure.Button>
+                                    </div>
+                                </div>
+                            </Disclosure.Panel>)}
                 </>
             )}
         </Disclosure>
-        {/* <ExploreMenu handleOpen={setOpen} open={exploreOpen} /> */}
-        {/* <TypesMenu handleOpen={setOpen} open={typesOpen} /> */}
-        </>
     )
 
 }
