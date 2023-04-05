@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from 'react'
-import Map from './Map';
+import Map from '../components/Map';
 import { Transition } from '@headlessui/react'
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import getShopsWithLocations from './api/getVendors';
@@ -80,11 +80,11 @@ function TypesMenu(props: TypesMenuProps) {
                     title={item}
                   />
                 </Link>
-              </>
-            ))}
-            <Link href='#' onClick={reverseGeocode}>
+                </>
+              ))}
+            {/* <Link href='#' onClick={reverseGeocode}>
               APPLE BEES
-            </Link>
+            </Link> */}
           </div>
         </section>
       </main>

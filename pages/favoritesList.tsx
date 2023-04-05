@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Map from './Map';
+import Map from '../components/Map';
 import { Transition } from '@headlessui/react'
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import getShopsWithLocations from './api/getVendors';

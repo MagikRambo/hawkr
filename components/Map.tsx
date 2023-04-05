@@ -4,7 +4,7 @@ import { GetStaticProps, InferGetServerSidePropsType, InferGetStaticPropsType } 
 // import { useQuery } from 'react-query'
 
 // Components
-import CurrentLocation from '../components/CurrentLocation';
+import CurrentLocation from './CurrentLocation';
 
 //Map Settings
 import { containerStyle, center, options } from './settings';
@@ -25,6 +25,7 @@ export type MarkerType = {
 };
 
   export default function Map({shops}:any, showOpen:boolean) {
+
     const { isLoaded } = useLoadScript({
       id: 'google-map-script',
       googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_KEY!,
@@ -60,6 +61,7 @@ export type MarkerType = {
         }
       });
     }
+    return userCurLocation;
   }
   
   const moveTo = (position: google.maps.LatLngLiteral) => {
@@ -94,6 +96,7 @@ export type MarkerType = {
       <GoogleMap
         mapContainerStyle={containerStyle}
         options={options as google.maps.MapOptions}
+        // This looks like it should be kept?
         center={getUserCurrentLocation()}
         zoom={14}
         onLoad={onLoad}
@@ -102,6 +105,7 @@ export type MarkerType = {
         >
         {clickedPos.lat ? <Marker position={clickedPos} /> : null}
         {clickedPos.lat ? shops?.map((marker:any) => (
+
           <Marker
           key={marker.shopsID}
           position={marker.location}

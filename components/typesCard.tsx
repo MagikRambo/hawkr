@@ -24,6 +24,7 @@ function TypesCard(TCProps:TypesCardProps) {
     >
       <div className="relative h-24 w-40 md:h-24 md:w-40 flex-shrink-0">
         <Image
+          alt="TCProps"
           src={TCProps.img}
           layout="fill"
           objectFit="cover"

@@ -2,9 +2,9 @@ import { useSessionContext, useUser } from "@supabase/auth-helpers-react"
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react"
 import { supabase } from "../utils/supabaseClient";
-import get_vendor_by_id from "./api/getVendorByID";
+import get_vendor_by_id from "./api/getVendorById";
 
-export default function vendorExample(){
+export default function useVendorExample(){
 
 
     // console.log(userID)

@@ -4,7 +4,7 @@ import { Fragment, useEffect, useState } from "react"
 import { useForm } from "react-hook-form";
 import { supabase } from "../utils/supabaseClient";
 import { getShopImage, uploadShopImage } from "./api/cdnHelpers";
-import get_vendor_by_id from "./api/getVendorByID";
+import get_vendor_by_id from "./api/getVendorById";
 import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -19,7 +19,7 @@ function classNames(...classes:any) {
     return classes.filter(Boolean).join(' ')
   }
 
-export default function manageShops(){
+export default function useManageShops(){
 
     const supabase = useSupabaseClient();
 
@@ -63,7 +63,7 @@ export default function manageShops(){
 
       ]
       
-      function classNames(...classes) {
+      function classNames(...classes:any[]) {
         return classes.filter(Boolean).join(' ')
       }
 
@@ -298,7 +298,7 @@ export default function manageShops(){
                                 id="current-tab"
                                 name="current-tab"
                                 className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
-                                defaultValue={tabs.find((tab) => tab.current).name}
+                                defaultValue={tabs.find((tab:any) => tab.current)!.name}
                             >
                                 {tabs.map((tab) => (
                                 <option key={tab.name}>{tab.name}</option>
@@ -331,8 +331,8 @@ export default function manageShops(){
                     <div className="relative grid grid-cols-4 h-screen place-items-center ">
                         {/* TODO: Make map function IMAGES BELOW */}
                         <>
-                        {shops.data.map((shop) => 
-                            <div className="w-80 rounded-2xl bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-1 shadow-xl">
+                        {shops.data.map((shop:any) => 
+                            <div key={shop.shopID} className="w-80 rounded-2xl bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-1 shadow-xl">
                                 <div className="h-64 w-full bg-gray-200 flex flex-col justify-between p-4 bg-cover rounded-xl bg-center"
                                      style={{backgroundImage: `url(${shop.shop_image_url})`}}
                                 >

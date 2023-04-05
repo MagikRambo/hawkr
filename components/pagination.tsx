@@ -64,7 +64,7 @@ export default function Pagination(props: PaginationProps) {
 
             {/** Buttons in pagination */}
             {pages?.map((item: number)=>(
-              <button className={getItemStyle(item)} onClick={() => props.on_page_swith_to(item)}>
+              <button key={item} className={getItemStyle(item)} onClick={() => props.on_page_swith_to(item)}>
                 {item}
               </button>
             ))}
