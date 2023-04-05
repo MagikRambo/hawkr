@@ -13,7 +13,7 @@ function CurrentLocation({moveTo, showOpen}:Props) {
   return (
     <>
     <button
-      className= {(showOpen? 'sm:block hidden ':'') + 'absolute z-[5] right-5 rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 m-8'}
+      className= {(showOpen? '':'') + 'absolute z-[5] right-5 rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 m-8'}
       disabled={disabled}
       onClick={() => {
         // Deactivate button when geolocation is working
