@@ -1,5 +1,5 @@
 import { useUser } from "@supabase/auth-helpers-react"
-import { Fragment, Dispatch, SetStateAction, useEffect, useState } from "react"
+import { Fragment, Dispatch, SetStateAction, useEffect, useState, useId } from "react"
 import { useForm } from "react-hook-form";
 import { supabase } from "../utils/supabaseClient";
 import {getShopImage, removeShopImage, uploadShopImage } from "../pages/api/cdnHelpers";
@@ -202,7 +202,7 @@ export default function ManageShopsForm({getShops, shop, userID, setSubmissionTy
 
                 //remove  existing image and upload new one
                 console.log(user?.id, shopID)
-                await uploadShopImage(file, supabase, user?.id, shopID)
+                await uploadShopImage(file, supabase, userID, shopID)
         
                 console.log('USE STATE CONTENT OF IMAGES: ', images)
 
@@ -259,14 +259,15 @@ export default function ManageShopsForm({getShops, shop, userID, setSubmissionTy
 
                 const {data:resShopImage, error:resShopImageError } = await getShopImage(userID, shopID, supabase)
 
-                const shopImage = resShopImage[0]
-
-                
-                if( resShopImage["length"] > 0){
-                    await removeShopImage(shopImage.name, supabase, user?.id, shopID)
+                if(resShopImage){
+                    const shopImage = resShopImage[0]
+                    
+                    if( resShopImage["length"] > 0){
+                        await removeShopImage(shopImage.name, supabase, userID, shopID)
+                    }
                 }
-
-                await uploadShopImage(formData.file[0], supabase, user?.id, shopID)
+                    
+                await uploadShopImage(formData.file[0], supabase, userID, shopID)
 
                 img_src =`${SHOP_CDN_URL}/${userID}/${shopID}/${formData.file[0].name}`
                 
@@ -297,13 +298,17 @@ export default function ManageShopsForm({getShops, shop, userID, setSubmissionTy
                 //Update with already existing image
                 var img_src
                 const {data:resShopImage, error:resShopImageError } = await getShopImage(userID, shopID, supabase)
+                
+                if(resShopImage){
                 const shopImage = resShopImage[0]
-
-                if(resShopImage["length"] > 0){
-                    img_src =`${SHOP_CDN_URL}/${userID}/${shopID}/${shopImage.name}`
-                }else{
-                    img_src = base_hawkr_img
+                
+                    if(resShopImage["length"] > 0){
+                        img_src =`${SHOP_CDN_URL}/${userID}/${shopID}/${shopImage.name}`
+                    }else{
+                        img_src = base_hawkr_img
+                    }
                 }
+                
 
                 const {data, error} = await supabase
                 .from('shops')

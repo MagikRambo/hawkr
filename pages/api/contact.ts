@@ -24,7 +24,7 @@ const generateEmailContent = (data:any) => {
   };
 };
 
-export default async function (req, res) {
+export default async function (req:any, res:any) {
     // require("env.local").config();
   
     // "use strict";
@@ -45,7 +45,7 @@ export default async function (req, res) {
       subject: req.body.subject,
     };
     await new Promise((resolve, reject) => {
-      transporter.sendMail(mailData, function (err, info) {
+      transporter.sendMail(mailData, function (err:any, info:any) {
         if (err) {
           console.log(err);
           reject(err);

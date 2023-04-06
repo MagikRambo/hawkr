@@ -54,9 +54,8 @@ function SidePanelMenu(props: ExploreMenuProps) {
 
             <div className="flex flex-col">
               {props.shops?.map((item: any) => (
-                <Link href={`/shops/${item.shopID}`}>
+                <Link key={item.shopID} href={`/shops/${item.shopID}`}>
                 <InfoCard
-                  key={item.shopID}
                   img={hawkr_icon}
                   description={item.shopDescription}
                   title={item.shopName}

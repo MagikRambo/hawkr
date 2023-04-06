@@ -1,6 +1,9 @@
 import { useSupabaseClient } from "@supabase/auth-helpers-react"
 import { createClient } from "@supabase/supabase-js";
-import { useState } from "react"
+import { Dispatch, useState } from "react"
+import {supabase} from '../../utils/supabaseClient'
+
+
 
 // const supabase = useSupabaseClient();
 // const [images, setImages] = useState<any>([]);
@@ -8,7 +11,9 @@ import { useState } from "react"
 //https://www.youtube.com/watch?v=8tfdY0Sf2rA&t=210s
 // Video helps with functions above ^
 
-export async function getBaseHawkrImage(supabase){
+type supabaseType = typeof supabase
+
+export async function getBaseHawkrImage(supabase : supabaseType){
 
     const {data, error} = await supabase
     .storage
@@ -36,7 +41,7 @@ export async function getBaseHawkrImage(supabase){
 }
 
 // TO be utilized in 'Create a Shop' or 'Edit a shop'
-export async function uploadShopImage(e, supabase, userID, shopID){
+export async function uploadShopImage(e:any, supabase:supabaseType, userID:string, shopID:string){
 
     console.log('uploadShop Image Function!! : ', e)
 
@@ -63,10 +68,9 @@ export async function uploadShopImage(e, supabase, userID, shopID){
     }
 }
 
-export async function uploadProfileImage(e,user){
+export async function uploadProfileImage(e:any, supabase:supabaseType, user:any){
     console.log(e.target.files)
     let file = e.target.files[0]
-    const supabase = useSupabaseClient();
 
     const {data, error} = await supabase
     .storage
@@ -82,7 +86,7 @@ export async function uploadProfileImage(e,user){
     }
 }
 
-export async function removeShopImage(e, supabase, userID, shopID){
+export async function removeShopImage(e:any, supabase:supabaseType, userID:string, shopID:string){
     
     let file_name = e
     const path = `${userID}/${shopID}/${file_name}`
@@ -103,7 +107,7 @@ export async function removeShopImage(e, supabase, userID, shopID){
 
 }
 
-export async function replaceShopImage(old_path, file, supabase, userID, shopID){
+export async function replaceShopImage(old_path:string, file:string, supabase:supabaseType, userID:string, shopID:string){
 
     console.log(old_path)
     console.log(file)
@@ -118,7 +122,7 @@ export async function replaceShopImage(old_path, file, supabase, userID, shopID)
 
 }
 
-export async function getShopImage(userID, shopID, supabase){
+export async function getShopImage(userID:string, shopID:string, supabase:supabaseType){
     
     const {data, error} = await supabase
     .storage
@@ -147,7 +151,7 @@ export async function getShopImage(userID, shopID, supabase){
         }
     }
 }
-export async function getProfileImage(profileID, supabase, setImages){
+export async function getProfileImage(profileID:string, supabase:supabaseType, setImages:Dispatch<any>){
     const {data, error} = await supabase
     .storage
     .from('shop-images')

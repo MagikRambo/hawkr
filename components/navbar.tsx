@@ -8,8 +8,10 @@ import { useSession, useSupabaseClient, useUser } from '@supabase/auth-helpers-r
 import { useState } from 'react'
 import TypesMenu from './typesMenu'
 import { Router, useRouter } from 'next/router'
-import get_vendor_by_id from '../pages/api/getVendorByID'
+import getVendorById from '../pages/api/getVendorById'
 import { Database } from '../utils/database.types'
+
+import Image from 'next/image'
 import FavoritesList from '../pages/favoritesList';
 type Profiles = Database['public']['Tables']['profiles']['Row']
 
@@ -37,7 +39,7 @@ function Navbar() {
     const session = useSession()
     const supabase = useSupabaseClient()
 
-    type VendorContent = Awaited<ReturnType<typeof get_vendor_by_id>>
+    type VendorContent = Awaited<ReturnType<typeof getVendorById>>
 
     // Start Supabase user code
     const user = useUser()
@@ -52,7 +54,7 @@ function Navbar() {
     useEffect(() => {
         const getVendor = async () => {
             if (userID) {
-                const v = await get_vendor_by_id(userID.toString())
+                const v = await getVendorById(userID.toString())
                 setVendor(v)
                 loadData()
             }
@@ -123,16 +125,24 @@ function Navbar() {
                             <div className="flex px-2 lg:px-0">
                                 <div className="flex flex-shrink-0 items-center">
                                     <Link href="/#">
-                                        <img
-                                            className="block h-8 w-auto lg:hidden"
-                                            src="/img/hawkr_icon.png"
-                                            alt="Hawkr"
-                                        />
-                                        <img
-                                            className="hidden h-8 w-auto lg:block"
-                                            src="/img/hawkr_icon.png"
-                                            alt="Hawkr"
-                                        />
+                                        {/* <div className='h-8 w-8'> */}
+
+                                            <Image
+                                                height={100}
+                                                width={100}
+                                                className="block h-8 w-auto lg:hidden"
+                                                src="/img/hawkr_icon.png"
+                                                alt="Hawkr"
+                                                />
+                                            <Image
+                                                // fill={true}
+                                                height={100}
+                                                width={100}
+                                                className="hidden h-8 w-auto lg:block"
+                                                src="/img/hawkr_icon.png"
+                                                alt="Hawkr"
+                                                />
+                                        {/* </div> */}
                                     </Link>
                                 </div>
                                 <div className="hidden lg:ml-6 lg:flex lg:space-x-8">
@@ -143,13 +153,13 @@ function Navbar() {
                                     >
                                         Explore Nearby
                                     </Link>
-                                    <a
+                                    <Link
                                         href="/types"
                                         className={classNames(currIdx == 2 ? "border-cyan-400 text-gray-900" : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
                                             "inline-flex items-center border-b-4 px-1 pt-1 text-sm font-medium")}
                                     >
                                         Hawkr Type
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                             <div className="flex flex-1 items-center px-2 lg:ml-6 lg:justify-center">
@@ -205,11 +215,15 @@ function Navbar() {
                                             <div>
                                                 <Menu.Button className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2">
                                                     <span className="sr-only">Open user menu</span>
-                                                    <img
-                                                        className="h-8 w-8 rounded-full"
+                                                    <div className='h-8 w-8'>
+
+                                                    <Image
+                                                        fill={true}
+                                                        className="rounded-full"
                                                         src="/img/hawkr_icon.png"
                                                         alt=""
-                                                    />
+                                                        />
+                                                    </div>
                                                 </Menu.Button>
                                             </div>
                                             <Transition
@@ -224,34 +238,34 @@ function Navbar() {
                                                 <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                                     <Menu.Item>
                                                         {({ active }) => (
-                                                            <a
+                                                            <Link
                                                                 href="/profile"
                                                                 className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                                                             >
                                                                 Profile
-                                                            </a>
+                                                            </Link>
                                                         )}
                                                     </Menu.Item>
 
                                                     {vendor && vendor.data && vendor.data['length'] > 0 && vendor.data[0]["state"] == 1 && (
                                                         <Menu.Item>
-                                                            {({ active }) => (<a href="/favoritesList" className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}>
+                                                            {({ active }) => (<Link href="/favoritesList" className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}>
                                                                 Favorites List
-                                                            </a>)}
+                                                            </Link>)}
                                                         </Menu.Item>)}
 
                                                     {vendor && vendor.data && vendor.data['length'] > 0 && vendor.data[0]["state"] == 2 && (
                                                         <Menu.Item>
-                                                            {({ active }) => (<a href="/manageShops" className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}>
+                                                            {({ active }) => (<Link href="/manageShops" className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}>
                                                                 Manage Shops
-                                                            </a>)}
+                                                            </Link>)}
                                                         </Menu.Item>)}
 
                                                     {vendor && vendor.data && vendor.data['length'] > 0 && vendor.data[0]["state"] == 1 && (
                                                         <Menu.Item>
-                                                            {({ active }) => (<a href="/becomeVendor" className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}>
+                                                            {({ active }) => (<Link href="/becomeVendor" className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}>
                                                                 Become Vendor
-                                                            </a>)}
+                                                            </Link>)}
                                                         </Menu.Item>)}
 
                                                     {/* <Menu.Item>
@@ -266,13 +280,13 @@ function Navbar() {
 
                                                     <Menu.Item>
                                                         {({ active }) => (
-                                                            <a
+                                                            <Link
                                                                 href="#"
                                                                 onClick={() => { signOut() }}
                                                                 className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                                                             >
                                                                 Sign out
-                                                            </a>
+                                                            </Link>
                                                         )}
                                                     </Menu.Item>
                                                 </Menu.Items>
@@ -311,7 +325,8 @@ function Navbar() {
                                 <div className="border-t border-gray-200 pt-4 pb-3">
                                     <div className="flex items-center px-4">
                                         <div className="flex-shrink-0">
-                                            <img
+                                            <Image
+                                                fill={true}
                                                 className="h-10 w-10 rounded-full"
                                                 src="/img/hawkr_icon.png"
                                                 alt=""
