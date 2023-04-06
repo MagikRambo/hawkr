@@ -22,7 +22,7 @@ import { useUser } from '@supabase/auth-helpers-react';
 export const getStaticPaths = async () => {
     const {data} = await get_shops_with_location();
 
-    const paths = data?.map(item => {
+    const paths = data?.map((item:any) => {
         return {
             params: {id: item.shopID.toString()}
         }

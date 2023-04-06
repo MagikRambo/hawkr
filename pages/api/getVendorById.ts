@@ -1,7 +1,7 @@
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import {createClient} from '@supabase/supabase-js'
 
-async function get_vendor_by_id(vendor_id:string) {
+async function getVendorById(vendor_id:string) {
     
     const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
 
@@ -21,5 +21,5 @@ async function get_vendor_by_id(vendor_id:string) {
 
     return {data}
 }
-    export default get_vendor_by_id
+    export default getVendorById
     
