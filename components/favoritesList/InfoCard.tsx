@@ -26,6 +26,7 @@ function InfoCard(ICProps:InfoCardProps) {
       >
       <div className="relative h-24 w-40 md:h-24 md:w-40 flex-shrink-0">
         <Image
+          alt="ICProps Image"
           src={ICProps.img}
           layout="fill"
           objectFit="cover"
