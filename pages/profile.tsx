@@ -4,6 +4,7 @@ import { stat } from "fs"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import { Database } from '../utils/database.types'
+import Image from 'next/image'
 
 type Profiles = Database['public']['Tables']['profiles']['Row']
 
@@ -112,7 +113,7 @@ function Profile(props:any){
       <main className="bg-slate-200">
           <div className="sm:py-36 sm:px-44">
             <div className='h-20 sm:hidden'/>
-            <img className="w-36 h-36 mx-auto rounded-full ring-4 ring-gray-300 hover:ring-5 hover:ring-slate-500"
+            <Image width={100} height={100} className="w-36 h-36 mx-auto rounded-full ring-4 ring-gray-300 hover:ring-5 hover:ring-slate-500"
                 src="/img/hawkr_icon.png"
                 alt="Hawkr"/>
             {/* <h1 className="text-black font-bold text-3xl text-center">{name}</h1> */}
