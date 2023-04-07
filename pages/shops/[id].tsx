@@ -76,8 +76,6 @@ function ExploreMenu (props: any){
 function useShopDetails({shopData}:InferGetStaticPropsType<typeof getStaticProps>){
 
     // console.log("WE MADE IT TO DETAILS")
-
-    console.log(shopData[0])
     
     let [showOpen, setShowOpen] = useState(true)
 
