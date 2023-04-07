@@ -114,7 +114,7 @@ export default function useManageShops(){
         const filesToRemove = list?.map((x) => `${userID}/${shopID}/${x.name}`) as NonNullable<Array<string>>;
         const { data:resRemove, error:resRemoveError } = await supabase.storage.from(bucket).remove(filesToRemove);
 
-        if (shops){
+        if (shops && shops.data){
             for (let i = 0; i < shops.data["length"]; i++ ){
                 console.log(shops.data[i].shopID)
                 console.log(shopID)

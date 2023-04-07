@@ -127,8 +127,10 @@ export default function FavoritesList({ shops }: InferGetStaticPropsType<typeof 
                 for(let i = 0; i < shop_ids["length"]; i++)
                 {
                  const {data:shop} =  await get_shops_by_id(String(shop_ids[i].shopID))
-                 openArr.push(shop[0])
-                 console.log(shop[0])
+                 if(shop){
+                   openArr.push(shop[0])
+                   console.log(shop[0])
+                 }
                 }
 
                 console.log(openArr)
