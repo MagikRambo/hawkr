@@ -17,14 +17,15 @@ type ExploreMenuProps = {
   shops:any
 }
 
-export const getStaticProps: GetStaticProps = async () => {
-  const { data } = await getShopsWithLocations();
-  return { props: { shops: data } };
-};
+// export const getStaticProps: GetStaticProps = async () => {
+//   const { data } = await getShopsWithLocations();
+//   return { props: { shops: data } };
+// };
 
 
 function SidePanelMenu(props: ExploreMenuProps) {
   const [curr_page, setCurrPage] = useState(1)
+
 
   //Hawkr-blue is #1498
   return (
@@ -55,13 +56,30 @@ function SidePanelMenu(props: ExploreMenuProps) {
   )
 }
 
-function Explore({ shops }: InferGetStaticPropsType<typeof getStaticProps>) {
+function Explore() {
 
   let [showOpen, setShowOpen] = useState(true)
-  let openShops = shops.filter( (shop:any) => shop.open )
+  const [loading, setLoading] = useState<boolean>(true)
+  const [shops, setShops] = useState<any>()
+  useEffect( () => {
+    const getShops = async() =>{
+      const { data } = await getShopsWithLocations();
+      setShops(data)
+    }
+    getShops().catch(console.error)
+    
+    setLoading(false)
+  }, [loading])
 
-  return (
-    <>
+  if(loading){
+    return <p>Loading...</p>
+  }
+
+  if(shops){
+    let openShops = shops.filter( (shop:any) => shop.open )
+    
+    return (
+      <>
       <div className="flex justify-between bg-slate-200">
         <Transition className="w-full sm:w-2/5" show={showOpen}
           enter='transition-all' enterFrom='opacity-0 w-0' enterTo='opacity-100 w-full sm:w-2/5'
@@ -82,6 +100,7 @@ function Explore({ shops }: InferGetStaticPropsType<typeof getStaticProps>) {
       </div>
     </>
   )
+}
 }
 
 export default Explore;
