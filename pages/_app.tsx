@@ -3,8 +3,11 @@ import type { AppProps } from 'next/app'
 import { useEffect, useState } from 'react'
 import Navbar from '../components/navbar'
 import Footer from '../components/footer'
+import { QueryClientProvider, QueryClient } from 'react-query'
 import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs'
 import { SessionContextProvider, Session, useUser } from '@supabase/auth-helpers-react'
+
+const queryClient = new QueryClient()
 
 export default function App({ Component, pageProps }: AppProps<{initialSession: Session}>) {
   
@@ -59,15 +62,17 @@ export default function App({ Component, pageProps }: AppProps<{initialSession: 
 
 
   return (
-    <SessionContextProvider
-    supabaseClient={supabaseClient}
-    initialSession={pageProps.initialSession}
-    >
-    <div>
-      <Navbar/>
-      <Component {...pageProps} />
-      <Footer />
-    </div>
-    </SessionContextProvider>
+    <QueryClientProvider client={queryClient}>
+      <SessionContextProvider
+      supabaseClient={supabaseClient}
+      initialSession={pageProps.initialSession}
+      >
+      <div>
+        <Navbar/>
+        <Component {...pageProps} />
+        <Footer />
+      </div>
+      </SessionContextProvider>
+    </QueryClientProvider>
   )
 }

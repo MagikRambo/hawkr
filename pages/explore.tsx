@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Map from '../components/Map';
 import { Transition } from '@headlessui/react'
-import { GetStaticProps, InferGetStaticPropsType } from 'next';
+import { useQuery } from 'react-query';
 import getShopsWithLocations from './api/getVendors';
 import InfoCard from '../components/InfoCard'
 import Pagination from '../components/pagination';
@@ -16,12 +16,6 @@ import Link from 'next/link';
 type ExploreMenuProps = {
   shops:any
 }
-
-// export const getStaticProps: GetStaticProps = async () => {
-//   const { data } = await getShopsWithLocations();
-//   return { props: { shops: data } };
-// };
-
 
 function SidePanelMenu(props: ExploreMenuProps) {
   const [curr_page, setCurrPage] = useState(1)
@@ -59,25 +53,16 @@ function SidePanelMenu(props: ExploreMenuProps) {
 function Explore() {
 
   let [showOpen, setShowOpen] = useState(true)
-  const [loading, setLoading] = useState<boolean>(true)
-  const [shops, setShops] = useState<any>()
-  useEffect( () => {
-    const getShops = async() =>{
-      const { data } = await getShopsWithLocations();
-      setShops(data)
-    }
-    getShops().catch(console.error)
-    
-    setLoading(false)
-  }, [loading])
 
-  if(loading){
+  const {isLoading, data:shops} = useQuery('shops-with-locations', getShopsWithLocations)
+
+  if(isLoading){
     return <p>Loading...</p>
   }
 
-  if(shops){
-    let openShops = shops.filter( (shop:any) => shop.open )
-    
+  if(shops && shops.data){
+    let openShops = shops.data.filter( (shop:any) => shop.open )
+    console.log('openShops: ', openShops)
     return (
       <>
       <div className="flex justify-between bg-slate-200">
@@ -95,7 +80,7 @@ function Explore() {
             onClick={() => setShowOpen(!showOpen)}>
             {showOpen ? <Image width={23} height={23} alt="LeftArrow" src={LeftArrow.src} /> : <div className="flex text-blue-500 text-base"><Image width={20} height={20} alt="RightArrow" src={RightArrow.src} />Show List</div>}
           </button>
-          <Map shops={shops} showOpen={showOpen}/>
+          <Map shops={openShops} showOpen={showOpen}/>
         </div>
       </div>
     </>
