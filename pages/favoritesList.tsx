@@ -5,6 +5,7 @@ import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import getShopsWithLocations from './api/getVendors';
 import InfoCard from '../components/favoritesList/InfoCard'
 import Pagination from '../components/pagination';
+import { useQuery } from 'react-query';
 
 //Image imports
 import hawkr_icon from '../public/img/hawkr_icon.png';
@@ -19,13 +20,6 @@ import get_shops_by_id from './api/getShopById';
 type ExploreMenuProps = {
   shops:any
 }
-
-export const getStaticProps: GetStaticProps = async () => {
-
-
-  const { data } = await getShopsWithLocations();
-  return { props: { shops: data } };
-};
 
 
 function FavoritesMenu(props: ExploreMenuProps) {
@@ -88,9 +82,12 @@ function FavoritesMenu(props: ExploreMenuProps) {
 }
 
 
-export default function FavoritesList({ shops }: InferGetStaticPropsType<typeof getStaticProps>) {
+export default function FavoritesList() {
 
   let [showOpen, setShowOpen] = useState(true)
+
+  // const {isLoading, data:shops} = useQuery('shops-with-locations', getShopsWithLocations)
+
 
   //filter to only get open shops to pass to Map
   
@@ -101,7 +98,7 @@ export default function FavoritesList({ shops }: InferGetStaticPropsType<typeof 
   let user = useUser()
   const userID = user?.id
 
-  const [loading, setLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(true)
 
 
 //   const { data:list, error:listError } = await supabase.storage.from(bucket).list(`${userID}/${shopID}`);
@@ -110,8 +107,7 @@ export default function FavoritesList({ shops }: InferGetStaticPropsType<typeof 
 
   useEffect(() => {
 
-    setLoading(true)
-    const getFavoriteShopsId = async () => {
+    const getFavoriteShops = async () => {
         if(userID){
             const {data:shop_ids, error} = await supabase
             .from('favoritesList')
@@ -136,16 +132,11 @@ export default function FavoritesList({ shops }: InferGetStaticPropsType<typeof 
                 console.log(openArr)
                 setFavoriteShops(openArr)
                 console.log('favorites: ', favoriteShops)
-                setLoading(false)
-
-                
+                setLoading(false) 
             }
         }
     }
-
-
-   getFavoriteShopsId().catch(console.error)
-//    getFavoriteShops().catch(console.error)
+   getFavoriteShops().catch(console.error)
 
   }, [userID]);
 

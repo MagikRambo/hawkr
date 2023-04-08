@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { GoogleMap, Marker, InfoWindow, useJsApiLoader, useLoadScript } from '@react-google-maps/api';
-import { GetStaticProps, InferGetServerSidePropsType, InferGetStaticPropsType } from 'next';
 // import { useQuery } from 'react-query'
 
 // Components

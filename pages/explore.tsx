@@ -54,10 +54,13 @@ function Explore() {
 
   let [showOpen, setShowOpen] = useState(true)
 
-  const {isLoading, data:shops} = useQuery('shops-with-locations', getShopsWithLocations)
+  const {isLoading, data:shops, isError, error} = useQuery('shops-with-locations', getShopsWithLocations)
 
   if(isLoading){
     return <p>Loading...</p>
+  }
+  if(isError && error instanceof Error){
+    return <h2>{error.message}</h2>
   }
 
   if(shops && shops.data){
