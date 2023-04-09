@@ -16,12 +16,16 @@ import Image from 'next/image'
 import Link from 'next/link';
 import get_hawkr_types from '../../api/getHawkrTypes';
 import get_shops_by_type from '../../api/getShopsByType';
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import { supabase } from '../../../utils/supabaseClient';
 
 type SidePanelMenuProps = {
   data:any
 }
+const getShopsByType = async ({hawkrType}:any) => {
+    const { data } = await supabase.rpc('get_shop_by_type', {shop_type: hawkrType})
+    return data
+  }
 
 function SidePanelMenu(props: SidePanelMenuProps) {
   const [curr_page, setCurrPage] = useState(1)
@@ -61,28 +65,19 @@ function Types_Dyn() {
 
   let router = useRouter()
   let hawkrType = router.query
-  const [loading, setLoading] = useState<boolean>(true)
-  const [shops, setShops] = useState<any>()
+  const queryClient = useQueryClient()
 
-  useEffect(() => {
-    const getShopsByType = async ({hawkrType}:any) => {
-        const { data } = await supabase.rpc('get_shop_by_type', {shop_type: hawkrType})
-        setShops(data)
-      }
-
-      if(hawkrType){
-        getShopsByType(hawkrType).catch(console.error)
-        setLoading(false)
-      }
-
-  }, [hawkrType])
-
-  if(loading){
-    return <p>loading...</p>
-  }
+  const {isLoading, data:shops, isError, error} = useQuery(['shops-by-type', hawkrType.hawkrType], () => getShopsByType(hawkrType), 
+  {
+    initialData: () => {
+      const shop:any = (queryClient.getQueryData('shops-by-type') as {data: any})?.data?.find( (s:any) => s.hawkrType === hawkrType.hawkrType)
+      // console.log(shop)
+      return shop
+    },
+    enabled: !!hawkrType,
+  })
 
   let openShops = shops?.filter( (shop:any) => shop.open )
-  console.log(openShops)
 
   return (
     <>
