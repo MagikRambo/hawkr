@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Map from '../components/Map';
 import { Transition } from '@headlessui/react'
 import { useQuery } from 'react-query';
-import getShopsWithLocations from './api/getVendors';
+import getShopsWithLocations from './api/getShopsWithLocation';
 import InfoCard from '../components/InfoCard'
 import Pagination from '../components/pagination';
 

@@ -2,7 +2,7 @@ import React, { Fragment, useState } from 'react'
 import Map from '../components/Map';
 import { Transition } from '@headlessui/react'
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
-import getShopsWithLocations from './api/getVendors';
+import getShopsWithLocations from './api/getShopsWithLocation';
 import TypesCard from '../components/typesCard'
 import { motion } from 'framer-motion'
 

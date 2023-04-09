@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Map from '../../../components/Map';
 import { Transition } from '@headlessui/react'
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next';
-import get_shops_with_location from "../../api/getVendors";
+import get_shops_with_location from "../../api/getShopsWithLocation";
 import get_shops_by_id from "../../api/getShopById";
 import InfoCard from '../../../components/InfoCard'
 import Pagination from '../../../components/pagination';
@@ -16,29 +16,45 @@ import Image from 'next/image'
 import Link from 'next/link';
 import get_hawkr_types from '../../api/getHawkrTypes';
 import get_shops_by_type from '../../api/getShopsByType';
+import { useQuery } from 'react-query';
+import { supabase } from '../../../utils/supabaseClient';
 
 type ExploreMenuProps = {
-  shops:any
+  data:any
 }
 
-export const getStaticPaths = async () => {
-  const {data} = await get_hawkr_types();
-  const paths = data?.map((item:any) => {
-    return {
-      params: {hawkrType: item.hawkrType.toString()}
-    }
-  })
-  return {
-      paths,
-      fallback: false
-  };
+const getShopsByType = async ({hawkrType}:any) => {
+
+console.log(hawkrType)
+  const { data } = await supabase.rpc('get_shop_by_type', {shop_type: hawkrType})
+  return data
 }
 
-export const getStaticProps: GetStaticProps = async ({params}:NonNullable<any>) => {
 
-    const { data } = await get_shops_by_type(params.hawkrType);
-    return { props: { shops: data } };
-  };
+const getHawkrTypes = async () => {
+
+    const { data } = await supabase.rpc('get_hawkr_types')
+    console.log(data)
+    return data
+  }
+// export const getStaticPaths = async () => {
+//   const {data} = await get_hawkr_types();
+//   const paths = data?.map((item:any) => {
+//     return {
+//       params: {hawkrType: item.hawkrType.toString()}
+//     }
+//   })
+//   return {
+//       paths,
+//       fallback: false
+//   };
+// }
+
+// export const getStaticProps: GetStaticProps = async ({params}:NonNullable<any>) => {
+
+//     const { data } = await get_shops_by_type(params.hawkrType);
+//     return { props: { shops: data } };
+//   };
 
 
 function SidePanelMenu(props: ExploreMenuProps) {
@@ -53,7 +69,7 @@ function SidePanelMenu(props: ExploreMenuProps) {
           <h1 className=' pb-2 pl-2 font-bold text-gray-600 text-2xl'> {routerType} Hawkrs near me</h1>
 
             <div className="flex flex-col">
-              {props.shops?.map((item: any) => (
+              {props.data?.map((item: any) => (
                 <Link key={item.shopID} href={`/shops/${item.shopID}`}>
                 <InfoCard
                   img={hawkr_icon}
@@ -67,17 +83,45 @@ function SidePanelMenu(props: ExploreMenuProps) {
               <Link href='/hawkrVendorInfo' className="text-xl font-medium text-black">Want to run your business?</Link>
               <Link href='/hawkrVendorInfo'className="text-2xl font-bold text-sky-500">Setup a Hawkr</Link>
             </div>
-          <Pagination curr_page_idx={curr_page} total_items={props.shops.length} 
-          items_on_each_page={10} on_page_swith_to={(num)=>setCurrPage(num)}/>
+          {/* <Pagination curr_page_idx={curr_page} total_items={props.data.length}  */}
+          {/* items_on_each_page={10} on_page_swith_to={(num)=>setCurrPage(num)}/> */}
         </section>
       </main>
   )
 }
 
-function Types_Dyn({ shops }: InferGetStaticPropsType<typeof getStaticProps>) {
+function Types_Dyn() {
 
   let [showOpen, setShowOpen] = useState(true)
-  let openShops = shops.filter( (shop:any) => shop.open )
+
+  let router = useRouter()
+  let hawkrType = router.query
+
+  //TODO: On refresh it breaks. Need to somehow cache or find workaround.
+  const {isLoading:typesLoading, data:hawkrTypePull} = useQuery('hawkr-types', () => getHawkrTypes(),
+  {
+    enabled: !!hawkrType,
+    select: (data) => {
+      const correctType:NonNullable<any> = data?.filter( (item) => item.hawkrType === hawkrType.hawkrType)
+      console.log(correctType)
+      const retType = correctType[0].hawkrType
+      return retType
+    }
+  }
+  )
+  console.log(hawkrTypePull)
+
+
+  const {isLoading, data:shops, isError, error} = useQuery('shops-with-locations', () => getShopsByType(hawkrType),
+  {
+    enabled: !!hawkrType
+  })
+
+  if(isLoading || typesLoading){
+    return <p>loading...</p>
+  }
+
+  let openShops = shops?.filter( (shop:any) => shop.open )
 
   return (
     <>
@@ -85,7 +129,7 @@ function Types_Dyn({ shops }: InferGetStaticPropsType<typeof getStaticProps>) {
         <Transition className="w-2/5" show={showOpen}
           enter='transition-all' enterFrom='opacity-0 w-0' enterTo='opacity-100 w-2/5'
           leave='transition-all' leaveFrom='opacity-100 w-2/5' leaveTo='opacity-0 w-0'>
-          <SidePanelMenu shops={openShops} />
+          <SidePanelMenu data={openShops} />
         </Transition>
         <div className='relative grow'>
           <button className='absolute z-10 rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm

@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import Map from '../../components/Map'
-import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType} from "next";
-import get_shops_with_location from "../api/getVendors";
+import get_shops_with_location from "../api/getShopsWithLocation";
 import get_shops_by_id from "../api/getShopById";
 import InfoCard from '../../components/InfoCard'
 import {motion} from 'framer-motion'
@@ -16,34 +15,16 @@ import RightArrow from '../../public/img/Right_Arrow.svg'
 import ShopCard from '../../components/ShopCard';
 import { supabase } from '../../utils/supabaseClient';
 import { useUser } from '@supabase/auth-helpers-react';
+import { useRouter } from 'next/router';
+import {useParams} from 'react-router-dom'
+import { useQuery } from 'react-query';
 
 
-
-export const getStaticPaths = async () => {
-    const {data} = await get_shops_with_location();
-
-    const paths = data?.map((item:any) => {
-        return {
-            params: {id: item.shopID.toString()}
-        }
-    })
-    return {
-        paths,
-        fallback: false
-    }
-
+const getSpecificShop = async ({id}:any) => {
+  const {data,error} = await supabase.rpc('get_shops_by_id', {shop_id: id})
+  return data
 }
-
-export const getStaticProps = async ( {params}:any ) => {
-
-
-    const id = params.id
-    const {data} = await get_shops_by_id(id)
-    return {props: {shopData: data}}
-}
-
-
-function ExploreMenu (props: any){
+function SidePanelMenu (props: any){
 
     return (
       <motion.div
@@ -73,12 +54,22 @@ function ExploreMenu (props: any){
     )
 }
 
-function useShopDetails({shopData}:InferGetStaticPropsType<typeof getStaticProps>){
+function useShopDetails(){
 
     // console.log("WE MADE IT TO DETAILS")
     
     let [showOpen, setShowOpen] = useState(true)
+    let router = useRouter()
+    let shopID = router.query
 
+    //TODO: Need to stop refresh on window focus
+    const {isLoading:shopDataIsLoading, data:shopData} = useQuery('specific-shop',() => getSpecificShop(shopID),
+    {
+      enabled: !!shopID.id
+    })
+    if(shopDataIsLoading){
+      return <p>Loading...</p>
+    }
 
     return (
         <>
@@ -87,8 +78,7 @@ function useShopDetails({shopData}:InferGetStaticPropsType<typeof getStaticProps
             enter='transition-all' enterFrom='opacity-0 w-0' enterTo='opacity-100 w-2/5'
             leave='transition-all' leaveFrom='opacity-100 w-2/5' leaveTo='opacity-0 w-0'>
                 
-             {/*  SECTION TO CREATE A NEW SHOP PAGE AND INSERT DATA HERE. */}
-              <ExploreMenu shops={shopData}/>
+              <SidePanelMenu shops={shopData}/>
             </Transition>
             <div className='relative grow'>
               <button className='absolute z-10 rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm
