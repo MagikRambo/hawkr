@@ -84,7 +84,7 @@ function Navbar() {
     const [loading, setLoading] = useState(true)
 
     useQuery("userLocation", fetchUserLocation, {
-        refetchInterval:  15 * 60 * 1000, //15 minutes refetch location
+        refetchInterval:  15 * 60 * 10000, //15 minutes refetch location
         refetchIntervalInBackground: true,
         enabled: !!userID,
         onSuccess: async (position: Position) => {
