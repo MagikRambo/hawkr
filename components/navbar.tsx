@@ -294,7 +294,7 @@ function Navbar() {
                                                         )}
                                                     </Menu.Item>
 
-                                                    {vendor && vendor.data && vendor.data['length'] > 0 && vendor.data[0]["state"] == 1 && (
+                                                    {vendor && vendor.data && vendor.data['length'] > 0 && vendor.data[0]["state"] >= 1 && (
                                                         <Menu.Item>
                                                             {({ active }) => (<Link href="/favoritesList" className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}>
                                                                 Favorites List
