@@ -13,21 +13,57 @@ import { Database } from '../utils/database.types'
 
 import Image from 'next/image'
 import FavoritesList from '../pages/favoritesList';
+import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs'
+import { useQuery } from 'react-query'
 type Profiles = Database['public']['Tables']['profiles']['Row']
 
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
 }
+interface Position {
+    readonly coords: Coordinates;
+    readonly timestamp: number;
+  }
+  interface Coordinates {
+    readonly latitude: number;
+    readonly longitude: number;
+    readonly altitude: number | null;
+    readonly accuracy: number;
+    readonly altitudeAccuracy: number | null;
+    readonly heading: number | null;
+    readonly speed: number | null;
+  }
 
-type NavProps = {
-    handleOpen: (o: boolean, idx: number) => void,
-    curr_idx: number,
-    shops: any,
-};
 
-type NavState = {
-};
+
+async function fetchUserLocation() {
+    return new Promise<Position>((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(resolve, reject);
+    });
+  }
+  
+  async function updateUserLocation(userPosition: { lat: number; lng: number }) {
+    const supabaseClient = createBrowserSupabaseClient();
+    const res_user = await supabaseClient.auth.getUser();
+    const userID = res_user.data.user?.id;
+  
+    const { data: openTrackedShops, error: openShopsError } = await supabaseClient
+      .from("shops")
+      .select("*")
+      .match({
+        vendorID: userID,
+        open: true,
+        liveTracking: true,
+      });
+  
+    if (openTrackedShops && openTrackedShops["length"] > 0) {
+      const { data, error } = await supabaseClient
+        .from("locations")
+        .update({ UUID: userID, location: userPosition })
+        .match({ UUID: userID });
+    }
+  }
 
 
 function Navbar() {
@@ -49,6 +85,18 @@ function Navbar() {
     const [name, setName] = useState<Profiles['name']>(null)
     const [loading, setLoading] = useState(true)
 
+    useQuery("userLocation", fetchUserLocation, {
+        refetchInterval:  6000,
+        refetchIntervalInBackground: true,
+        onSuccess: async (position: Position) => {
+          const userPosition = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+          await updateUserLocation(userPosition);
+        },
+      });
+    
 
     // FETCH THE VENDOR DATA
     useEffect(() => {
