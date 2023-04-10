@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import React from 'react'
-import { useSession, useSupabaseClient, useUser } from '@supabase/auth-helpers-react'
+import { SupabaseClient, useSession, useSupabaseClient, useUser } from '@supabase/auth-helpers-react'
 import { useState } from 'react'
 import TypesMenu from './typesMenu'
 import { Router, useRouter } from 'next/router'
@@ -43,12 +43,10 @@ async function fetchUserLocation() {
     });
   }
   
-  async function updateUserLocation(userPosition: { lat: number; lng: number }) {
-    const supabaseClient = createBrowserSupabaseClient();
-    const res_user = await supabaseClient.auth.getUser();
-    const userID = res_user.data.user?.id;
+  async function updateUserLocation(supabase: SupabaseClient<any, "public", any>, userID:string, userPosition: { lat: number; lng: number }) {
+
   
-    const { data: openTrackedShops, error: openShopsError } = await supabaseClient
+    const { data: openTrackedShops, error: openShopsError } = await supabase
       .from("shops")
       .select("*")
       .match({
@@ -58,7 +56,7 @@ async function fetchUserLocation() {
       });
   
     if (openTrackedShops && openTrackedShops["length"] > 0) {
-      const { data, error } = await supabaseClient
+      const { data, error } = await supabase
         .from("locations")
         .update({ UUID: userID, location: userPosition })
         .match({ UUID: userID });
@@ -79,7 +77,7 @@ function Navbar() {
 
     // Start Supabase user code
     const user = useUser()
-    const userID = user?.id
+    const userID:NonNullable<any> = user?.id
     const [UUID, setUUID] = useState<Profiles['UUID']>()
     const [state, setState] = useState<Profiles['state']>(null)
     const [name, setName] = useState<Profiles['name']>(null)
@@ -88,12 +86,13 @@ function Navbar() {
     useQuery("userLocation", fetchUserLocation, {
         refetchInterval:  6000,
         refetchIntervalInBackground: true,
+        enabled: !!userID,
         onSuccess: async (position: Position) => {
           const userPosition = {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
           };
-          await updateUserLocation(userPosition);
+          await updateUserLocation(supabase, userID, userPosition);
         },
       });
     
@@ -109,7 +108,7 @@ function Navbar() {
         }
         getVendor().catch(console.error)
     }, [user])
-    console.log('vendor nav: ', vendor)
+    // console.log('vendor nav: ', vendor)
     // End Supabase user code
 
 
