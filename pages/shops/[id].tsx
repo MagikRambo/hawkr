@@ -17,6 +17,7 @@ import { supabase } from '../../utils/supabaseClient';
 import { useUser } from '@supabase/auth-helpers-react';
 import { useRouter } from 'next/router';
 import {useParams} from 'react-router-dom'
+import loading from '../../public/img/loading.svg'
 import { useQuery } from 'react-query';
 
 
@@ -68,8 +69,14 @@ function useShopDetails(){
       enabled: !!shopID.id
     })
     if(shopDataIsLoading){
-      return <p>Loading...</p>
-    }
+      return(
+        <>
+        <div className='w-full h-screen bg-slate-200 pl-5 text-black'>
+            <h1> Loading... </h1>
+        </div>    
+        </>
+      )
+      }
 
     return (
         <>
