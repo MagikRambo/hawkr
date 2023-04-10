@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import React from 'react'
-import { useSession, useSupabaseClient, useUser } from '@supabase/auth-helpers-react'
+import { SupabaseClient, useSession, useSupabaseClient, useUser } from '@supabase/auth-helpers-react'
 import { useState } from 'react'
 import TypesMenu from './typesMenu'
 import { Router, useRouter } from 'next/router'
@@ -13,21 +13,55 @@ import { Database } from '../utils/database.types'
 
 import Image from 'next/image'
 import FavoritesList from '../pages/favoritesList';
+import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs'
+import { useQuery } from 'react-query'
 type Profiles = Database['public']['Tables']['profiles']['Row']
 
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
 }
+interface Position {
+    readonly coords: Coordinates;
+    readonly timestamp: number;
+  }
+  interface Coordinates {
+    readonly latitude: number;
+    readonly longitude: number;
+    readonly altitude: number | null;
+    readonly accuracy: number;
+    readonly altitudeAccuracy: number | null;
+    readonly heading: number | null;
+    readonly speed: number | null;
+  }
 
-type NavProps = {
-    handleOpen: (o: boolean, idx: number) => void,
-    curr_idx: number,
-    shops: any,
-};
 
-type NavState = {
-};
+
+async function fetchUserLocation() {
+    return new Promise<Position>((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(resolve, reject);
+    });
+  }
+  
+  async function updateUserLocation(supabase: SupabaseClient<any, "public", any>, userID:string, userPosition: { lat: number; lng: number }) {
+
+  
+    const { data: openTrackedShops, error: openShopsError } = await supabase
+      .from("shops")
+      .select("*")
+      .match({
+        vendorID: userID,
+        open: true,
+        liveTracking: true,
+      });
+  
+    if (openTrackedShops && openTrackedShops["length"] > 0) {
+      const { data, error } = await supabase
+        .from("locations")
+        .update({ UUID: userID, location: userPosition })
+        .match({ UUID: userID });
+    }
+  }
 
 
 function Navbar() {
@@ -43,12 +77,25 @@ function Navbar() {
 
     // Start Supabase user code
     const user = useUser()
-    const userID = user?.id
+    const userID:NonNullable<any> = user?.id
     const [UUID, setUUID] = useState<Profiles['UUID']>()
     const [state, setState] = useState<Profiles['state']>(null)
     const [name, setName] = useState<Profiles['name']>(null)
     const [loading, setLoading] = useState(true)
 
+    useQuery("userLocation", fetchUserLocation, {
+        refetchInterval:  6000,
+        refetchIntervalInBackground: true,
+        enabled: !!userID,
+        onSuccess: async (position: Position) => {
+          const userPosition = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+          await updateUserLocation(supabase, userID, userPosition);
+        },
+      });
+    
 
     // FETCH THE VENDOR DATA
     useEffect(() => {
@@ -61,7 +108,7 @@ function Navbar() {
         }
         getVendor().catch(console.error)
     }, [user])
-    console.log('vendor nav: ', vendor)
+    // console.log('vendor nav: ', vendor)
     // End Supabase user code
 
 
