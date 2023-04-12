@@ -149,9 +149,10 @@ export default function FavoritesList() {
   }
   else if(favoriteShops["length"] === 0 || !favoriteShops){
     return(
-        <>
-        <p>No shops present</p>
-        </>
+        <div className='bg-slate-200 h-screen sm:py-36 sm:px-44'>
+        <div className='h-20 sm:hidden'/>
+        <p className='text-center font-bold text-3xl'>No shops present</p>
+        </div>
     )
   }
   else{
