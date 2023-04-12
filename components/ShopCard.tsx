@@ -82,15 +82,14 @@ const retrieveFavoritesList = async () => {
 
   return (
     <main className="flex text-slate-950">
-      <section className='flex-grow h-screen px-16 bg-slate-200 overflow-y-auto [&::-webkit-scrollbar]:hidden'>
+      <section className='flex-grow w-screen h-screen px-2 sm:px-16 bg-slate-200 overflow-y-auto [&::-webkit-scrollbar]:hidden'>
       {/* ~~~~~~~ EDITS NEED TO BE MADE HERE FOR IMAGE ~~~~~~~ */}
-      <div className='h-64 w-96 relative'>
-        <Image fill={true} src={shopImage} alt={`picture of the link ${shopImage}`}/>
+      <div className='will-change-auto relative'>
+        <img className="rounded-md object-cover border-cyan-500/100 border-2" src={shopImage} alt={`picture of the link ${shopImage}`}/>
       </div>
-        <div className='h-60'/>
         <div className='flex justify-between items-center'>
           <div>
-            <h1 className='text-6xl font-bold pt-8'>{props.shopName}</h1>
+            <h1 className='text-3xl sm:text-6xl font-bold pt-8'>{props.shopName}</h1>
             <p className='text-xl pb-4'>{props.hawkrType}</p>
           </div>
 
@@ -101,11 +100,11 @@ const retrieveFavoritesList = async () => {
           }
         </div>
         <p className='font-bold text-xl py-2'>Current Location: {props.location.lat} {props.location.lng}</p>
-        <p className='font-bold text-4xl py-4'>Vender Detail</p>
+        <p className='font-bold text-2xl sm:text-4xl py-4'>Vender Detail</p>
         <p className='py-2 text-2xl'>{props.shopDescription}</p>
 
         {/** The text Review Part*/}
-        <p className='font-bold text-4xl py-4'>Leave a Review</p>
+        <p className='font-bold text-2xl sm:text-4xl py-4'>Leave a Review</p>
         <div className='flex justify-start'>
           <StarIcon className="h-10 cursor-pointer" />
           <StarIcon className="h-10 cursor-pointer" />

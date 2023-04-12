@@ -82,18 +82,21 @@ function Types_Dyn() {
   return (
     <>
       <div className="flex justify-between bg-slate-200">
-        <Transition className="w-2/5" show={showOpen}
-          enter='transition-all' enterFrom='opacity-0 w-0' enterTo='opacity-100 w-2/5'
-          leave='transition-all' leaveFrom='opacity-100 w-2/5' leaveTo='opacity-0 w-0'>
-          <SidePanelMenu data={openShops} />
-        </Transition>
-        <div className='relative grow'>
-          <button className='absolute z-10 rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm
-             hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 m-8'
+        <Transition className="w-full sm:w-2/5" show={showOpen}
+          enter='transition-all' enterFrom='opacity-0 w-0' enterTo='opacity-100 w-full sm:w-2/5'
+          leave='transition-all' leaveFrom='opacity-100 w-full sm:w-2/5 ' leaveTo='opacity-0 w-0'>
+          <button className='p-2 border-gray-300 bg-white text-gray-700 m-5 sm:hidden'
             onClick={() => setShowOpen(!showOpen)}>
             {showOpen ? <Image width={23} height={23} alt="LeftArrow" src={LeftArrow.src} /> : <div className="flex text-blue-500 text-base"><Image width={20} height={20} alt="RightArrow" src={RightArrow.src} />Show List</div>}
           </button>
-          <Map shops={openShops} />
+          <SidePanelMenu data={openShops} />
+        </Transition>
+        <div className='relative grow'>
+          <button className={'absolute z-10 sm:rounded sm:border border-gray-300 bg-white sm:px-2.5 sm:py-1.5 sm:text-xs font-medium text-gray-700 sm:shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:m-8' + (showOpen ? "" : "absolute m-5")}
+            onClick={() => setShowOpen(!showOpen)}>
+            {showOpen ? <Image width={23} height={23} alt="LeftArrow" src={LeftArrow.src} /> : <div className="flex text-blue-500 text-base"><Image width={20} height={20} alt="RightArrow" src={RightArrow.src} />Show List</div>}
+          </button>
+          <Map data={openShops} />
         </div>
       </div>
     </>
