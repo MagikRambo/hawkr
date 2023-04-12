@@ -11,10 +11,7 @@ import { stat } from 'fs'
 // import {supabase} from '../utils/supabaseClient'
 import { useRouter } from 'next/router'
 
-
-
 const useLogin: NextPage = () => {
-
 
     const { isLoading, session, error } = useSessionContext();
     const supabase = useSupabaseClient();

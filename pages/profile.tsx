@@ -5,6 +5,7 @@ import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import { Database } from '../utils/database.types'
 import Image from 'next/image'
+import Link from 'next/dist/client/link'
 
 type Profiles = Database['public']['Tables']['profiles']['Row']
 
@@ -17,7 +18,6 @@ function Profile(props:any){
   const [description, setDescription] = useState<Profiles['description']>(null)
   const [loading, setLoading] = useState(true)
   const router = useRouter()
-  const session = useSession()
   let redirect = 0
 
   async function signOut(){
@@ -37,6 +37,33 @@ function Profile(props:any){
     redirect = 1
     return (<></>)
   }
+
+  const setShowEditButtons = () => {
+    const editbttn = document.getElementById("edit-button")
+    const updatebttn = document.getElementById("update-button")
+    const cancbttn = document.getElementById("cancel-button")
+    const nametextbx = document.getElementById("username")
+    const desctextbc = document.getElementById("description")
+
+    const disp = 'none'
+    if(editbttn != null && updatebttn != null && cancbttn != null && nametextbx != null && desctextbc != null){
+      if (editbttn?.style.display == 'none'){
+        editbttn.style.display = 'inherit'
+        updatebttn.style.display = 'none'
+        cancbttn.style.display = 'none'
+        nametextbx.setAttribute("disabled", "true")
+        desctextbc.setAttribute("disabled", "true")
+      }
+      else {
+        editbttn.style.display = 'none'
+        updatebttn.style.display = 'inherit'
+        cancbttn.style.display = 'inherit'
+        nametextbx.removeAttribute("disabled")
+        desctextbc.removeAttribute("disabled")
+      }
+    }
+  }
+
   useEffect(() => {
     async function loadData() {
       try {
@@ -98,9 +125,7 @@ function Profile(props:any){
       let { error } = await supabase.from('profiles').upsert(updates)
       if (error) throw error
       else router.push('/profile')
-      //alert('Profile updated!')
     } catch (error) {
-      //alert('Error updating the data!')
       console.log(error)
     } finally {
       setLoading(false)
@@ -108,7 +133,6 @@ function Profile(props:any){
   }
 
   if(user)
-    // if(state == 2)
     return (
       <main className="bg-slate-200">
           <div className="sm:py-36 sm:px-44">
@@ -116,44 +140,53 @@ function Profile(props:any){
             <Image width={100} height={100} className="w-36 h-36 mx-auto rounded-full ring-4 ring-gray-300 hover:ring-5 hover:ring-slate-500"
                 src="/img/hawkr_icon.png"
                 alt="Hawkr"/>
-            {/* <h1 className="text-black font-bold text-3xl text-center">{name}</h1> */}
-            {state == 2 ? (
-            <>
-            <div className="flex justify-center">
-              <button className="py-2 px-2 text-2xl font-bold text-cyan-500">
-                Vendor Page
-              </button>
-              <button className="py-2 px-2 text-2xl font-bold text-cyan-500">
-                History
-              </button>
-            </div>
-            </>) : (<></>)}
             <div className="py-1 px-2.5 content-center">
-              <h1 className="text-black py-10 font-bold text-3xl text-center">Description</h1>
-              <textarea className='text-black block px-12 py-10 rounded-lg  ring-4 h-full w-full' value={description? description : ""} readOnly>
+                <h1 className="text-black py-10 font-bold text-3xl text-left">Name</h1>
+                  <input
+                    id="username"
+                    type="text"
+                    className='text-black block px-12 py-3 rounded-lg  ring-4 h-full w-full' 
+                    value={name? name : ""} 
+                    onChange={(e) => setName(e.target.value)}
+                    disabled
+                    >
+                </input>
+              <h1 className="text-black py-10 font-bold text-3xl text-left">Description</h1>
+              <textarea
+                id="description"
+                className='text-black block px-12 py-10 rounded-lg  ring-4 h-full w-full' 
+                value={description? description : ""}
+                onChange={(e) => setDescription(e.target.value)}
+                disabled
+                >
               </textarea>
-              <button className="py-2 text-2xl font-bold text-cyan-500">
-                  Edit Client Page
-              </button>
-            {state == 2 ? (
-            <>
-              <h1 className="py-10 font-bold text-3xl text-center">Vendor Page</h1>
-              <div className='block bg-white px-12 py-10 rounded-lg ring-gray-300 ring-4 h-full w-full'>
+              <div className="flex">
+                <button 
+                  id="edit-button"
+                  onClick={() => setShowEditButtons()} 
+                  className="py-2 text-2xl font-bold text-cyan-500">
+                    Edit Client Page
+                </button>
+                <button 
+                  id="update-button"
+                  onClick={() => updateProfile({name, description})} 
+                  className="py-2 px-6 text-2xl font-bold text-cyan-500 hidden">
+                    {loading ? 'Loading ...' : 'Update'}
+                </button>
+                <button
+                  id="cancel-button"
+                  onClick={() => setShowEditButtons()} 
+                  className="py-2 px-6 text-2xl font-bold text-cyan-500 hidden">
+                    Cancel
+                </button>
               </div>
-              </>) : (<></>)
-            }
-
             </div>
-
             <div className="py-12 flex flex-col items-center">
               {state == 2 ? (
-              <> 
-                <button className="py-2 text-2xl font-bold text-cyan-500">
-                  Edit Vendor Page
-                </button>
-                <button className="py-2 text-2xl font-bold text-cyan-500">
-                  Popup
-                </button>
+              <>
+                <Link href="/manageShops" className="py-2 text-2xl font-bold text-cyan-500" >
+                  Manage Shops
+                </Link>
               </>) : (<>
                 <button className="py-2 text-2xl font-bold text-cyan-500">
                   Setup as Hawkr
