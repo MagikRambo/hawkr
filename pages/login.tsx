@@ -19,26 +19,7 @@ const useLogin: NextPage = () => {
 
     // const supabase = useSupabaseClient()
     const user = useUser()
-    console.log("USER FROM AUTH UI: ", user)
-
-
-    // const [asession, setCurSession] = useState(false);
-    // const [dataV, setDataV] = useState<any>()
-    
-    // useEffect(() => {
-
-    //   const getSession = async () => {
-    //     const { data, error } = await supabase.auth.getSession()
-        
-    //     if(data){
-    //       console.log("USE STATE DATA: ",data)
-    //       setDataV(data.session)
-    //       // setCurSession(true)
-    //     }
-
-    //   }
-    //   getSession()
-    // }, [])
+    //console.log("USER FROM AUTH UI: ", user)
 
     const [email, setEmail] = useState<string | undefined>();
     const [password, setPassword] = useState<string | undefined>();
