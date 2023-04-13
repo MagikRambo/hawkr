@@ -3,10 +3,10 @@ const people = [
     {
       name: 'Mike Marambio',
       role: 'Full-Stack Developer',
-      description: 'TContrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32',
       imageUrl:
         'https://www.mikemarambio.com/images/profile.jpg',
-      linkedinUrl: '#',
+      linkedinUrl: 'https://www.linkedin.com/in/mike-marambio/',
+      email: 'mikemarambio@gmail.com'
     },
     {
         name: 'Alex Romero',
@@ -14,19 +14,20 @@ const people = [
         description: 'Text goes here',
         imageUrl:
           'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/base-hawkr/hawkr_icon.png',
-        linkedinUrl: 'https://www.linkedin.com/in/mike-marambio/',
+        linkedinUrl: '',
+        email: 'alexromero@gmail.com'
       },
       {
         name: 'Leo Zhang',
-        role: 'Front-end Developer ',
-        description: 'Text goes here' ,
-        imageUrl:
-          'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/base-hawkr/hawkr_icon.png',
-        linkedinUrl: '#',
-      },
+        role: 'Front-end Developer | Aspiring Game Developer ',
+         imageUrl:
+          'https://hakkerbarry.com/images/Me.png',
+        linkedinUrl: 'https://www.linkedin.com/in/zixuanzhang1998/',
+        email: 'zixuanzhang1998@gmail.com'
+    },
   ]
   
-  export default function Example() {
+  export default function About() {
     return (
       <div className="bg-slate-200 py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -46,16 +47,31 @@ const people = [
                 <img className="aspect-[2/2] w-full rounded-2xl object-cover" src={person.imageUrl} alt="" />
                 <h3 className="mt-6 text-lg font-semibold leading-8 tracking-tight text-gray-900">{person.name}</h3>
                 <p className="text-base leading-7 text-gray-600 pb-4">{person.role}</p>
-                <p className="text-base leading-7 text-gray-600">{person.description}</p>
+
+                {person.name === 'Mike Marambio' && (
+                <div className="text-black">
+                    <p className="pb-4">My name is Mike Marambio, and I am a Computer Science student at the University of Utah, set to graduate in the spring of 2023. As an aspiring software engineer, I am passionate about building scalable and efficient systems, particularly in the areas of Microservices, Distributed Systems, and Containerization.</p>
+                    
+                    <p className="pb-4"> In addition to my academic pursuits, I am also an undergraduate researcher at the Visual Perception and Spatial Cognition Lab, where I focus on exploring the potential of Mixed Reality. Furthermore, I am honored to serve as Vice President of The Society of Hispanic Professional Engineers (SHPE), a role that has allowed me to connect with fellow students and professionals in the engineering field while promoting diversity and inclusion. </p>
+                    
+                    <p className="pb-4">My interest in software development has also led me to intern at Microsoft twice. During my first internship, I developed an admin UI and later pivoted the project towards a Full-Stack direction. In my second internship, I created a developer tool to simplify containerization and improve the developer life cycle.</p>
+                    
+                    <p className="pb-4">When I'm not immersed in coding, I enjoy training, learning new hobbies, and spending quality time with family and friends. After graduation, I plan to continue developing my current project and integrate additional features to benefit small local vendors. I am confident that my skills and experiences will enable me to make a meaningful impact in the software engineering industry.</p>
+                 </div>)}
+                 {person.name === 'Alex Romero' && (
+                    <p>example text here</p>
+                 )}
+
+                 {person.name === 'Leo Zhang' && (
+                <div className="text-black">
+                    <p className="pb-4">Hello my name is Leo, born on Feb  19, 1998 in Tianjin. By chance, I came to the University of Utah and had the most memorable time of my life here.</p>
+                    
+                    <p className="pb-4">I pursued architecture design in college at beginning, but soon realized my growing interest in computer science and computer graphics. I made the decision to continue his studies in the field at the University of Utah in the United States, and thanks for this choose, I meet a lot of cool guys here. </p>
+                    
+                    <p className="pb-4">As my undergraduate studies progressed, I became increasingly interested in graphics. I enjoy reading about rendering and the technologies associated with game engines. My biggest dream is to open my own game studio and dedicate myself to providing a better gaming experience for players.</p>                                    
+                </div>)}
+                <p className="text-base leading-7 text-gray-600">{person.email}</p>
                 <ul role="list" className="mt-6 flex gap-x-6">
-                  {/* <li>
-                    <a href={person.twitterUrl} className="text-gray-400 hover:text-gray-500">
-                      <span className="sr-only">Twitter</span>
-                      <svg className="h-5 w-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M6.29 18.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0020 3.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.073 4.073 0 01.8 7.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 010 16.407a11.616 11.616 0 006.29 1.84" />
-                      </svg>
-                    </a>
-                  </li> */}
                   <li>
                     <a href={person.linkedinUrl} className="text-gray-400 hover:text-gray-500">
                       <span className="sr-only">LinkedIn</span>
