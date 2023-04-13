@@ -372,8 +372,7 @@ function Navbar() {
                                 <div className="border-t border-gray-200 pt-4 pb-3">
                                     <div className="flex items-center px-4">
                                         <div className="flex-shrink-0">
-                                            <Image
-                                                fill={true}
+                                            <img
                                                 className="h-10 w-10 rounded-full"
                                                 src="/img/hawkr_icon.png"
                                                 alt=""
