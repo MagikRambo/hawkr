@@ -55,7 +55,43 @@ Databases used: Supabase ~ PostgreSQL
 
 # How to build and run the project
 
-Duis tincidunt sit amet nunc elementum luctus. Donec ipsum dolor, accumsan nec tellus nec, egestas dignissim odio. Donec quis nunc urna. Donec convallis orci non nibh iaculis, a fringilla massa posuere. Vivamus tincidunt nec elit nec laoreet. Ut auctor, nunc vel placerat volutpat, est erat interdum quam, ac auctor orci neque eu quam. Maecenas molestie, metus ut viverra lobortis, augue ex ornare orci, at fringilla purus dui in massa. 
+To build and run Hawkr there are several different avenues one could take. For our purposes, we have primarily hosted the site on AWS and Amplify(Using Route53 for domain routing).
+
+### Requirements
+
+1. **Supabase tables and .env file.** The project was built in conjunction with the Supabase API. An account with a respective database and tables are required. Below are the table names, and properties. Once an account is created be sure to create a .env file in the root directory with your Supabase credentials.
+
+
+##### profiles
+| UUID(uuid)  | state(int2) | name(varchar) | description(varchar) |
+| ------ | ------ |------|------|
+
+##### shops
+| shopID(uuid)  | vendorID(uuid) | shopName(varchar) | shopDescription(varchar) | open(bool) | timeOpen(time) | timeOpen(time) | messagesOn(bool) | liveTracking(bool) | hawkrType(varchar) | shop_image_url(text) |
+|------|------|------|------|------|------|------|------|------|------|------|
+
+##### locations
+| UUID(uuid)  | location(json) |
+| ------ | ------ |
+
+##### favoritesList
+| clientID(uuid)  | shopID(uuid) |
+| ------ | ------ |
+
+##### messages
+| messageID(uuid)  | clientID(uuid) | shopID(uuid) | content(json) |
+| ------ | ------ |------|------|
+
+
+The default authentication table for Supabase is below:
+| Email  | Phone | Provider | Created | Last Sign In | User UID |
+| ------ | ------ |------|------|------|------|
+
+2. **npm install.** 
+
+
+
+__Note that the project looks and performs best on Google Chrome__
 
 ## How to build in AWS
 
@@ -67,9 +103,13 @@ Morbi orci diam, malesuada non ligula et, sagittis mattis sem. Vivamus nulla pur
 
 ## How to run the project locally
 
-Morbi orci diam, malesuada non ligula et, sagittis mattis sem. Vivamus nulla purus, aliquam nec consequat in, aliquet vitae purus. Mauris varius hendrerit ex. Nullam posuere mi mi, nec vehicula nulla molestie eget. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Phasellus sit amet facilisis nibh. Duis in lorem molestie, fermentum ante eget, varius sapien. Phasellus dapibus convallis ullamcorper. Sed vel maximus massa. Maecenas pretium varius ornare. Etiam quis ipsum nisl. Donec accumsan auctor ipsum, semper varius augue tempor eu. Sed odio quam, porttitor eget consectetur eu, rutrum quis odio. Praesent cursus sed massa sed iaculis.
+1. In the project folder run 'npm run dev' to run the project locally. If you plan to run the the project on hosting service. You can use 'npm run build' instead.
+
+2. The project should now output were it is being hosted from in the terminal/command line. Feel free to visit it in any browser. 
 
 #
+
+The project has also been tested and is also hosted as a Vercel project [here](https://undergrad-capstone-2023.vercel.app/explore).
 
 > This page will be maintained and updated this page throughout the semester.
 
