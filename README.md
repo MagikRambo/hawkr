@@ -61,33 +61,33 @@ To build and run Hawkr there are several different avenues one could take. For o
 
 ### Requirements
 
-1. **npm install.** Since the project is built using React and NextJs. npm will need to be installed. to run locally. Instructions are provided by npm [here](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+1. **npm install.** Since the project is built using React and NextJs. npm will need to be installed to run locally. Instructions to install npm are provided [here](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm).
 
 2. **Supabase tables and .env file.** The project was built in conjunction with the Supabase API. An account with a respective database and tables are required. Below are the table names, and properties. Once an account is created be sure to create a .env file in the root directory with your Supabase credentials.
 
 
-##### profiles
+**profiles**
 | UUID(uuid)  | state(int2) | name(varchar) | description(varchar) |
 | ------ | ------ |------|------|
 
-##### shops
+**shops**
 | shopID(uuid)  | vendorID(uuid) | shopName(varchar) | shopDescription(varchar) | open(bool) | timeOpen(time) | timeOpen(time) | messagesOn(bool) | liveTracking(bool) | hawkrType(varchar) | shop_image_url(text) |
 |------|------|------|------|------|------|------|------|------|------|------|
 
-##### locations
+**locations**
 | UUID(uuid)  | location(json) |
 | ------ | ------ |
 
-##### favoritesList
+**favoritesList**
 | clientID(uuid)  | shopID(uuid) |
 | ------ | ------ |
 
-##### messages
+**messages**
 | messageID(uuid)  | clientID(uuid) | shopID(uuid) | content(json) |
 | ------ | ------ |------|------|
 
 
-The default authentication table for Supabase is below:
+**The default authentication table for Supabase is below:**
 | Email  | Phone | Provider | Created | Last Sign In | User UID |
 | ------ | ------ |------|------|------|------|
 
@@ -101,27 +101,29 @@ The default authentication table for Supabase is below:
 ## How to build in AWS
 
 
-
 1. Create an account on AWS. [link](https://portal.aws.amazon.com/billing/signup?nc2=h_ct&src=header_signup&redirect_url=https%3A%2F%2Faws.amazon.com%2Fregistration-confirmation#/start/email)
 2. Type in AWS Amplify in the console management search
-3. click on github or Deploy without git provider
+3. Here you can Click on github or Deploy without git provider
 
-If you click on github:
-4. sign in and authorize through github
+**If you chose to deploy with github:**
+
+4. Sign in and authorize through github
 5. Select a repository that you cloned from
 6. Select a branch
 7. Verify build and test settings are proper
 8. Add in the following Environment Variables and their respective values:NEXT_PUBLIC_EMAIL_PASS, NEXT_PUBLIC_EMAIL, NEXT_PUBLIC_GOOGLE_KEY, NEXT_PUBLIC_SUPABASE_ANON_KEY, NEXT_PUBLIC_SUPABASE_URL
 9. Save and deploy 
 
-If you click on manual deployment:
+**If you chose to deploy manually:**
+
 4. Provide your app name and environment name
-5. Drag your folder of your code
+5. Drag a zip file containing the build with your code
 6. Save and deploy
 
 
 Typically, it takes 3-5 minutes to build and deploy a new project. Once complete, AWS will provide you with a URL which you may visit.
 Be aware, that once connected to the github repository, the site is now setup as a CI/CD site which will automatically build and go live as updates are pushed to the main repository.
+
 ## How to build in Vercel
 
 Since NextJS was created by Vercel. They allow free(with some cavetas) hosting.
