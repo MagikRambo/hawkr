@@ -100,8 +100,28 @@ The default authentication table for Supabase is below:
 
 ## How to build in AWS
 
-Suspendisse accumsan ut arcu nec scelerisque. Ut odio ante, gravida ac malesuada non, sagittis eu urna. Mauris nec gravida ante, sed lacinia nibh. In eu urna bibendum, semper quam eu, condimentum ex. Vivamus vitae metus commodo, elementum nibh sit amet, tincidunt velit. In vel aliquam ex. Proin fermentum, risus eget semper lobortis, ligula tortor egestas augue, ac condimentum elit augue vitae velit. Suspendisse pretium egestas erat, at elementum sapien dignissim in. Aliquam cursus, leo vel malesuada varius, eros nisl pretium dui, a sagittis dui ipsum rutrum urna. Aenean vulputate dolor nisi, et suscipit eros interdum ac. 
 
+
+1. Create an account on AWS. [link](https://portal.aws.amazon.com/billing/signup?nc2=h_ct&src=header_signup&redirect_url=https%3A%2F%2Faws.amazon.com%2Fregistration-confirmation#/start/email)
+2. Type in AWS Amplify in the console management search
+3. click on github or Deploy without git provider
+
+If you click on github:
+4. sign in and authorize through github
+5. Select a repository that you cloned from
+6. Select a branch
+7. Verify build and test settings are proper
+8. Add in the following Environment Variables and their respective values:NEXT_PUBLIC_EMAIL_PASS, NEXT_PUBLIC_EMAIL, NEXT_PUBLIC_GOOGLE_KEY, NEXT_PUBLIC_SUPABASE_ANON_KEY, NEXT_PUBLIC_SUPABASE_URL
+9. Save and deploy 
+
+If you click on manual deployment:
+4. Provide your app name and environment name
+5. Drag your folder of your code
+6. Save and deploy
+
+
+Typically, it takes 3-5 minutes to build and deploy a new project. Once complete, AWS will provide you with a URL which you may visit.
+Be aware, that once connected to the github repository, the site is now setup as a CI/CD site which will automatically build and go live as updates are pushed to the main repository.
 ## How to build in Vercel
 
 Since NextJS was created by Vercel. They allow free(with some cavetas) hosting.
