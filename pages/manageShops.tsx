@@ -269,15 +269,15 @@ export default function useManageShops(){
                 {/* Bar above to creat shops etc.... */}
                     <div className="relative bg-gray-300 border-b border-gray-400 pb-5 sm:pb-0 w-screen h-30 ">
 
-                        <div className="relative pt-8 pl-10 text-2xl font-bold text-black">
+                        <div className="text-center sm:text-left relative p-5 sm:pt-8 sm:pl-10 text-2xl font-bold text-black">
                            
-                           <div className="flex">
+                           <div className="sm:flex">
                                 <p> Manage Shops </p>
-                                <p className="pl-2"> |</p>
-                                <p className="pl-2"> {shops.data["length"]} Shops </p>
+                                <p className="hidden sm:block p-2 sm:pl-2"> |</p>
+                                <p className="p-2 sm:pl-2"> {shops.data["length"]} Shops </p>
                                 {/* Button to create more shops */}
 
-                                <div className="absolute right-12 top-10  ">
+                                <div className="sm:absolute right-12 top-10  ">
 
                                     <button 
                                         onClick={() => (setEditClicked(false), setEditShop(null), setShowModal(true))} 
@@ -289,7 +289,7 @@ export default function useManageShops(){
                                 
                              </div> 
                         </div>
-                        <div className="pl-10 mt-4">
+                        <div className="p-5 sm:pl-10 sm:mt-4">
                             <div className="sm:hidden">
                             <label htmlFor="current-tab" className="sr-only">
                                 Select a tab
