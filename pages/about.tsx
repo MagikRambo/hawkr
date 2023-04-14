@@ -52,16 +52,13 @@ const people = [
                 {person.name === 'Mike Marambio' && (
                     <>
                     <p className="pb-4">My name is Mike Marambio, and I am a Computer Science student at the University of Utah, set to graduate in the spring of 2023. As an aspiring software engineer, I am passionate about building scalable and efficient systems, particularly in the areas of Microservices, Distributed Systems, and Containerization.</p>
-                    
                     <p className="pb-4"> In addition to my academic pursuits, I am also an undergraduate researcher at the Visual Perception and Spatial Cognition Lab, where I focus on exploring the potential of Mixed Reality. Furthermore, I am honored to serve as Vice President of The Society of Hispanic Professional Engineers (SHPE), a role that has allowed me to connect with fellow students and professionals in the engineering field while promoting diversity and inclusion. </p>
-                    
                     <p className="pb-4">My interest in software development has also led me to intern at Microsoft twice. During my first internship, I developed an admin UI and later pivoted the project towards a Full-Stack direction. In my second internship, I created a developer tool to simplify containerization and improve the developer life cycle.</p>
-                    
                     <p className="pb-4">When I'm not immersed in coding, I enjoy training, learning new hobbies, and spending quality time with family and friends. After graduation, I plan to continue developing my current project and integrate additional features to benefit small local vendors. I am confident that my skills and experiences will enable me to make a meaningful impact in the software engineering industry.</p>
                     </>)}
                  {person.name === 'Alex Romero' && (
                     <>
-                    <p className="pb-4">My name is Alex, I am a Hispanic American studying at the University of Utah. This year I am graduating with a bachelor’s degree in computer science and am currently in search of software engineering positions.</p>
+                    <p className="pb-4">My name is Alex, I am a Hispanic American studying at the University of Utah. This year I am graduating with a bachelors degree in computer science and am currently in search of software engineering positions.</p>
                     <p className="pb-4">During my time as an undergraduate, I have gained experience with Java, Kotlin, C/C++, C#, Python, JavaScript, React, and JavaScript. </p>
                     <p className="pb-4">I previously worked for Blendtec in Orem as a Software/Systems Engineer for approximately 3 years. While my experiences are diverse and with several different systems, I have a strong interest in OpSec and Backend Development. I have several hobbies including hiking, camping, automobile mechanics, and music discovery.</p>
                     </>)}
@@ -69,9 +66,7 @@ const people = [
                  {person.name === 'Leo Zhang' && (
                     <>
                     <p className="pb-4">Hello my name is Leo, born on Feb  19, 1998 in Tianjin. By chance, I came to the University of Utah and had the most memorable time of my life here.</p>
-                    
                     <p className="pb-4">I pursued architecture design in college at beginning, but soon realized my growing interest in computer science and computer graphics. I made the decision to continue my studies in the field at the University of Utah in the United States, and thanks for this choose, I meet a lot of cool guys here. </p>
-                    
                     <p className="pb-4">As my undergraduate studies progressed, I became increasingly interested in graphics. I enjoy reading about rendering and the technologies associated with game engines. My biggest dream is to open my own game studio and dedicate myself to providing a better gaming experience for players.</p>                                    
                     </>)}
                 </div>
