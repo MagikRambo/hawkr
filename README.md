@@ -2,7 +2,7 @@
 
 A Hawker is "defined as a person who travels around selling goods, typically advertising them by shouting" Our application aims to connect street entertainers, vendors and popup food sellers with their clients in a seamless easy to use web app.
 
-![hawkr_team_50](https://capstone-cs.eng.utah.edu/groups/hawkr/-/wikis/uploads/e3b7eb83aa7becf443fefb8d9fa855a6/hawkr_team_50.jpg)
+![hawkr_team_50](https://capstone-cs.eng.utah.edu/groups/hawkr/-/wikis/uploads/ff659392cbd77379e73588cd41aeceb2/Team_Picture.jpg)
 
 Authors: Alex Romero, Zixuan Zhang, Mike Marambio
 
