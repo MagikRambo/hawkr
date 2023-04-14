@@ -2,13 +2,15 @@
 
 A Hawker is "defined as a person who travels around selling goods, typically advertising them by shouting" Our application aims to connect street entertainers, vendors and popup food sellers with their clients in a seamless easy to use web app.
 
-![hawkr_team_50](https://capstone-cs.eng.utah.edu/groups/hawkr/-/wikis/uploads/e3b7eb83aa7becf443fefb8d9fa855a6/hawkr_team_50.jpg)
+<img src="https://capstone-cs.eng.utah.edu/groups/hawkr/-/wikis/uploads/ff659392cbd77379e73588cd41aeceb2/Team_Picture.jpg" width="500" />
 
 Authors: Alex Romero, Zixuan Zhang, Mike Marambio
 
 Link to published cloud site: [hawkr.dev](https://www.hawkr.dev)
 
 [Formalized Team Project Writeup](https://docs.google.com/document/d/1lMkBMix7LFE7FiyNj-BaNz_ERZAy1MkaqYW19PvmWDU/edit?usp=sharing)
+
+__Note that the site looks and performs best on Google Chrome__
 
 #
 
@@ -55,21 +57,92 @@ Databases used: Supabase ~ PostgreSQL
 
 # How to build and run the project
 
-Duis tincidunt sit amet nunc elementum luctus. Donec ipsum dolor, accumsan nec tellus nec, egestas dignissim odio. Donec quis nunc urna. Donec convallis orci non nibh iaculis, a fringilla massa posuere. Vivamus tincidunt nec elit nec laoreet. Ut auctor, nunc vel placerat volutpat, est erat interdum quam, ac auctor orci neque eu quam. Maecenas molestie, metus ut viverra lobortis, augue ex ornare orci, at fringilla purus dui in massa. 
+To build and run Hawkr there are several different avenues one could take. For our purposes, we have primarily hosted the site on AWS and Amplify(Using Route53 for domain routing).
 
-## How to build in AWS
+### Requirements
 
-Suspendisse accumsan ut arcu nec scelerisque. Ut odio ante, gravida ac malesuada non, sagittis eu urna. Mauris nec gravida ante, sed lacinia nibh. In eu urna bibendum, semper quam eu, condimentum ex. Vivamus vitae metus commodo, elementum nibh sit amet, tincidunt velit. In vel aliquam ex. Proin fermentum, risus eget semper lobortis, ligula tortor egestas augue, ac condimentum elit augue vitae velit. Suspendisse pretium egestas erat, at elementum sapien dignissim in. Aliquam cursus, leo vel malesuada varius, eros nisl pretium dui, a sagittis dui ipsum rutrum urna. Aenean vulputate dolor nisi, et suscipit eros interdum ac. 
+1. **npm install.** Since the project is built using React and NextJs. npm will need to be installed to run locally. Instructions to install npm are provided [here](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm).
 
-## How to build in Vercel
+2. **Supabase tables and .env file.** The project was built in conjunction with the Supabase API. An account with a respective database and tables are required. Below are the table names, and properties. Once an account is created be sure to create a .env file in the root directory with your Supabase credentials.
 
-Morbi orci diam, malesuada non ligula et, sagittis mattis sem. Vivamus nulla purus, aliquam nec consequat in, aliquet vitae purus. Mauris varius hendrerit ex. Nullam posuere mi mi, nec vehicula nulla molestie eget. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Phasellus sit amet facilisis nibh. Duis in lorem molestie, fermentum ante eget, varius sapien. Phasellus dapibus convallis ullamcorper. Sed vel maximus massa. Maecenas pretium varius ornare. Etiam quis ipsum nisl. Donec accumsan auctor ipsum, semper varius augue tempor eu. Sed odio quam, porttitor eget consectetur eu, rutrum quis odio. Praesent cursus sed massa sed iaculis. 
+
+**profiles**
+| UUID(uuid)  | state(int2) | name(varchar) | description(varchar) |
+| ------ | ------ |------|------|
+
+**shops**
+| shopID(uuid)  | vendorID(uuid) | shopName(varchar) | shopDescription(varchar) | open(bool) | timeOpen(time) | timeOpen(time) | messagesOn(bool) | liveTracking(bool) | hawkrType(varchar) | shop_image_url(text) |
+|------|------|------|------|------|------|------|------|------|------|------|
+
+**locations**
+| UUID(uuid)  | location(json) |
+| ------ | ------ |
+
+**favoritesList**
+| clientID(uuid)  | shopID(uuid) |
+| ------ | ------ |
+
+**messages**
+| messageID(uuid)  | clientID(uuid) | shopID(uuid) | content(json) |
+| ------ | ------ |------|------|
+
+
+**The default authentication table for Supabase is below:**
+| Email  | Phone | Provider | Created | Last Sign In | User UID |
+| ------ | ------ |------|------|------|------|
+
 
 ## How to run the project locally
 
-Morbi orci diam, malesuada non ligula et, sagittis mattis sem. Vivamus nulla purus, aliquam nec consequat in, aliquet vitae purus. Mauris varius hendrerit ex. Nullam posuere mi mi, nec vehicula nulla molestie eget. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Phasellus sit amet facilisis nibh. Duis in lorem molestie, fermentum ante eget, varius sapien. Phasellus dapibus convallis ullamcorper. Sed vel maximus massa. Maecenas pretium varius ornare. Etiam quis ipsum nisl. Donec accumsan auctor ipsum, semper varius augue tempor eu. Sed odio quam, porttitor eget consectetur eu, rutrum quis odio. Praesent cursus sed massa sed iaculis.
+1. In the project folder run 'npm run dev' to run the project locally. If you plan to run the the project on hosting service. You can use 'npm run build' instead.
+
+2. The project should now output were it is being hosted from in the terminal/command line. Feel free to visit it in any browser. 
+
+## How to build in AWS
+
+
+1. Create an account on AWS. [link](https://portal.aws.amazon.com/billing/signup?nc2=h_ct&src=header_signup&redirect_url=https%3A%2F%2Faws.amazon.com%2Fregistration-confirmation#/start/email)
+2. Type in AWS Amplify in the console management search
+3. Here you can Click on github or Deploy without git provider
+
+**If you chose to deploy with github:**
+
+4. Sign in and authorize through github
+5. Select a repository that you cloned from
+6. Select a branch
+7. Verify build and test settings are proper
+8. Add in the following Environment Variables and their respective values:NEXT_PUBLIC_EMAIL_PASS, NEXT_PUBLIC_EMAIL, NEXT_PUBLIC_GOOGLE_KEY, NEXT_PUBLIC_SUPABASE_ANON_KEY, NEXT_PUBLIC_SUPABASE_URL
+9. Save and deploy 
+
+**If you chose to deploy manually:**
+
+4. Provide your app name and environment name
+5. Drag a zip file containing the build with your code
+6. Save and deploy
+
+
+Typically, it takes 3-5 minutes to build and deploy a new project. Once complete, AWS will provide you with a URL which you may visit.
+Be aware, that once connected to the github repository, the site is now setup as a CI/CD site which will automatically build and go live as updates are pushed to the main repository.
+
+## How to build in Vercel
+
+Since NextJS was created by Vercel. They allow free(with some cavetas) hosting.
+To build the project in Vercel simply do the following:
+
+1. Create an account in vercel. [link](https://vercel.com/signup)
+2. Create a new project. [vercel.com/new](https://vercel.com/new)
+3. Sign in with the github account where the repository is hosted or click on 'Import Third-Party Git Repository' and provide a link to the repository.
+4. Add the supabase account's information. You will need the following: NEXT_PUBLIC_EMAIL_PASS, NEXT_PUBLIC_EMAIL, NEXT_PUBLIC_GOOGLE_KEY, NEXT_PUBLIC_SUPABASE_ANON_KEY, NEXT_PUBLIC_SUPABASE_URL
+5. Click 'deploy'
+
+Typically, it takes 3-5 minutes to build and deploy a new project. Once complete, Vercel will provide you with a URL which you may visit.
+
+Be aware, that once connected to the github repository, the site is now setup as a CI/CD site which will automatically build and go live as updates are pushed to the main repository.
 
 #
+
+The project has also been tested and is also hosted as a Vercel project [here](https://undergrad-capstone-2023.vercel.app/explore).
+
 
 > This page will be maintained and updated this page throughout the semester.
 

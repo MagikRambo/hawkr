@@ -269,15 +269,15 @@ export default function useManageShops(){
                 {/* Bar above to creat shops etc.... */}
                     <div className="relative bg-gray-300 border-b border-gray-400 pb-5 sm:pb-0 w-screen h-30 ">
 
-                        <div className="relative pt-8 pl-10 text-2xl font-bold text-black">
+                        <div className="text-center sm:text-left relative p-5 sm:pt-8 sm:pl-10 text-2xl font-bold text-black">
                            
-                           <div className="flex">
+                           <div className="sm:flex">
                                 <p> Manage Shops </p>
-                                <p className="pl-2"> |</p>
-                                <p className="pl-2"> {shops.data["length"]} Shops </p>
+                                <p className="hidden sm:block p-2 sm:pl-2"> |</p>
+                                <p className="p-2 sm:pl-2"> {shops.data["length"]} Shops </p>
                                 {/* Button to create more shops */}
 
-                                <div className="absolute right-12 top-10  ">
+                                <div className="sm:absolute right-12 top-10  ">
 
                                     <button 
                                         onClick={() => (setEditClicked(false), setEditShop(null), setShowModal(true))} 
@@ -289,7 +289,7 @@ export default function useManageShops(){
                                 
                              </div> 
                         </div>
-                        <div className="pl-10 mt-4">
+                        <div className="p-5 sm:pl-10 sm:mt-4">
                             <div className="sm:hidden">
                             <label htmlFor="current-tab" className="sr-only">
                                 Select a tab
@@ -328,16 +328,16 @@ export default function useManageShops(){
                     </div>
 
            
-                    <div className="relative grid grid-cols-4 h-screen place-items-center ">
+                    <div className="relative sm:grid sm:grid-cols-4 h-screen place-items-center ">
                         {/* TODO: Make map function IMAGES BELOW */}
                         <>
                         {shops.data.map((shop:any) => 
                             <div key={shop.shopID} className="w-80 rounded-2xl bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-1 shadow-xl">
-                                <div className="h-64 w-full bg-gray-200 flex flex-col justify-between p-4 bg-cover rounded-xl bg-center"
+                                <div className="h-64 w-full bg-gray-200 sm:flex sm:flex-col justify-between p-4 bg-cover rounded-xl bg-center"
                                      style={{backgroundImage: `url(${shop.shop_image_url})`}}
                                 >
-                                    <div className="flex justify-between">
-                                        <div className="relative h-32 w-32">
+                                    <div className="sm:flex justify-between">
+                                        <div className="sm:relative h-32 w-32">
                                             <button type="button"
                                                 onClick={() => (setOpen(true), setRemoveShop(shop))} 
                                                 className="relative -left-6 -top-6 focus-visible:outline-offset-[-4px] rounded-xl bg-gray-900 bg-opacity-50 pl-2 pb-2 text-white hover:bg-gray-500 hover:bg-opacity-50 hover:text-blue-500"
@@ -369,7 +369,7 @@ export default function useManageShops(){
 
                                     </div>
                                     
-                                    <div className="relative -left-4 -bottom-4 w-full h-18 rounded-xl pl-2 bg-slate-800 bg-opacity-90">
+                                    <div className="hidden sm:block relative -left-4 -bottom-4 w-full h-18 rounded-xl pl-2 bg-slate-800 bg-opacity-90">
                                         <p className="text-xl">{shop.shopName}</p>
                                     <div className="relative flex space-x-40 -left-2  w-full h-10 rounded-xl pl-2 bg-slate-800 bg-opacity-90">
                                         <p className="text-2xl"> Open </p>
