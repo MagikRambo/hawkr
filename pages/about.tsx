@@ -1,4 +1,3 @@
-
 const people = [
     {
       name: 'Mike Marambio',
@@ -10,7 +9,7 @@ const people = [
     },
     {
         name: 'Alex Romero',
-        role: 'Front-end Developer',
+        role: 'Full-Stack Developer',
         description: 'Text goes here',
         imageUrl:
           ' https://alex-romero.vercel.app/selfie.jpg',
@@ -56,11 +55,11 @@ const people = [
                     <p className="pb-4">My interest in software development has also led me to intern at Microsoft twice. During my first internship, I developed an admin UI and later pivoted the project towards a Full-Stack direction. In my second internship, I created a developer tool to simplify containerization and improve the developer life cycle.</p>
                     <p className="pb-4">When I am not immersed in coding, I enjoy training, learning new hobbies, and spending quality time with family and friends. After graduation, I plan to continue developing my current project and integrate additional features to benefit small local vendors. I am confident that my skills and experiences will enable me to make a meaningful impact in the software engineering industry.</p>
                     </>)}
-                 {person.name === 'Alex Romero' && (
+                {person.name === 'Alex Romero' && (
                     <>
-                    <p className="pb-4">My name is Alex, I am a Hispanic American studying at the University of Utah. This year I am graduating with a bachelors degree in computer science and am currently in search of software engineering positions.</p>
-                    <p className="pb-4">During my time as an undergraduate, I have gained experience with Java, Kotlin, C/C++, C#, Python, JavaScript, React, and JavaScript. </p>
-                    <p className="pb-4">I previously worked for Blendtec in Orem as a Software/Systems Engineer for approximately 3 years. While my experiences are diverse and with several different systems, I have a strong interest in OpSec and Backend Development. I have several hobbies including hiking, camping, automobile mechanics, and music discovery.</p>
+                    <p className="pb-4">My name is Alex, I am a student studying Computer Science at the University of Utah. I plan on graduating Spring of 2023 with a bachelor’s degree and I am currently seeking employment opportunities. During my time as an undergraduate, I grew a strong interest in Backend Development and Reverse Software Engineering.</p>
+                    <p className="pb-4">I have spent approximately 2-3 years employed as Software/Systems Engineer for Blendtec located in Orem. During this time gained valuable experience and understanding of custom manufacturing ERP systems. The I.T team at Blendtec was a small, thus my duties as a Software Engineer required that i be in charge of several companywide systems. These included the custom code in Microsoft Dynamics AX, Microsoft SQL, All Amazon Web Services, Active Directory, and the Company Seller site. Much of the work ment that occasionally I soley debuged, repaired, created custom software, and performed serval important updates to websites/systems. I also gained valuable communication skills since a primary function became to speak with employees in every department to gain a deeper understanding of problems/bugs(submitted through Jira onto a Kanban board) which they would encounter. Often, i would educate new/old memebers on performing tasks using Blendtec's custom Software.</p>
+                    <p className="pb-4">Outside of Computing I enjoy the great outdoors. I have visited many places with the intention to either camp, backpack, or hike. Although this is not an exhaustive list, I have visited, Iceland, Canada, Hawaii, Oregon, Washington Montana, Colorado, and California. I also enjoy doing performance car modifications and discovering new music.</p>
                     </>)}
 
                  {person.name === 'Leo Zhang' && (
