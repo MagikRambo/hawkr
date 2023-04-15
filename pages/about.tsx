@@ -12,7 +12,7 @@ const people = [
         role: 'Full-Stack Developer',
         description: 'Text goes here',
         imageUrl:
-          ' https://alex-romero.vercel.app/selfie.jpg',
+          'https://alex-romero.vercel.app/selfie.jpg',
         linkedinUrl: 'https://www.linkedin.com/in/alex--romero/',
         email: 'alexander--romero@outlook.com'
       },
