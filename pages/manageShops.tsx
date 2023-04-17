@@ -272,9 +272,9 @@ export default function useManageShops(){
                         <div className="text-center sm:text-left relative p-5 sm:pt-8 sm:pl-10 text-2xl font-bold text-black">
                            
                            <div className="sm:flex">
-                                <p> Manage Shops </p>
-                                <p className="hidden sm:block p-2 sm:pl-2"> |</p>
-                                <p className="p-2 sm:pl-2"> {shops.data["length"]} Shops </p>
+                                <p className="p-2 sm:pl-0"> Manage Shops </p>
+                                <p className="hidden sm:block p-2 sm:pl-0"> |</p>
+                                <p className="p-2 sm:pl-0"> {shops.data["length"]} Shops </p>
                                 {/* Button to create more shops */}
 
                                 <div className="sm:absolute right-12 top-10  ">
