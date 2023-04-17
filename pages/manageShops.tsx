@@ -289,7 +289,7 @@ export default function useManageShops(){
                                 
                              </div> 
                         </div>
-                        <div className="p-5 sm:pl-10 sm:mt-4">
+                        <div className="p-5 sm:p-1 sm:pl-10 sm:mt-0">
                             <div className="sm:hidden">
                             <label htmlFor="current-tab" className="sr-only">
                                 Select a tab
