@@ -100,7 +100,7 @@ const retrieveFavoritesList = async () => {
           )}
         </div>
         <p className='font-bold text-xl py-2'>Current Location: {props.location.lat} {props.location.lng}</p>
-        <p className='font-bold text-2xl sm:text-4xl py-4'>Vender Detail</p>
+        <p className='font-bold text-2xl sm:text-4xl py-4'>Vendor Detail</p>
         <p className='py-2 text-2xl'>{props.shopDescription}</p>
 
         {/** The text Review Part*/}
