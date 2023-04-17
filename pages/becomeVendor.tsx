@@ -61,7 +61,7 @@ export default function useBecomeVendor() {
 
                     <p>- Fill out your name</p>
                     <p>- Fill out your Email</p>
-                    <p>- Fill in a Description of yourself and what you'd like to sell</p>
+                    <p>- Fill in a Description of yourself and what you would like to sell</p>
 
                 </div>
               </div>
