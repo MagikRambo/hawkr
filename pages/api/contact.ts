@@ -42,7 +42,7 @@ export default async function (req:any, res:any) {
       from: email,
       to: email,
       ...generateEmailContent(req.body),
-      subject: req.body.subject,
+      subject: "New Vendor Application",
     };
     await new Promise((resolve, reject) => {
       transporter.sendMail(mailData, function (err:any, info:any) {
