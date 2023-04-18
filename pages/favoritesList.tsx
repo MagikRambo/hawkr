@@ -20,7 +20,6 @@ type ExploreMenuProps = {
   shops: any
 }
 
-
 function FavoritesMenu(props: ExploreMenuProps) {
 
   const [curr_page, setCurrPage] = useState(1)
@@ -38,7 +37,7 @@ function FavoritesMenu(props: ExploreMenuProps) {
                 <Link href={`shops/${item.shopID}`}>
                   <InfoCard
                     key={item.shopID}
-                    img={hawkr_icon}
+                    img={item.shop_image_url ? item.shop_image_url : hawkr_icon}
                     description={item.shopDescription}
                     title={item.shopName}
                     open={item.open}
@@ -57,7 +56,7 @@ function FavoritesMenu(props: ExploreMenuProps) {
                 <Link href={`shops/${item.shopID}`}>
                   <InfoCard
                     key={item.shopID}
-                    img={hawkr_icon}
+                    img={item.shop_image_url ? item.shop_image_url : hawkr_icon}
                     description={item.shopDescription}
                     title={item.shopName}
                     open={item.open}
@@ -91,6 +90,7 @@ export default function FavoritesList() {
   //filter to only get open shops to pass to Map
 
   const [favoriteShops, setFavoriteShops] = useState<any>([])
+  console.log(favoriteShops)
   let openShops = favoriteShops.filter((shop: any) => shop.open === true)
   const [shopIDs, setShopIDs] = useState<any>('')
 
@@ -165,17 +165,17 @@ export default function FavoritesList() {
             leave='transition-all' leaveFrom='opacity-100 w-full sm:w-2/5 ' leaveTo='opacity-0 w-0'>
             <button className='p-2 border-gray-300 bg-white text-gray-700 m-5 sm:hidden'
               onClick={() => setShowOpen(!showOpen)}>
-              {showOpen ? <Image width={23} height={23} alt="LeftArrow" src={LeftArrow.src} /> : <div className="flex text-blue-500 text-base"><Image width={20} height={20} alt="RightArrow" src={RightArrow.src} />Show List</div>}
+              {showOpen ? <Image width={23} height={23} alt="LeftArrow" src={LeftArrow.src} /> : <div className="flex text-blue-500 text-base"><Image width={20} height={20} alt="RightArrow" src={RightArrow.src} /></div>}
             </button>
             <FavoritesMenu shops={favoriteShops} />
           </Transition>
           <div className='relative grow'>
-            <button className={'absolute z-10 sm:rounded sm:border border-gray-300 bg-white sm:px-2.5 sm:py-1.5 sm:text-xs font-medium text-gray-700 sm:shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:m-8' + (showOpen ? "" : "absolute m-5")}
-              onClick={() => setShowOpen(!showOpen)}>
-              {showOpen ? <Image width={23} height={23} alt="LeftArrow" src={LeftArrow.src} /> : <div className="flex text-blue-500 text-base"><Image width={20} height={20} alt="RightArrow" src={RightArrow.src} />Show List</div>}
+            <button className={(showOpen ? 'hidden ' : '') + 'sm:block absolute z-10 rounded sborder border-gray-300 bg-white px-2.5 h-10 sm:py-1.5 sm:text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:m-8' + (showOpen ? "" : "absolute m-5")}
+            onClick={() => setShowOpen(!showOpen)}>
+              {showOpen ? <Image width={23} height={23} alt="RightArrow" src={LeftArrow.src} /> : <div className="flex text-blue-500 text-base"><Image width={20} height={20} alt="RightArrow" src={RightArrow.src} />Show List</div>}
             </button>
             <Map shops={openShops} />
-          </div>
+            </div>
         </div>
       </>
     )

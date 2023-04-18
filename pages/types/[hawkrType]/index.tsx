@@ -41,9 +41,10 @@ function SidePanelMenu(props: SidePanelMenuProps) {
               {props.data?.map((item: any) => (
                 <Link key={item.shopID} href={`/shops/${item.shopID}`}>
                 <InfoCard
-                  img={hawkr_icon}
+                  img={item.shop_image_url ? item.shop_image_url : hawkr_icon}
                   description={item.shopDescription}
                   title={item.shopName}
+                  open={item.open}
                   />
                   </Link>
                 ))}
