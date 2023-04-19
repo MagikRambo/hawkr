@@ -14,6 +14,7 @@ import { Wrapper, LoadingView } from './Map.styles';
 
 import { createClient } from '@supabase/supabase-js';
 import { getHawkrTypeIcon } from '../utils/functions/getHawkrTypeIcon';
+import { useRouter } from 'next/router';
 
 export type MarkerType = {
   id: string;
@@ -24,6 +25,7 @@ export type MarkerType = {
 };
 
   export default function Map({shops}:any, showOpen:boolean) {
+    const {push} = useRouter()
 
     const { isLoaded } = useLoadScript({
       id: 'google-map-script',
@@ -85,7 +87,13 @@ export type MarkerType = {
     console.log({lat: e.latLng!.lat(), lng: e.latLng!.lng()});
   };
 
-  const onMarkerClick = (marker: MarkerType) => setSelectedMarker(marker);
+  const onMarkerClick = (marker: MarkerType) => {
+  
+    setSelectedMarker(marker)
+    push(`https://maps.google.com?q=${marker.location.lat},${marker.location.lng}`)
+
+    // console.log(marker)
+  };
 
   if (!isLoaded) return <div> Map Loading ...</div>
 

@@ -3,8 +3,10 @@ import { useUser } from '@supabase/auth-helpers-react';
 // import { HeartIcon } from '@heroicons/react/24/solid';
 import { useEffect, useState } from 'react';
 import { supabase } from '../utils/supabaseClient';
+import { useRouter } from 'next/router';
 
 import Image from 'next/image';
+import reverseGeocode from '../pages/api/reverseGeocode';
 type ShopCardProps = {
     hawkrType: string,
     location: {lat: number, lng: number},
@@ -19,8 +21,10 @@ type ShopCardProps = {
 export default function ShopCard(props: ShopCardProps){
 
   const [HeartStatus, setHeartStatus] = useState<boolean>(false)
+  const [locationName, setLocationName] = useState<string|undefined>('')
   const [favoritesList, setFavoritesList] = useState<any>()
   const [loading, setLoading] = useState<boolean>(false)
+  const router = useRouter()
   const user = useUser();
   const userID = user?.id
   const base_hawkr_img = 'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/base-hawkr/hawkr_icon.png'
@@ -29,7 +33,7 @@ export default function ShopCard(props: ShopCardProps){
   useEffect(() => {
     setLoading(true)
     retrieveFavoritesList().catch(console.error)
-    
+    retrieveLocationName(props.location.lat, props.location.lng).catch(console.error)
     setLoading(false)
     
     }, [userID])
@@ -79,6 +83,12 @@ const retrieveFavoritesList = async () => {
     }
   }
 }
+const retrieveLocationName  = async (lat:number, lng:number) => {
+  let resLocationName:string|undefined = await reverseGeocode(lat, lng)
+
+  setLocationName(resLocationName)
+  
+}
 
   return (
     <main className="flex text-slate-950 text-black">
@@ -99,7 +109,14 @@ const retrieveFavoritesList = async () => {
           <button onClick={() => toggleHeart(props.shopID)}><HeartIcon className='h-14 cursor-pointer mr-7 '/></button>
           )}
         </div>
-        <p className='font-bold text-xl py-2'>Current Location: {props.location.lat} {props.location.lng}</p>
+        <p className='font-bold text-xl py-2'>Current Location:</p>
+        <p className='font-bold text-xl py-2 '>{locationName}</p>
+        <button
+        className='inline-flex items-center rounded-md border border-transparent bg-cyan-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
+        onClick={() => router.push(`https://maps.google.com?q=${locationName}`)
+      }>
+          Take me there
+        </button>
         <p className='font-bold text-2xl sm:text-4xl py-4'>Vendor Detail</p>
         <p className='py-2 text-2xl'>{props.shopDescription}</p>
 
