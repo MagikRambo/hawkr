@@ -23,28 +23,43 @@ const hawkrPages = [
 
 const technologies = [
   {
-    name: 'Technologies 1',
+    name: 'Next (React Framework)',
     description: 'layout...',
      imageUrl:
-     'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/base-hawkr/hawkr_editshopspage.png'
+     'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/base-hawkr/nextjs.png'
   },
   {
-    name: 'Technologies 2',
+    name: 'Typescript',
     description: 'layout...',
      imageUrl:
-     'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/base-hawkr/hawkr_editshopspage.png'
+     'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/base-hawkr/typescript.png'
   },
   {
-    name: 'Technologies 3',
+    name: 'AWS - Amplify',
     description: 'layout...',
      imageUrl:
-     'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/base-hawkr/hawkr_editshopspage.png'
+     'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/base-hawkr/aws.png'
   },
   {
-    name: 'Technologies 4',
+    name: 'Supabase - DB,CDN,AUTH',
     description: 'layout...',
      imageUrl:
-     'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/base-hawkr/hawkr_editshopspage.png'
+     'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/base-hawkr/supabase.png'
+  }
+]
+
+const architectures = [
+  {
+    name: 'Architecture Diagram 1',
+    description: '.....',
+    imageUrl:
+    'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/base-hawkr/hawkr_architecture.png'
+  },
+  {
+    name: 'Architecture Diagram 2',
+    description: '.....',
+    imageUrl:
+    'xxxxx'
   }
 ]
 
@@ -74,11 +89,11 @@ export default function About() {
         </div>
         <ul
           role="list"
-          className="mx-auto mt-20 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-1 lg:mx-0 lg:max-w-md lg:grid-cols-2"
+          className="mx-auto mt-20 grid max-w-2xl grid-cols-1 gap-x-14 gap-y-4 sm:grid-cols-1 lg:mx-0 lg:max-w-md lg:grid-cols-2"
         >
           {technologies.map((technologies) => (
             <li key={technologies.name}>
-              <img className="aspect-[2/2] w-full rounded-xl object-cover" src={technologies.imageUrl} alt="" />
+              <img className="h-40 md:max-w-l  rounded-xl object-fit border-2 border-rose-400 shadow-xl" src={technologies.imageUrl} alt="" />
               <h3 className="mt-2 text-lg font-semibold leading-8 tracking-tight text-gray-900">{technologies.name}</h3>
               <p className="pb-4 text-sm text-black">
                   {technologies.description}
@@ -93,7 +108,7 @@ export default function About() {
           
           {hawkrPages.map((hwkrPage) => (
             <li key={hwkrPage.name}>
-              <img className="aspect-[2/2] w-full rounded-xl object-cover" src={hwkrPage.imageUrl} alt="" />
+              <img className="h-40 w-full rounded-xl object-fit" src={hwkrPage.imageUrl} alt="" />
               <h3 className="mt-2 text-lg font-semibold leading-8 tracking-tight text-gray-900">{hwkrPage.name}</h3>
               <p className="pb-4 text-sm text-black">
                   {hwkrPage.description}
