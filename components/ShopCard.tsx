@@ -95,7 +95,7 @@ const retrieveLocationName  = async (lat:number, lng:number) => {
       <section className='flex-grow w-screen h-screen px-2 sm:px-16 bg-slate-200 overflow-y-auto [&::-webkit-scrollbar]:hidden'>
       {/* ~~~~~~~ EDITS NEED TO BE MADE HERE FOR IMAGE ~~~~~~~ */}
       <div className='will-change-auto relative'>
-        <img className="rounded-md object-cover border-cyan-500/100 border-2" src={shopImage} alt={`picture of the link ${shopImage}`}/>
+        <img className=" h-auto aspect-[5/2] w-full rounded-md object-cover border-cyan-500/100 border-2" src={shopImage} alt={`picture of the link ${shopImage}`}/>
       </div>
         <div className='flex justify-between items-center'>
           <div>
