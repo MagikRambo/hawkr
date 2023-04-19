@@ -84,7 +84,7 @@ export default function About() {
           <p className="mt-6 text-lg leading-8 text-gray-600">
           Hawkr is a Website/Mobile application which intends to bridge the gap between mobile vendors 
           and cutomers/clients. Using AWS Services, React, NextJs, Tailwind, Supabase, and Google Maps 
-          API's we intend to create an all in one application which will create and bring these mobile 
+          APIs we intend to create an all in one application which will create and bring these mobile 
           vendor communities together.
           </p>
           <p className="mt-6 text-lg leading-8 text-gray-600">
