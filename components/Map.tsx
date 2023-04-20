@@ -17,7 +17,7 @@ import { getHawkrTypeIcon } from '../utils/functions/getHawkrTypeIcon';
 import { useRouter } from 'next/router';
 
 export type MarkerType = {
-  id: string;
+  shopID: string;
   location: google.maps.LatLngLiteral;
   name: string;
   phone_number: string;
@@ -90,9 +90,9 @@ export type MarkerType = {
   const onMarkerClick = (marker: MarkerType) => {
   
     setSelectedMarker(marker)
-    push(`https://maps.google.com?q=${marker.location.lat},${marker.location.lng}`)
+    push(`/shops/${marker.shopID}`)
 
-    // console.log(marker)
+    console.log(marker)
   };
 
   if (!isLoaded) return <div> Map Loading ...</div>
