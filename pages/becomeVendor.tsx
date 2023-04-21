@@ -4,8 +4,14 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useRouter } from "next/router";
+import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
 
 export default function useBecomeVendor() {
+
+  const router = useRouter()
+  const { isLoading, session, error } = useSessionContext();
+
 
   const [contactDetail, setContactDetail] = useState([]);
   const {
@@ -39,6 +45,9 @@ export default function useBecomeVendor() {
   };
 
   // console.log("contact Detail", contactDetail);
+  if(!session && !isLoading){
+    router.push('/login')
+  }
 
   return (
     <>
