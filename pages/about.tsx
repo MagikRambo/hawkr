@@ -1,3 +1,5 @@
+import { useState } from "react"
+
 const hawkrPages = {
   HomePage: [{
     name: 'Home Page',
@@ -137,6 +139,39 @@ const people = [
 ]
 
 export default function About() {
+  
+  function onUseClick(flagName:string){
+    if (flagName === 'Home')
+    {
+      setHomeFlag(true)
+      setAccountFlag(false)
+      setVendorFlag(false)
+      setShopsFlag(false)
+    }
+    else if(flagName === 'Account'){
+      setHomeFlag(false)
+      setAccountFlag(true)
+      setVendorFlag(false)
+      setShopsFlag(false)
+    }
+    else if (flagName === 'Vendor'){
+      setHomeFlag(false)
+      setAccountFlag(false)
+      setVendorFlag(true)
+      setShopsFlag(false)
+    }
+    else{
+      setHomeFlag(false)
+      setAccountFlag(false)
+      setVendorFlag(false)
+      setShopsFlag(true)
+    }
+  }
+  const [homeFlag, setHomeFlag] = useState<boolean>(true)
+  const [accountFlag, setAccountFlag] = useState<boolean>(false)
+  const [vendorFlag, setVendorFlag] = useState<boolean>(false)
+  const [shopsFlag, setShopsFlag] = useState<boolean>(false)
+
   return (
     <div className="bg-slate-200 py-24 sm:py-12">
       <div className="mx-auto max-w-7xl px-4 lg:px-6">
@@ -283,8 +318,20 @@ export default function About() {
             Hawkr offers a robust and user-friendly platform, providing vendors with essential tools to manage their business and reach a broader audience, while also offering customers an easy-to-use platform for finding the products and services they need. 
             With Hawkr, locating your next mobile vendor is one-click away!</h3>
 
-          <h1 className="text-2xl font-bold border-b-2 border-gray-400 mb-2 w-44 pl-4 py-4 hover:text-gray-500 hover:border-blue-300">Homepage</h1>
-          <ul 
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8">
+          <button onClick={() => onUseClick('Home')}><h1 className="text-2xl font-bold border-b-2 border-gray-400 mb-2 w-full mr-4 py-4 hover:text-gray-500 hover:border-blue-300">Homepage</h1></button>
+          
+          <button onClick={() => onUseClick('Account')}><h1 className="text-2xl font-bold border-b-2 border-gray-400 mb-2 w-full mr-4 py-4 hover:text-gray-500 hover:border-blue-300">Account Creation</h1></button>
+
+          <button onClick={() => onUseClick('Vendor')}><h1 className="text-2xl font-bold border-b-2 border-gray-400 mb-2 w-full mr-4 py-4 hover:text-gray-500 hover:border-blue-300">Becoming a Vendor</h1></button>
+
+          <button onClick={() => onUseClick('Shop')}><h1 className="text-2xl font-bold border-b-2 border-gray-400 mb-2 w-full mr-4 py-4 hover:text-gray-500 hover:border-blue-300">Building your own shop</h1></button>
+          </div>
+
+          
+          
+          
+          {homeFlag && <ul 
           className="relative  grid grid-cols-1 gap-y-4 md:gap-x-8 sm:grid-cols-1 lg:mx-0 lg:max-w-full lg:grid-cols-3 mx-auto"
           >
           {/* Home page */}
@@ -304,11 +351,10 @@ export default function About() {
               </div>
             </li>
           ))}
-          </ul>
+          </ul>}
 
 
-          <h1 className="text-2xl font-bold border-b-2 border-gray-400 mb-2 w-44 pl-4 py-4 hover:text-gray-500 hover:border-blue-300">Account Creation</h1>
-          <ul 
+          {accountFlag && <ul 
           className="relative  grid grid-cols-1 gap-y-4 md:gap-x-8 sm:grid-cols-1 lg:mx-0 lg:max-w-full lg:grid-cols-3 mx-auto"
           >
           {/* Account Creation */}
@@ -328,10 +374,9 @@ export default function About() {
 
             </li>
           ))}
-          </ul>
+          </ul>}
 
-          <h1 className="text-2xl font-bold border-b-2 border-gray-400 mb-2 w-44 pl-4 py-4 hover:text-gray-500 hover:border-blue-300">Becoming a Vendor</h1>
-          <ul 
+          {vendorFlag && <ul 
           className="relative  grid grid-cols-1 gap-y-4 md:gap-x-8 sm:grid-cols-1 lg:mx-0 lg:max-w-full lg:grid-cols-3 mx-auto"
           >
           {/* Becoming Vendor */}
@@ -350,10 +395,10 @@ export default function About() {
               </div>
             </li>
           ))}
-          </ul>
+          </ul>}
 
-          <h1 className="text-2xl font-bold border-b-2 border-gray-400 mb-2 w-44 pl-4 py-4 hover:text-gray-500 hover:border-blue-300">Building your own shop</h1>
-          <ul 
+
+          {shopsFlag && <ul 
           className="relative  grid grid-cols-1 gap-y-4 md:gap-x-8 sm:grid-cols-1 lg:mx-0 lg:max-w-full lg:grid-cols-3 mx-auto"
           >
           {/* Building your own shop */}
@@ -373,7 +418,7 @@ export default function About() {
               </div>
             </li>
           ))}
-          </ul>
+          </ul>}
         </div>
       </div>
 
