@@ -1,23 +1,85 @@
-const hawkrPages = [
-  {
+const hawkrPages = {
+  HomePage: [{
     name: 'Home Page',
-    description: 'The homepage shows users everything they need to find nearby vendors',
+    description: 'Hawkr allows anyone the ability to find nearby vendors, even without an account.',
     imageUrl:
-      'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/base-hawkr/hawkr_homepage.png'
+      'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/base-hawkr/about/hawkr_homepage.png'
   },
   {
-      name: 'Vendor Shops Page',
-      description: 'Vendors can easily update their location and information',
+    name: 'Hawkr Types',
+    description: 'You can browse through the following types! FoodTrucks, Clothes, Art. Browse specific types.',
+    imageUrl:
+      'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/base-hawkr/about/HawkrTypes.png?t=2023-04-21T02%3A59%3A37.979Z'
+  },
+  {
+    name: 'Shop Card',
+    description: 'When viewing a vendor you can see their descriptions as well as get directions to them.',
+    imageUrl:
+      'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/base-hawkr/about/shopCard.png'
+  }
+
+],
+
+  AccountCreation: [
+    {
+      name: 'Signing up',
+      description: 'Creating and verfiying your account is done simple.',
       imageUrl:
-        'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/base-hawkr/manageshops.png'
+        'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/base-hawkr/about/sign_up_1.png'
     },
     {
-      name: 'Vendor Shops Page cont.',
-      description: 'The edit page for a vendor',
-       imageUrl:
-       'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/base-hawkr/hawkr_editshopspage.png'
-  },
-]
+      name: 'Favorites',
+      description: 'You can then save your favorite vendors and find them later.',
+      imageUrl:
+        'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/base-hawkr/about/favorites_2.png'
+    },
+
+    {
+      name: 'Profile',
+      description: 'You can also edit your profile page information.',
+      imageUrl:
+        'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/base-hawkr/about/my_profile.png'
+    }],
+
+  BecomingVendor: [
+    {
+    name: 'Becoming Vendor 1',
+    description: 'To become a vendor you must first go through our application process.',
+    imageUrl:
+      'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/base-hawkr/about/become_vendor.png'
+  }],
+
+  BuildingOwnShop: [
+    {
+      name: 'Where to find ManageShops',
+      description: 'Once approved you will gain access to the Manage Shops page',
+      imageUrl:
+        'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/base-hawkr/about/manage_shops1.png'
+    },
+    {
+      name: 'Creating your shop / edit shop form',
+      description: 'Form containing information that when completed allows for shops to be available.',
+      imageUrl:
+        'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/base-hawkr/about/manage_shops2.png'
+    },
+    {
+      name: 'Open/Close Shop',
+      description: 'Opening/Closing your shop is simple. Just set your availability and using the on/off toggle when you are ready to begin (photo)',
+      imageUrl:
+        'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/base-hawkr/about/manage_shops_page.png'},
+    {
+      name: 'Shop Form pt.1',
+      description: 'When Creating/Editing your shop, you would need to fill in the following information such as Shop Name, Description, Photo, Type, Time, optional(live-tracking)',
+      imageUrl:
+        'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/base-hawkr/about/manage_shops_edit1.png'
+    },
+    {
+      name: 'Shop Form pt.2',
+      description: 'Continuation description of pt.1',
+      imageUrl:
+        'https://mlijczvqqsvotbjytzjm.supabase.co/storage/v1/object/public/base-hawkr/about/manage_shops_edit2.png'
+    }]
+}
 
 const technologies = [
   {
@@ -211,24 +273,104 @@ export default function About() {
         </div>
 
 
-        <div className="bg-slate-200 py-4 sm:py-15">
+        {/* How To Use Hawkr */}
+        <div className="bg-slate-200 py-4 sm:py-15 text-black">
           <h2 className="text-xl py-8 font-bold tracking-tight text-gray-900 sm:text-2xl">How to use Hawkr</h2>
+          {/* Blurb */}
+          <h3 className="pb-8">Hawkr is a versatile web application that simplifies the process of connecting local and mobile vendors with clients. 
+            Its intuitive interface allows users to effortlessly explore nearby shops or filter by type, making it easier to discover new and exciting offerings. 
+            Moreover, vendors can easily create and edit their shops, update their details and even opt for live tracking, providing an intuitive customer and vendor experience. 
+            Hawkr offers a robust and user-friendly platform, providing vendors with essential tools to manage their business and reach a broader audience, while also offering customers an easy-to-use platform for finding the products and services they need. 
+            With Hawkr, locating your next mobile vendor is one-click away!</h3>
+
+          <h1 className="text-2xl font-bold border-b-2 border-gray-400 mb-2 w-44 pl-4 py-4 hover:text-gray-500 hover:border-blue-300">Homepage</h1>
           <ul 
           className="relative  grid grid-cols-1 gap-y-4 md:gap-x-8 sm:grid-cols-1 lg:mx-0 lg:max-w-full lg:grid-cols-3 mx-auto"
           >
-          
-          {hawkrPages.map((hwkrPage) => (
+          {/* Home page */}
+          {hawkrPages.HomePage.map((hwkrPage) => (
             <li 
             key={hwkrPage.name}
             className="col-span-1 ">
               
-              <div>
-              <img className="h-[80%] w-full md:h-80 md:w-[80%] lg:h-[70%] lg:w-[100%] lg:space-x-4 rounded-xl object-fit" src={hwkrPage.imageUrl} alt="" />
+              <div className="max-w-sm rounded-xl overflow-hidden shadow-lg border-2 border-gray-100">
+                <img className="w-full h-64" src={hwkrPage.imageUrl} alt=""/>
+                <div className="px-6 py-4 border-t border-gray-100">
+                  <div className="font-bold text-xl mb-2 \">{hwkrPage.name}</div>
+                  <p className="text-gray-700 text-base">
+                   {hwkrPage.description}
+                  </p>
+                </div>
               </div>
-              <h3 className="mt-2 text-lg font-semibold leading-8 tracking-tight text-gray-900">{hwkrPage.name}</h3>
-              <p className="pb-4 text-sm text-black">
-                  {hwkrPage.description}
-              </p>
+            </li>
+          ))}
+          </ul>
+
+
+          <h1 className="text-2xl font-bold border-b-2 border-gray-400 mb-2 w-44 pl-4 py-4 hover:text-gray-500 hover:border-blue-300">Account Creation</h1>
+          <ul 
+          className="relative  grid grid-cols-1 gap-y-4 md:gap-x-8 sm:grid-cols-1 lg:mx-0 lg:max-w-full lg:grid-cols-3 mx-auto"
+          >
+          {/* Account Creation */}
+          {hawkrPages.AccountCreation.map((hwkrPage) => (
+            <li 
+            key={hwkrPage.name}
+            className="col-span-1 ">
+              <div className="max-w-sm rounded-xl overflow-hidden shadow-lg border-2 border-gray-100">
+                <img className="w-full h-64" src={hwkrPage.imageUrl} alt=""/>
+                <div className="px-6 py-4 border-t border-gray-100">
+                  <div className="font-bold text-xl mb-2 \">{hwkrPage.name}</div>
+                  <p className="text-gray-700 text-base">
+                   {hwkrPage.description}
+                  </p>
+                </div>
+              </div>
+
+            </li>
+          ))}
+          </ul>
+
+          <h1 className="text-2xl font-bold border-b-2 border-gray-400 mb-2 w-44 pl-4 py-4 hover:text-gray-500 hover:border-blue-300">Becoming a Vendor</h1>
+          <ul 
+          className="relative  grid grid-cols-1 gap-y-4 md:gap-x-8 sm:grid-cols-1 lg:mx-0 lg:max-w-full lg:grid-cols-3 mx-auto"
+          >
+          {/* Becoming Vendor */}
+          {hawkrPages.BecomingVendor.map((hwkrPage) => (
+            <li 
+            key={hwkrPage.name}
+            className="col-span-1 ">
+              <div className="max-w-sm rounded-xl overflow-hidden shadow-lg border-2 border-gray-100">
+                <img className="w-full h-64" src={hwkrPage.imageUrl} alt=""/>
+                <div className="px-6 py-4 border-t border-gray-100">
+                  <div className="font-bold text-xl mb-2 \">{hwkrPage.name}</div>
+                  <p className="text-gray-700 text-base">
+                   {hwkrPage.description}
+                  </p>
+                </div>
+              </div>
+            </li>
+          ))}
+          </ul>
+
+          <h1 className="text-2xl font-bold border-b-2 border-gray-400 mb-2 w-44 pl-4 py-4 hover:text-gray-500 hover:border-blue-300">Building your own shop</h1>
+          <ul 
+          className="relative  grid grid-cols-1 gap-y-4 md:gap-x-8 sm:grid-cols-1 lg:mx-0 lg:max-w-full lg:grid-cols-3 mx-auto"
+          >
+          {/* Building your own shop */}
+          {hawkrPages.BuildingOwnShop.map((hwkrPage) => (
+            <li 
+            key={hwkrPage.name}
+            className="col-span-1 ">
+              
+              <div className="max-w-sm rounded-xl overflow-hidden shadow-lg border-2 border-gray-100">
+                <img className="w-full" src={hwkrPage.imageUrl} alt=""/>
+                <div className="px-6 py-4 border-t border-gray-100">
+                  <div className="font-bold text-xl mb-2 \">{hwkrPage.name}</div>
+                  <p className="text-gray-700 text-base">
+                   {hwkrPage.description}
+                  </p>
+                </div>
+              </div>
             </li>
           ))}
           </ul>
